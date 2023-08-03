@@ -1,0 +1,52 @@
+query Merchants {
+  merchants {
+    uuid
+    name
+    type
+    taxIdentifier
+    bankName
+    bankAccount
+    status
+    address {
+      city
+      dist
+      address
+    }
+    #    vendors {
+    #      uuid
+    #      name
+    #      merchantUuid
+    #      zipCode
+    #      distance
+    #    }
+  }
+}
+
+mutation Login($loginReq: LoginReqDto!) {
+  login(body: $loginReq) {
+    token
+    expires_in
+  }
+}
+mutation DeleteMerchant($uuid: String!) {
+  deleteMerchant(uuid: $uuid) {
+    result
+  }
+}
+mutation UpdateMerchant(
+  $updateMerchantInput: UpdateMerchantInput!
+  $uuid: String!
+) {
+  updateMerchant(updateMerchantInput: $updateMerchantInput, uuid: $uuid) {
+    uuid
+    name
+    type
+  }
+}
+mutation CreateMerchant($createMerchantInput: CreateMerchantReqDto!) {
+  createMerchant(createMerchantInput: $createMerchantInput) {
+    uuid
+    name
+    type
+  }
+}
