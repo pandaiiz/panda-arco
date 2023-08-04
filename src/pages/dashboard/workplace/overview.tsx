@@ -7,17 +7,17 @@ import {
   Skeleton,
   Link,
 } from '@arco-design/web-react';
-import { useSelector } from 'react-redux';
 import { IconCaretUp } from '@arco-design/web-react/icon';
 import OverviewAreaLine from '@/components/Chart/overview-area-line';
 import axios from 'axios';
-import locale from './locale';
-import useLocale from '@/utils/useLocale';
+
 import styles from './style/overview.module.less';
 import IconCalendar from './assets/calendar.svg';
 import IconComments from './assets/comments.svg';
 import IconContent from './assets/content.svg';
 import IconIncrease from './assets/increase.svg';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 const { Row, Col } = Grid;
 
@@ -59,9 +59,8 @@ type DataType = {
 function Overview() {
   const [data, setData] = useState<DataType>({});
   const [loading, setLoading] = useState(true);
-  const t = useLocale(locale);
 
-  const userInfo = useSelector((state: any) => state.userInfo || {});
+  const [{ userInfo }] = useRecoilState(commonState);
 
   const fetchData = () => {
     setLoading(true);
@@ -82,7 +81,7 @@ function Overview() {
   return (
     <Card>
       <Typography.Title heading={5}>
-        {t['workplace.welcomeBack']}
+        欢迎回来，
         {userInfo.name}
       </Typography.Title>
       <Divider />
@@ -90,37 +89,37 @@ function Overview() {
         <Col flex={1}>
           <StatisticItem
             icon={<IconCalendar />}
-            title={t['workplace.totalOnlyData']}
+            title={['workplace.totalOnlyData']}
             count={data.allContents}
             loading={loading}
-            unit={t['workplace.pecs']}
+            unit={['workplace.pecs']}
           />
         </Col>
         <Divider type="vertical" className={styles.divider} />
         <Col flex={1}>
           <StatisticItem
             icon={<IconContent />}
-            title={t['workplace.contentInMarket']}
+            title={['workplace.contentInMarket']}
             count={data.liveContents}
             loading={loading}
-            unit={t['workplace.pecs']}
+            unit={['workplace.pecs']}
           />
         </Col>
         <Divider type="vertical" className={styles.divider} />
         <Col flex={1}>
           <StatisticItem
             icon={<IconComments />}
-            title={t['workplace.comments']}
+            title={['workplace.comments']}
             count={data.increaseComments}
             loading={loading}
-            unit={t['workplace.pecs']}
+            unit={['workplace.pecs']}
           />
         </Col>
         <Divider type="vertical" className={styles.divider} />
         <Col flex={1}>
           <StatisticItem
             icon={<IconIncrease />}
-            title={t['workplace.growth']}
+            title={['workplace.growth']}
             count={
               <span>
                 {data.growthRate}{' '}
@@ -140,12 +139,12 @@ function Overview() {
             className={styles['chart-title']}
             style={{ marginBottom: 0 }}
           >
-            {t['workplace.contentData']}
+            {['workplace.contentData']}
             <span className={styles['chart-sub-title']}>
-              ({t['workplace.1year']})
+              ({['workplace.1year']})
             </span>
           </Typography.Paragraph>
-          <Link>{t['workplace.seeMore']}</Link>
+          <Link>{['workplace.seeMore']}</Link>
         </div>
         <OverviewAreaLine data={data.chartData} loading={loading} />
       </div>

@@ -10,14 +10,12 @@ import {
   Badge,
 } from '@arco-design/web-react';
 import axios from 'axios';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import ProfileItem from './item';
 import styles from './style/index.module.less';
 import './mock';
 
 function BasicProfile() {
-  const t = useLocale(locale);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({ status: 1 });
   const [preLoading, setPreLoading] = useState(false);
@@ -72,39 +70,39 @@ function BasicProfile() {
         <Grid.Row justify="space-between" align="center">
           <Grid.Col span={16}>
             <Typography.Title heading={6}>
-              {t['basicProfile.title.form']}
+              {['basicProfile.title.form']}
             </Typography.Title>
           </Grid.Col>
           <Grid.Col span={8} style={{ textAlign: 'right' }}>
             <Space>
-              <Button>{t['basicProfile.cancel']}</Button>
-              <Button type="primary">{t['basicProfile.goBack']}</Button>
+              <Button>{['basicProfile.cancel']}</Button>
+              <Button type="primary">{['basicProfile.goBack']}</Button>
             </Space>
           </Grid.Col>
         </Grid.Row>
 
         <Steps current={data.status} lineless className={styles.steps}>
-          <Steps.Step title={t['basicProfile.steps.commit']} />
-          <Steps.Step title={t['basicProfile.steps.approval']} />
-          <Steps.Step title={t['basicProfile.steps.finish']} />
+          <Steps.Step title={['basicProfile.steps.commit']} />
+          <Steps.Step title={['basicProfile.steps.approval']} />
+          <Steps.Step title={['basicProfile.steps.finish']} />
         </Steps>
       </Card>
 
       <ProfileItem
-        title={t['basicProfile.title.currentParams']}
+        title={['basicProfile.title.currentParams']}
         data={data}
         type="current"
         loading={loading}
       />
       <ProfileItem
-        title={t['basicProfile.title.originParams']}
+        title={['basicProfile.title.originParams']}
         data={preData}
         type="origin"
         loading={preLoading}
       />
       <Card>
         <Typography.Title heading={6}>
-          {t['basicProfile.adjustment.record']}
+          {['basicProfile.adjustment.record']}
         </Typography.Title>
         <Table
           loading={tableLoading}
@@ -112,21 +110,21 @@ function BasicProfile() {
           columns={[
             {
               dataIndex: 'contentId',
-              title: t['basicProfile.adjustment.contentId'],
+              title: ['basicProfile.adjustment.contentId'],
             },
             {
               dataIndex: 'content',
-              title: t['basicProfile.adjustment.content'],
+              title: ['basicProfile.adjustment.content'],
             },
             {
               dataIndex: 'status',
-              title: t['basicProfile.adjustment.status'],
+              title: ['basicProfile.adjustment.status'],
               render: (status) => {
                 if (status) {
                   return (
                     <Badge
                       status="success"
-                      text={t['basicProfile.adjustment.success']}
+                      text={['basicProfile.adjustment.success']}
                     />
                   );
                 }
@@ -134,22 +132,22 @@ function BasicProfile() {
                 return (
                   <Badge
                     status="processing"
-                    text={t['basicProfile.adjustment.waiting']}
+                    text={['basicProfile.adjustment.waiting']}
                   />
                 );
               },
             },
             {
               dataIndex: 'updatedTime',
-              title: t['basicProfile.adjustment.updatedTime'],
+              title: ['basicProfile.adjustment.updatedTime'],
             },
             {
-              title: t['basicProfile.adjustment.operation'],
+              title: ['basicProfile.adjustment.operation'],
               headerCellStyle: { paddingLeft: '15px' },
               render() {
                 return (
                   <Button type="text">
-                    {t['basicProfile.adjustment.operation.view']}
+                    {['basicProfile.adjustment.operation.view']}
                   </Button>
                 );
               },

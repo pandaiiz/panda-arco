@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import {
   Form,
@@ -8,9 +8,7 @@ import {
   Button,
   Grid,
 } from '@arco-design/web-react';
-import { GlobalContext } from '@/context';
-import locale from './locale';
-import useLocale from '@/utils/useLocale';
+
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import { ContentType, FilterType, Status } from './constants';
 import styles from './style/index.module.less';
@@ -21,9 +19,6 @@ const { useForm } = Form;
 function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
 }) {
-  const { lang } = useContext(GlobalContext);
-
-  const t = useLocale(locale);
   const [form] = useForm();
 
   const handleSubmit = () => {
@@ -36,8 +31,6 @@ function SearchForm(props: {
     props.onSearch({});
   };
 
-  const colSpan = lang === 'zh-CN' ? 8 : 12;
-
   return (
     <div className={styles['search-form-wrapper']}>
       <Form
@@ -48,26 +41,23 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.id']} field="id">
-              <Input placeholder={t['searchForm.id.placeholder']} allowClear />
+          <Col span={8}>
+            <Form.Item label={['searchTable.columns.id']} field="id">
+              <Input placeholder={['searchForm.id.placeholder']} allowClear />
             </Form.Item>
           </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.name']} field="name">
-              <Input
-                allowClear
-                placeholder={t['searchForm.name.placeholder']}
-              />
+          <Col span={8}>
+            <Form.Item label={['searchTable.columns.name']} field="name">
+              <Input allowClear placeholder={['searchForm.name.placeholder']} />
             </Form.Item>
           </Col>
-          <Col span={colSpan}>
+          <Col span={8}>
             <Form.Item
-              label={t['searchTable.columns.contentType']}
+              label={['searchTable.columns.contentType']}
               field="contentType"
             >
               <Select
-                placeholder={t['searchForm.all.placeholder']}
+                placeholder={['searchForm.all.placeholder']}
                 options={ContentType.map((item, index) => ({
                   label: item,
                   value: index,
@@ -77,13 +67,13 @@ function SearchForm(props: {
               />
             </Form.Item>
           </Col>
-          <Col span={colSpan}>
+          <Col span={8}>
             <Form.Item
-              label={t['searchTable.columns.filterType']}
+              label={['searchTable.columns.filterType']}
               field="filterType"
             >
               <Select
-                placeholder={t['searchForm.all.placeholder']}
+                placeholder={['searchForm.all.placeholder']}
                 options={FilterType.map((item, index) => ({
                   label: item,
                   value: index,
@@ -93,9 +83,9 @@ function SearchForm(props: {
               />
             </Form.Item>
           </Col>
-          <Col span={colSpan}>
+          <Col span={8}>
             <Form.Item
-              label={t['searchTable.columns.createdTime']}
+              label={['searchTable.columns.createdTime']}
               field="createdTime"
             >
               <DatePicker.RangePicker
@@ -105,10 +95,10 @@ function SearchForm(props: {
               />
             </Form.Item>
           </Col>
-          <Col span={colSpan}>
-            <Form.Item label={t['searchTable.columns.status']} field="status">
+          <Col span={8}>
+            <Form.Item label={['searchTable.columns.status']} field="status">
               <Select
-                placeholder={t['searchForm.all.placeholder']}
+                placeholder={['searchForm.all.placeholder']}
                 options={Status.map((item, index) => ({
                   label: item,
                   value: index,
@@ -122,10 +112,10 @@ function SearchForm(props: {
       </Form>
       <div className={styles['right-button']}>
         <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
-          {t['searchTable.form.search']}
+          {['searchTable.form.search']}
         </Button>
         <Button icon={<IconRefresh />} onClick={handleReset}>
-          {t['searchTable.form.reset']}
+          {['searchTable.form.reset']}
         </Button>
       </div>
     </div>

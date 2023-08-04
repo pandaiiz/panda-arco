@@ -6,61 +6,58 @@ import {
   Space,
   Descriptions,
 } from '@arco-design/web-react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
 
 export default function StudioStatus() {
-  const t = useLocale(locale);
   const dataStatus = [
     {
       label: (
         <span>
           <Typography.Text style={{ paddingRight: 8 }}>
-            {t['monitor.studioStatus.mainstream']}
+            {['monitor.studioStatus.mainstream']}
           </Typography.Text>
-          {t['monitor.studioStatus.bitRate']}
+          {['monitor.studioStatus.bitRate']}
         </span>
       ),
       value: '6 Mbps',
     },
     {
-      label: t['monitor.studioStatus.frameRate'],
+      label: ['monitor.studioStatus.frameRate'],
       value: '60',
     },
     {
       label: (
         <span>
           <Typography.Text style={{ paddingRight: 8 }}>
-            {t['monitor.studioStatus.hotStandby']}
+            {['monitor.studioStatus.hotStandby']}
           </Typography.Text>
-          {t['monitor.studioStatus.bitRate']}
+          {['monitor.studioStatus.bitRate']}
         </span>
       ),
       value: '6 Mbps',
     },
     {
-      label: t['monitor.studioStatus.frameRate'],
+      label: ['monitor.studioStatus.frameRate'],
       value: '60',
     },
     {
       label: (
         <span>
           <Typography.Text style={{ paddingRight: 8 }}>
-            {t['monitor.studioStatus.coldStandby']}
+            {['monitor.studioStatus.coldStandby']}
           </Typography.Text>
-          {t['monitor.studioStatus.bitRate']}
+          {['monitor.studioStatus.bitRate']}
         </span>
       ),
       value: '6 Mbps',
     },
     {
-      label: t['monitor.studioStatus.frameRate'],
+      label: ['monitor.studioStatus.frameRate'],
       value: '60',
     },
   ];
   const dataPicture = [
     {
-      label: t['monitor.studioStatus.line'],
+      label: ['monitor.studioStatus.line'],
       value: '热备',
     },
     {
@@ -68,11 +65,11 @@ export default function StudioStatus() {
       value: 'KS',
     },
     {
-      label: t['monitor.studioStatus.play'],
+      label: ['monitor.studioStatus.play'],
       value: 'FLV',
     },
     {
-      label: t['monitor.studioStatus.pictureQuality'],
+      label: ['monitor.studioStatus.pictureQuality'],
       value: '原画',
     },
   ];
@@ -84,9 +81,9 @@ export default function StudioStatus() {
           style={{ marginTop: 0, marginBottom: 16 }}
           heading={6}
         >
-          {t['monitor.studioStatus.title.studioStatus']}
+          {['monitor.studioStatus.title.studioStatus']}
         </Typography.Title>
-        <Tag color="green">{t['monitor.studioStatus.smooth']}</Tag>
+        <Tag color="green">{['monitor.studioStatus.smooth']}</Tag>
       </Space>
       <Descriptions
         colon=": "
@@ -95,7 +92,7 @@ export default function StudioStatus() {
         column={2}
       />
       <Typography.Title style={{ marginBottom: 16 }} heading={6}>
-        {t['monitor.studioStatus.title.pictureInfo']}
+        {['monitor.studioStatus.title.pictureInfo']}
       </Typography.Title>
       <Descriptions
         colon=": "

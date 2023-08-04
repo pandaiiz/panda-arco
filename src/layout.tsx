@@ -14,18 +14,17 @@ import {
   IconMenuFold,
   IconMenuUnfold,
 } from '@arco-design/web-react/icon';
-import { useSelector } from 'react-redux';
 import qs from 'query-string';
 import NProgress from 'nprogress';
 import Navbar from './components/NavBar';
 import Footer from './components/Footer';
 import useRoute, { IRoute } from '@/routes';
 import { isArray } from './utils/is';
-import useLocale from './utils/useLocale';
 import getUrlParams from './utils/getUrlParams';
 import lazyload from './utils/lazyload';
-import { GlobalState } from './store';
+import { commonState } from './store';
 import styles from './style/layout.module.less';
+import { useRecoilState } from 'recoil';
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
@@ -88,10 +87,8 @@ function PageLayout() {
   const history = useHistory();
   const pathname = history.location.pathname;
   const currentComponent = qs.parseUrl(pathname).url.slice(1);
-  const locale = useLocale();
-  const { settings, userLoading, userInfo } = useSelector(
-    (state: GlobalState) => state
-  );
+
+  const [{ settings, userLoading, userInfo }] = useRecoilState(commonState);
 
   const [routes, defaultRoute] = useRoute(userInfo?.permissions);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
@@ -137,7 +134,7 @@ function PageLayout() {
   const paddingTop = showNavbar ? { paddingTop: navbarHeight } : {};
   const paddingStyle = { ...paddingLeft, ...paddingTop };
 
-  function renderRoutes(locale) {
+  function renderRoutes() {
     routeMap.current.clear();
     return function travel(_routes: IRoute[], level, parentNode = []) {
       return _routes.map((route) => {
@@ -145,7 +142,7 @@ function PageLayout() {
         const iconDom = getIconFromKey(route.key);
         const titleDom = (
           <>
-            {iconDom} {locale[route.name] || route.name}
+            {iconDom} {route.name}
           </>
         );
 
@@ -243,7 +240,7 @@ function PageLayout() {
                     setOpenKeys(openKeys);
                   }}
                 >
-                  {renderRoutes(locale)(routes, 1)}
+                  {renderRoutes()(routes, 1)}
                 </Menu>
               </div>
               <div className={styles['collapse-btn']} onClick={toggleCollapse}>
@@ -258,7 +255,7 @@ function PageLayout() {
                   <Breadcrumb>
                     {breadcrumb.map((node, index) => (
                       <Breadcrumb.Item key={index}>
-                        {typeof node === 'string' ? locale[node] || node : node}
+                        {typeof node === 'string' ? node || node : node}
                       </Breadcrumb.Item>
                     ))}
                   </Breadcrumb>

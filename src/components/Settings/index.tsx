@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Drawer, Alert, Message } from '@arco-design/web-react';
 import { IconSettings } from '@arco-design/web-react/icon';
 import copy from 'copy-to-clipboard';
-import { useSelector } from 'react-redux';
-import { GlobalState } from '../../store';
 import Block from './block';
 import ColorPanel from './color';
 import IconButton from '../NavBar/IconButton';
-import useLocale from '@/utils/useLocale';
+
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 interface SettingProps {
   trigger?: React.ReactElement;
@@ -16,12 +16,11 @@ interface SettingProps {
 function Setting(props: SettingProps) {
   const { trigger } = props;
   const [visible, setVisible] = useState(false);
-  const locale = useLocale();
-  const settings = useSelector((state: GlobalState) => state.settings);
+  const [{ settings }] = useRecoilState(commonState);
 
   function onCopySettings() {
     copy(JSON.stringify(settings, null, 2));
-    Message.success(locale['settings.copySettings.message']);
+    Message.success('复制成功，请粘贴到 src/settings.json 文件中');
   }
 
   return (
@@ -38,20 +37,20 @@ function Setting(props: SettingProps) {
         title={
           <>
             <IconSettings />
-            {locale['settings.title']}
+            {['settings.title']}
           </>
         }
         visible={visible}
-        okText={locale['settings.copySettings']}
-        cancelText={locale['settings.close']}
+        okText={['settings.copySettings']}
+        cancelText={['settings.close']}
         onOk={onCopySettings}
         onCancel={() => setVisible(false)}
       >
-        <Block title={locale['settings.themeColor']}>
+        <Block title={['settings.themeColor']}>
           <ColorPanel />
         </Block>
         <Block
-          title={locale['settings.content']}
+          title={['settings.content']}
           options={[
             { name: 'settings.navbar', value: 'navbar' },
             { name: 'settings.menu', value: 'menu' },
@@ -60,10 +59,10 @@ function Setting(props: SettingProps) {
           ]}
         />
         <Block
-          title={locale['settings.otherSettings']}
+          title={['settings.otherSettings']}
           options={[{ name: 'settings.colorWeek', value: 'colorWeek' }]}
         />
-        <Alert content={locale['settings.alertContent']} />
+        <Alert content={['settings.alertContent']} />
       </Drawer>
     </>
   );

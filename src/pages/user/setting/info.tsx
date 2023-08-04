@@ -1,7 +1,5 @@
-import React, { useContext } from 'react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
-import { GlobalContext } from '@/context';
+import React from 'react';
+
 import {
   Input,
   Select,
@@ -14,9 +12,7 @@ import {
 } from '@arco-design/web-react';
 
 function InfoForm({ loading }: { loading?: boolean }) {
-  const t = useLocale(locale);
   const [form] = Form.useForm();
-  const { lang } = useContext(GlobalContext);
 
   const handleSave = async () => {
     try {
@@ -45,47 +41,47 @@ function InfoForm({ loading }: { loading?: boolean }) {
     <Form
       style={{ width: '500px', marginTop: '6px' }}
       form={form}
-      labelCol={{ span: lang === 'en-US' ? 7 : 6 }}
-      wrapperCol={{ span: lang === 'en-US' ? 17 : 18 }}
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 18 }}
     >
       <Form.Item
-        label={t['userSetting.info.email']}
+        label={['userSetting.info.email']}
         field="email"
         rules={[
           {
             type: 'email',
             required: true,
-            message: t['userSetting.info.email.placeholder'],
+            message: ['userSetting.info.email.placeholder'],
           },
         ]}
       >
         {loading ? (
           loadingNode()
         ) : (
-          <Input placeholder={t['userSetting.info.email.placeholder']} />
+          <Input placeholder={'userSetting.info.email.placeholder'} />
         )}
       </Form.Item>
       <Form.Item
-        label={t['userSetting.info.nickName']}
+        label={['userSetting.info.nickName']}
         field="nickName"
         rules={[
           {
             required: true,
-            message: t['userSetting.info.nickName.placeholder'],
+            message: ['userSetting.info.nickName.placeholder'],
           },
         ]}
       >
         {loading ? (
           loadingNode()
         ) : (
-          <Input placeholder={t['userSetting.info.nickName.placeholder']} />
+          <Input placeholder={'userSetting.info.nickName.placeholder'} />
         )}
       </Form.Item>
       <Form.Item
-        label={t['userSetting.info.area']}
+        label={['userSetting.info.area']}
         field="rangeArea"
         rules={[
-          { required: true, message: t['userSetting.info.area.placeholder'] },
+          { required: true, message: ['userSetting.info.area.placeholder'] },
         ]}
       >
         {loading ? (
@@ -93,12 +89,12 @@ function InfoForm({ loading }: { loading?: boolean }) {
         ) : (
           <Select
             options={['中国']}
-            placeholder={t['userSetting.info.area.placeholder']}
+            placeholder={'userSetting.info.area.placeholder'}
           />
         )}
       </Form.Item>
       <Form.Item
-        label={t['userSetting.info.location']}
+        label={['userSetting.info.location']}
         field="location"
         initialValue={['BeiJing', 'BeiJing', 'HaiDian']}
         rules={[
@@ -144,19 +140,19 @@ function InfoForm({ loading }: { loading?: boolean }) {
           />
         )}
       </Form.Item>
-      <Form.Item label={t['userSetting.info.address']} field="address">
+      <Form.Item label={['userSetting.info.address']} field="address">
         {loading ? (
           loadingNode()
         ) : (
-          <Input placeholder={t['userSetting.info.address.placeholder']} />
+          <Input placeholder={'userSetting.info.address.placeholder'} />
         )}
       </Form.Item>
-      <Form.Item label={t['userSetting.info.profile']} field="profile">
+      <Form.Item label={['userSetting.info.profile']} field="profile">
         {loading ? (
           loadingNode(3)
         ) : (
           <Input.TextArea
-            placeholder={t['userSetting.info.profile.placeholder']}
+            placeholder={'userSetting.info.profile.placeholder'}
           />
         )}
       </Form.Item>
@@ -164,9 +160,9 @@ function InfoForm({ loading }: { loading?: boolean }) {
       <Form.Item label=" ">
         <Space>
           <Button type="primary" onClick={handleSave}>
-            {t['userSetting.save']}
+            {['userSetting.save']}
           </Button>
-          <Button onClick={handleReset}>{t['userSetting.reset']}</Button>
+          <Button onClick={handleReset}>{['userSetting.reset']}</Button>
         </Space>
       </Form.Item>
     </Form>

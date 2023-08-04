@@ -1,8 +1,7 @@
 import { Card, Typography, Avatar, Space, Grid } from '@arco-design/web-react';
 import { IconMore } from '@arco-design/web-react/icon';
 import React from 'react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/index.module.less';
 
 interface StudioProps {
@@ -13,7 +12,6 @@ interface StudioProps {
 }
 
 export default function Studio(props: StudioProps) {
-  const t = useLocale(locale);
   const { userInfo } = props;
   return (
     <Card>
@@ -23,7 +21,7 @@ export default function Studio(props: StudioProps) {
             style={{ marginTop: 0, marginBottom: 16 }}
             heading={6}
           >
-            {t['monitor.title.studioPreview']}
+            {['monitor.title.studioPreview']}
           </Typography.Title>
         </Grid.Col>
         <Grid.Col span={8} style={{ textAlign: 'right' }}>
@@ -44,13 +42,13 @@ export default function Studio(props: StudioProps) {
                 </Avatar>
                 <Typography.Text>
                   {userInfo.name}
-                  {t['monitor.studioPreview.studio']}
+                  {['monitor.studioPreview.studio']}
                 </Typography.Text>
               </Space>
             </div>
           )}
           <Typography.Text type="secondary">
-            3,6000 {t['monitor.studioPreview.watching']}
+            3,6000 {['monitor.studioPreview.watching']}
           </Typography.Text>
         </div>
       </div>

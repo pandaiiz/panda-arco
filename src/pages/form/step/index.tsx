@@ -13,13 +13,12 @@ import {
   Switch,
   Result,
 } from '@arco-design/web-react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/index.module.less';
+const RangePicker: any = DatePicker.RangePicker; //写上any会是正确的
 
 const { Title, Paragraph } = Typography;
 function StepForm() {
-  const t = useLocale(locale);
   const [current, setCurrent] = useState(1);
 
   const [form] = Form.useForm();
@@ -44,56 +43,56 @@ function StepForm() {
   return (
     <div className={styles.container}>
       <Card>
-        <Title heading={5}>{t['stepForm.desc.basicInfo']}</Title>
+        <Title heading={5}>{['stepForm.desc.basicInfo']}</Title>
         <div className={styles.wrapper}>
           <Steps current={current} lineless>
             <Steps.Step
-              title={t['stepForm.title.basicInfo']}
-              description={t['stepForm.desc.basicInfo']}
+              title={['stepForm.title.basicInfo']}
+              description={['stepForm.desc.basicInfo']}
             />
             <Steps.Step
-              title={t['stepForm.title.channel']}
-              description={t['stepForm.desc.channel']}
+              title={['stepForm.title.channel']}
+              description={['stepForm.desc.channel']}
             />
             <Steps.Step
-              title={t['stepForm.title.created']}
-              description={t['stepForm.desc.created']}
+              title={['stepForm.title.created']}
+              description={['stepForm.desc.created']}
             />
           </Steps>
           <Form form={form} className={styles.form}>
             {current === 1 && (
               <Form.Item noStyle>
                 <Form.Item
-                  label={t['stepForm.basicInfo.name']}
+                  label={['stepForm.basicInfo.name']}
                   required
                   field="basic.name"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.basicInfo.name.required'],
+                      message: ['stepForm.basicInfo.name.required'],
                     },
                     {
                       validator: (value: string, callback) => {
                         if (!/^[\u4e00-\u9fa5a-zA-Z0-9]{1,20}$/g.test(value)) {
-                          callback(t['stepForm.basicInfo.name.placeholder']);
+                          callback(['stepForm.basicInfo.name.placeholder']);
                         }
                       },
                     },
                   ]}
                 >
                   <Input
-                    placeholder={t['stepForm.basicInfo.name.placeholder']}
+                    placeholder={['stepForm.basicInfo.name.placeholder']}
                   />
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.basicInfo.channelType']}
+                  label={['stepForm.basicInfo.channelType']}
                   required
                   initialValue="app"
                   field="basic.channelType"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.basicInfo.channelType.required'],
+                      message: ['stepForm.basicInfo.channelType.required'],
                     },
                   ]}
                 >
@@ -104,28 +103,28 @@ function StepForm() {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.basicInfo.time']}
+                  label={['stepForm.basicInfo.time']}
                   required
                   field="basic.time"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.basicInfo.time.required'],
+                      message: ['stepForm.basicInfo.time.required'],
                     },
                   ]}
                 >
-                  <DatePicker.RangePicker style={{ width: '100%' }} />
+                  <RangePicker style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.basicInfo.link']}
+                  label={['stepForm.basicInfo.link']}
                   required
-                  extra={t['stepForm.basicInfo.link.tips']}
+                  extra={['stepForm.basicInfo.link.tips']}
                   field="basic.link"
                   initialValue={'https://arco.design'}
                   rules={[{ required: true }]}
                 >
                   <Input
-                    placeholder={t['stepForm.basicInfo.link.placeholder']}
+                    placeholder={['stepForm.basicInfo.link.placeholder']}
                   />
                 </Form.Item>
               </Form.Item>
@@ -133,37 +132,35 @@ function StepForm() {
             {current === 2 && (
               <Form.Item noStyle>
                 <Form.Item
-                  label={t['stepForm.channel.source']}
+                  label={['stepForm.channel.source']}
                   required
                   field="channel.source"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.channel.source.required'],
+                      message: ['stepForm.channel.source.required'],
                     },
                   ]}
                 >
                   <Input
-                    placeholder={t['stepForm.channel.source.placeholder']}
+                    placeholder={['stepForm.channel.source.placeholder']}
                   />
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.channel.media']}
+                  label={['stepForm.channel.media']}
                   required
                   field="channel.media"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.channel.media.required'],
+                      message: ['stepForm.channel.media.required'],
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={t['stepForm.channel.media.placeholder']}
-                  />
+                  <Input placeholder={['stepForm.channel.media.placeholder']} />
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.channel.keywords']}
+                  label={['stepForm.channel.keywords']}
                   required
                   field="channel.keywords"
                   initialValue={['今日头条', '火山']}
@@ -172,7 +169,7 @@ function StepForm() {
                   <InputTag />
                 </Form.Item>
                 <Form.Item
-                  label={t['stepForm.channel.remind']}
+                  label={['stepForm.channel.remind']}
                   required
                   initialValue={true}
                   field="channel.remind"
@@ -183,18 +180,18 @@ function StepForm() {
                 </Form.Item>
 
                 <Form.Item
-                  label={t['stepForm.channel.content']}
+                  label={['stepForm.channel.content']}
                   required
                   field="channel.content"
                   rules={[
                     {
                       required: true,
-                      message: t['stepForm.channel.content.required'],
+                      message: ['stepForm.channel.content.required'],
                     },
                   ]}
                 >
                   <Input.TextArea
-                    placeholder={t['stepForm.channel.content.placeholder']}
+                    placeholder={['stepForm.channel.content.placeholder']}
                   />
                 </Form.Item>
               </Form.Item>
@@ -207,12 +204,12 @@ function StepForm() {
                       size="large"
                       onClick={() => setCurrent(current - 1)}
                     >
-                      {t['stepForm.prev']}
+                      {['stepForm.prev']}
                     </Button>
                   )}
                   {current !== 3 && (
                     <Button type="primary" size="large" onClick={toNext}>
-                      {t['stepForm.next']}
+                      {['stepForm.next']}
                     </Button>
                   )}
                 </Space>
@@ -221,18 +218,18 @@ function StepForm() {
               <Form.Item noStyle>
                 <Result
                   status="success"
-                  title={t['stepForm.created.success.title']}
-                  subTitle={t['stepForm.created.success.desc']}
+                  title={['stepForm.created.success.title']}
+                  subTitle={['stepForm.created.success.desc']}
                   extra={[
                     <Button
                       key="reset"
                       style={{ marginRight: 16 }}
                       onClick={viewForm}
                     >
-                      {t['stepForm.created.success.view']}
+                      {['stepForm.created.success.view']}
                     </Button>,
                     <Button key="again" type="primary" onClick={reCreateForm}>
-                      {t['stepForm.created.success.again']}
+                      {['stepForm.created.success.again']}
                     </Button>,
                   ]}
                 />
@@ -242,10 +239,10 @@ function StepForm() {
         </div>
         {current === 3 && (
           <div className={styles['form-extra']}>
-            <Title heading={6}>{t['stepForm.created.extra.title']}</Title>
+            <Title heading={6}>{['stepForm.created.extra.title']}</Title>
             <Paragraph type="secondary">
-              {t['stepForm.created.extra.desc']}
-              <Button type="text">{t['stepForm.created.extra.detail']}</Button>
+              {['stepForm.created.extra.desc']}
+              <Button type="text">{['stepForm.created.extra.detail']}</Button>
             </Paragraph>
           </div>
         )}

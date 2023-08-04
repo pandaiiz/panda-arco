@@ -1,18 +1,16 @@
 import { Table, Tag, Typography } from '@arco-design/web-react';
 import React from 'react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/index.module.less';
 
 export default function QuickOperation() {
-  const t = useLocale(locale);
   const columns = [
     {
-      title: t['monitor.list.title.order'],
+      title: ['monitor.list.title.order'],
       render: (_col, _record, index) => <span>{index + 1}</span>,
     },
     {
-      title: t['monitor.list.title.cover'],
+      title: ['monitor.list.title.cover'],
       dataIndex: 'cover',
       render: (_col, record) => (
         <div className={styles['data-statistic-list-cover-wrapper']}>
@@ -22,23 +20,23 @@ export default function QuickOperation() {
               color="red"
               className={styles['data-statistic-list-cover-tag']}
             >
-              {t['monitor.list.tag.auditFailed']}
+              {['monitor.list.tag.auditFailed']}
             </Tag>
           )}
         </div>
       ),
     },
     {
-      title: t['monitor.list.title.name'],
+      title: ['monitor.list.title.name'],
       dataIndex: 'name',
     },
     {
       dataIndex: 'duration',
-      title: t['monitor.list.title.duration'],
+      title: ['monitor.list.title.duration'],
     },
     {
       dataIndex: 'id',
-      title: t['monitor.list.title.id'],
+      title: ['monitor.list.title.id'],
     },
   ];
   const data = [
@@ -67,9 +65,9 @@ export default function QuickOperation() {
         type="secondary"
         className={styles['data-statistic-list-tip']}
       >
-        {t['monitor.list.tip.rotations']}
+        {['monitor.list.tip.rotations']}
         {data.length}
-        {t['monitor.list.tip.rest']}
+        {['monitor.list.tip.rest']}
       </Typography.Text>
     </div>
   );

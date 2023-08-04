@@ -1,49 +1,30 @@
 import './style/global.less';
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import { ConfigProvider } from '@arco-design/web-react';
-import zhCN from '@arco-design/web-react/es/locale/zh-CN';
-import enUS from '@arco-design/web-react/es/locale/en-US';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
-import rootReducer from './store';
+import { commonState } from '@/store';
+import 'default-passive-events';
+
 import PageLayout from './layout';
-import { GlobalContext } from './context';
 import Login from './pages/login';
 import checkLogin from './utils/checkLogin';
 import changeTheme from './utils/changeTheme';
 import useStorage from './utils/useStorage';
 import './mock';
-
-const store = createStore(rootReducer);
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { createRoot } from 'react-dom/client';
 
 function Index() {
-  const [lang, setLang] = useStorage('arco-lang', 'en-US');
+  const [lang, setLang] = useStorage('arco-lang', 'zh-CN');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
 
-  function getArcoLocale() {
-    switch (lang) {
-      case 'zh-CN':
-        return zhCN;
-      case 'en-US':
-        return enUS;
-      default:
-        return zhCN;
-    }
-  }
+  const [comState, setComState] = useRecoilState(commonState);
 
   function fetchUserInfo() {
-    store.dispatch({
-      type: 'update-userInfo',
-      payload: { userLoading: true },
-    });
+    setComState({ ...comState, userLoading: true });
     axios.get('/api/user/userInfo').then((res) => {
-      store.dispatch({
-        type: 'update-userInfo',
-        payload: { userInfo: res.data, userLoading: false },
-      });
+      setComState({ ...comState, userInfo: res.data, userLoading: false });
     });
   }
 
@@ -59,17 +40,9 @@ function Index() {
     changeTheme(theme);
   }, [theme]);
 
-  const contextValue = {
-    lang,
-    setLang,
-    theme,
-    setTheme,
-  };
-
   return (
     <BrowserRouter>
       <ConfigProvider
-        locale={getArcoLocale()}
         componentConfig={{
           Card: {
             bordered: false,
@@ -82,17 +55,18 @@ function Index() {
           },
         }}
       >
-        <Provider store={store}>
-          <GlobalContext.Provider value={contextValue}>
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/" component={PageLayout} />
-            </Switch>
-          </GlobalContext.Provider>
-        </Provider>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/" component={PageLayout} />
+        </Switch>
       </ConfigProvider>
     </BrowserRouter>
   );
 }
 
-ReactDOM.render(<Index />, document.getElementById('root'));
+const container = document.getElementById('root');
+createRoot(container).render(
+  <RecoilRoot>
+    <Index />
+  </RecoilRoot>
+);

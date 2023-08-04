@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import {
   Typography,
   Grid,
@@ -8,8 +7,7 @@ import {
   Result,
   Skeleton,
 } from '@arco-design/web-react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import UserInfoHeader from './header';
 import styles from './style/index.module.less';
 import './mock';
@@ -17,13 +15,13 @@ import { Card } from '@arco-design/web-react';
 import MyProject from './my-projects';
 import MyTeam from './my-team';
 import LatestNews from './latest-news';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 const { Title } = Typography;
 const { Row, Col } = Grid;
 function UserInfo() {
-  const t = useLocale(locale);
-  const userInfo = useSelector((state: any) => state.userInfo);
-  const loading = useSelector((state: any) => state.userLoading);
+  const [{ userInfo, userLoading }] = useRecoilState(commonState);
 
   const [noticeLoading, setNoticeLoading] = useState(false);
 
@@ -38,15 +36,15 @@ function UserInfo() {
 
   return (
     <div>
-      <UserInfoHeader userInfo={userInfo} loading={loading} />
+      <UserInfoHeader userInfo={userInfo} loading={userLoading} />
       <Row gutter={16}>
         <Col span={16}>
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '20px' }}>
-                {t['userInfo.title.project']}
+                {['userInfo.title.project']}
               </Title>
-              <Link>{t['userInfo.btn.more']}</Link>
+              <Link>{['userInfo.btn.more']}</Link>
             </div>
             <MyProject />
           </Card>
@@ -55,7 +53,7 @@ function UserInfo() {
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '12px' }}>
-                {t['userInfo.title.team']}
+                {['userInfo.title.team']}
               </Title>
             </div>
             <MyTeam />
@@ -67,9 +65,9 @@ function UserInfo() {
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '8px' }}>
-                {t['userInfo.title.news']}
+                {['userInfo.title.news']}
               </Title>
-              <Link>{t['userInfo.btn.all']}</Link>
+              <Link>{['userInfo.btn.all']}</Link>
             </div>
             <LatestNews />
           </Card>
@@ -77,14 +75,14 @@ function UserInfo() {
         <Col span={8}>
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
-              <Title heading={6}>{t['userInfo.title.notice']}</Title>
+              <Title heading={6}>{['userInfo.title.notice']}</Title>
             </div>
             {noticeLoading ? (
               <Skeleton text={{ rows: 10 }} animation />
             ) : (
               <Result
                 status="404"
-                subTitle={t['userInfo.notice.empty']}
+                subTitle={['userInfo.notice.empty']}
                 style={{ paddingTop: '60px', paddingBottom: '130px' }}
               />
             )}

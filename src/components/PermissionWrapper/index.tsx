@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { GlobalState } from '@/store';
-import { useSelector } from 'react-redux';
 import authentication, { AuthParams } from '@/utils/authentication';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 type PermissionWrapperProps = AuthParams & {
   backup?: React.ReactNode;
@@ -11,14 +11,14 @@ const PermissionWrapper = (
   props: React.PropsWithChildren<PermissionWrapperProps>
 ) => {
   const { backup, requiredPermissions, oneOfPerm } = props;
-  const userInfo = useSelector((state: GlobalState) => state.userInfo);
+  const [{ userInfo }] = useRecoilState(commonState);
 
   const hasPermission = useMemo(() => {
     return authentication(
-        {requiredPermissions, oneOfPerm},
-        userInfo.permissions
+      { requiredPermissions, oneOfPerm },
+      userInfo.permissions
     );
-  },[oneOfPerm, requiredPermissions, userInfo.permissions]);
+  }, [oneOfPerm, requiredPermissions, userInfo.permissions]);
 
   if (hasPermission) {
     return <>{convertReactElement(props.children)}</>;

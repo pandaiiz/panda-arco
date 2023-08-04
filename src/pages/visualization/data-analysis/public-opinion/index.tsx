@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PublicOpinionCard, { PublicOpinionCardProps } from './card';
 import axios from 'axios';
 import { Grid } from '@arco-design/web-react';
-import useLocale from '@/utils/useLocale';
 import locale from '../locale';
 
 const { Row, Col } = Grid;
@@ -27,13 +26,12 @@ const cardInfo = [
 ];
 
 function PublicOpinion() {
-  const t = useLocale(locale);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PublicOpinionCardProps[]>(
     cardInfo.map((item) => ({
       ...item,
       chartType: item.type as 'line' | 'pie' | 'interval',
-      title: t[`dataAnalysis.publicOpinion.${item.key}`],
+      title: item.key,
     }))
   );
 
@@ -61,9 +59,9 @@ function PublicOpinion() {
   const formatData = useMemo(() => {
     return data.map((item) => ({
       ...item,
-      title: t[`dataAnalysis.publicOpinion.${item.key}`],
+      title: item.key,
     }));
-  }, [t, data]);
+  }, [data]);
 
   return (
     <div>
@@ -72,7 +70,7 @@ function PublicOpinion() {
           <Col span={6} key={index}>
             <PublicOpinionCard
               {...item}
-              compareTime={t['dataAnalysis.yesterday']}
+              compareTime={'较昨日'}
               loading={loading}
             />
           </Col>

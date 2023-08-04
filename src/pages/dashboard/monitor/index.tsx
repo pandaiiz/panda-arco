@@ -1,6 +1,5 @@
 import { Space } from '@arco-design/web-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import ChatPanel from './chat-panel';
 import Studio from './studio';
 import DataStatistic from './data-statistic';
@@ -9,9 +8,11 @@ import QuickOperation from './quick-operation';
 import StudioInformation from './studio-information';
 import styles from './style/index.module.less';
 import './mock';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 export default function Monitor() {
-  const userInfo = useSelector((state: any) => state.userInfo);
+  const [{ userInfo }] = useRecoilState(commonState);
   return (
     <div>
       <div className={styles.layout}>

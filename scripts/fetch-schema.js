@@ -48,8 +48,8 @@ async function fetchSchema({ endpoint, schemaFile, headers }) {
 }
 
 const endpoint =
-  process.env.GRAPHQL_ENDPOINT ||
-  'https://ininderprint-backend-nestjs.cloud-dev.ininderprint.tw/admin-api/graphql';
+  process.env.GRAPHQL_ENDPOINT || 'http://localhost:7000/graphql';
+// 'https://ininderprint-backend-nestjs.cloud-dev.ininderprint.tw/admin-api/graphql';
 const schemaPath = './src/graphql/schemas/schema.graphql';
 
 function fix(schema) {

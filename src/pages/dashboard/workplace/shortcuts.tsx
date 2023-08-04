@@ -13,36 +13,33 @@ import {
   IconMobile,
   IconFire,
 } from '@arco-design/web-react/icon';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/shortcuts.module.less';
 
 function Shortcuts() {
-  const t = useLocale(locale);
-
   const shortcuts = [
     {
-      title: t['workplace.contentMgmt'],
+      title: ['workplace.contentMgmt'],
       key: 'Content Management',
       icon: <IconFile />,
     },
     {
-      title: t['workplace.contentStatistic'],
+      title: ['workplace.contentStatistic'],
       key: 'Content Statistic',
       icon: <IconStorage />,
     },
     {
-      title: t['workplace.advancedMgmt'],
+      title: ['workplace.advancedMgmt'],
       key: 'Advanced Management',
       icon: <IconSettings />,
     },
     {
-      title: t['workplace.onlinePromotion'],
+      title: ['workplace.onlinePromotion'],
       key: 'Online Promotion',
       icon: <IconMobile />,
     },
     {
-      title: t['workplace.marketing'],
+      title: ['workplace.marketing'],
       key: 'Marketing',
       icon: <IconFire />,
     },
@@ -50,17 +47,17 @@ function Shortcuts() {
 
   const recentShortcuts = [
     {
-      title: t['workplace.contentStatistic'],
+      title: ['workplace.contentStatistic'],
       key: 'Content Statistic',
       icon: <IconStorage />,
     },
     {
-      title: t['workplace.contentMgmt'],
+      title: ['workplace.contentMgmt'],
       key: 'Content Management',
       icon: <IconFile />,
     },
     {
-      title: t['workplace.advancedMgmt'],
+      title: ['workplace.advancedMgmt'],
       key: 'Advanced Management',
       icon: <IconSettings />,
     },
@@ -80,9 +77,9 @@ function Shortcuts() {
     <Card>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography.Title heading={6}>
-          {t['workplace.shortcuts']}
+          {['workplace.shortcuts']}
         </Typography.Title>
-        <Link>{t['workplace.seeMore']}</Link>
+        <Link>{['workplace.seeMore']}</Link>
       </div>
       <div className={styles.shortcuts}>
         {shortcuts.map((shortcut) => (
@@ -97,7 +94,7 @@ function Shortcuts() {
         ))}
       </div>
       <Divider />
-      <div className={styles.recent}>{t['workplace.recent']}</div>
+      <div className={styles.recent}>{['workplace.recent']}</div>
       <div className={styles.shortcuts}>
         {recentShortcuts.map((shortcut) => (
           <div

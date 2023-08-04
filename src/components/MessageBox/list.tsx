@@ -8,7 +8,6 @@ import {
   Result,
   Tag,
 } from '@arco-design/web-react';
-import useLocale from '../../utils/useLocale';
 import styles from './style/index.module.less';
 
 export interface MessageItemData {
@@ -38,7 +37,6 @@ interface MessageListProps {
 }
 
 function MessageList(props: MessageListProps) {
-  const t = useLocale();
   const { data, unReadData } = props;
 
   function onItemClick(item: MessageItemData, index: number) {
@@ -52,17 +50,17 @@ function MessageList(props: MessageListProps) {
 
   return (
     <List
-      noDataElement={<Result status="404" subTitle={t['message.empty.tips']} />}
+      noDataElement={<Result status="404" subTitle={'暂无内容'} />}
       footer={
         <div className={styles.footer}>
           <div className={styles['footer-item']}>
             <Button type="text" size="small" onClick={onAllBtnClick}>
-              {t['message.allRead']}
+              全部已读
             </Button>
           </div>
           <div className={styles['footer-item']}>
             <Button type="text" size="small">
-              {t['message.seeMore']}
+              查看更多
             </Button>
           </div>
         </div>

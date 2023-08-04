@@ -9,8 +9,7 @@ import {
   Link,
 } from '@arco-design/web-react';
 import { IconCamera, IconPlus } from '@arco-design/web-react/icon';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/header.module.less';
 
 export default function Info({
@@ -20,8 +19,6 @@ export default function Info({
   userInfo: any;
   loading: boolean;
 }) {
-  const t = useLocale(locale);
-
   const [avatar, setAvatar] = useState('');
 
   function onAvatarChange(_, file) {
@@ -63,49 +60,49 @@ export default function Info({
         labelStyle={{ textAlign: 'right' }}
         data={[
           {
-            label: t['userSetting.label.name'],
+            label: ['userSetting.label.name'],
             value: loading ? loadingNode : userInfo.name,
           },
           {
-            label: t['userSetting.label.verified'],
+            label: ['userSetting.label.verified'],
             value: loading ? (
               loadingNode
             ) : (
               <span>
                 {userInfo.verified ? (
                   <Tag color="green" className={styles['verified-tag']}>
-                    {t['userSetting.value.verified']}
+                    {['userSetting.value.verified']}
                   </Tag>
                 ) : (
                   <Tag color="red" className={styles['verified-tag']}>
-                    {t['userSetting.value.notVerified']}
+                    {['userSetting.value.notVerified']}
                   </Tag>
                 )}
                 <Link role="button" className={styles['edit-btn']}>
-                  {t['userSetting.btn.edit']}
+                  {['userSetting.btn.edit']}
                 </Link>
               </span>
             ),
           },
           {
-            label: t['userSetting.label.accountId'],
+            label: ['userSetting.label.accountId'],
             value: loading ? loadingNode : userInfo.accountId,
           },
           {
-            label: t['userSetting.label.phoneNumber'],
+            label: ['userSetting.label.phoneNumber'],
             value: loading ? (
               loadingNode
             ) : (
               <span>
                 {userInfo.phoneNumber}
                 <Link role="button" className={styles['edit-btn']}>
-                  {t['userSetting.btn.edit']}
+                  {['userSetting.btn.edit']}
                 </Link>
               </span>
             ),
           },
           {
-            label: t['userSetting.label.registrationTime'],
+            label: ['userSetting.label.registrationTime'],
             value: loading ? loadingNode : userInfo.registrationTime,
           },
         ]}

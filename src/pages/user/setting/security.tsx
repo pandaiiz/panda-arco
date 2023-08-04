@@ -1,38 +1,34 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import cs from 'classnames';
 import { Button } from '@arco-design/web-react';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/index.module.less';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 function Security() {
-  const t = useLocale(locale);
-
-  const userInfo = useSelector((state: any) => {
-    return state.userInfo || {};
-  });
+  const [{ userInfo }] = useRecoilState(commonState);
 
   const data = [
     {
-      title: t['userSetting.security.password'],
-      value: t['userSetting.security.password.tips'],
+      title: ['userSetting.security.password'],
+      value: ['userSetting.security.password.tips'],
     },
     {
-      title: t['userSetting.security.question'],
+      title: ['userSetting.security.question'],
       value: '',
-      placeholder: t['userSetting.security.question.placeholder'],
+      placeholder: ['userSetting.security.question.placeholder'],
     },
     {
-      title: t['userSetting.security.phone'],
+      title: ['userSetting.security.phone'],
       value: userInfo.phoneNumber
-        ? `${t['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
+        ? `${['userSetting.security.phone.tips']} ${userInfo.phoneNumber}`
         : '',
     },
     {
-      title: t['userSetting.security.email'],
+      title: ['userSetting.security.email'],
       value: '',
-      placeholder: t['userSetting.security.email.placeholder'],
+      placeholder: ['userSetting.security.email.placeholder'],
     },
   ];
 
@@ -53,8 +49,8 @@ function Security() {
             <span>
               <Button type="text">
                 {item.value
-                  ? t['userSetting.btn.edit']
-                  : t['userSetting.btn.set']}
+                  ? ['userSetting.btn.edit']
+                  : ['userSetting.btn.set']}
               </Button>
             </span>
           </div>

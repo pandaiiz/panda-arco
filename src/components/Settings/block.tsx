@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Switch, Divider, InputNumber } from '@arco-design/web-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { GlobalState } from '../../store';
-import useLocale from '../../utils/useLocale';
 import styles from './style/block.module.less';
+import { useRecoilState } from 'recoil';
+import { commonState } from '@/store';
 
 export interface BlockProps {
   title?: ReactNode;
@@ -13,9 +12,8 @@ export interface BlockProps {
 
 export default function Block(props: BlockProps) {
   const { title, options, children } = props;
-  const locale = useLocale();
-  const settings = useSelector((state: GlobalState) => state.settings);
-  const dispatch = useDispatch();
+
+  const [comState, setComState] = useRecoilState(commonState);
 
   return (
     <div className={styles.block}>
@@ -26,19 +24,19 @@ export default function Block(props: BlockProps) {
 
           return (
             <div className={styles['switch-wrapper']} key={option.value}>
-              <span>{locale[option.name]}</span>
+              <span>{option.name}</span>
               {type === 'switch' && (
                 <Switch
                   size="small"
-                  checked={!!settings[option.value]}
+                  checked={!!comState.settings[option.value]}
                   onChange={(checked) => {
                     const newSetting = {
-                      ...settings,
+                      ...comState.settings,
                       [option.value]: checked,
                     };
-                    dispatch({
-                      type: 'update-settings',
-                      payload: { settings: newSetting },
+                    setComState({
+                      ...comState,
+                      settings: newSetting,
                     });
                     // set color week
                     if (checked && option.value === 'colorWeek') {
@@ -54,15 +52,15 @@ export default function Block(props: BlockProps) {
                 <InputNumber
                   style={{ width: 80 }}
                   size="small"
-                  value={settings.menuWidth}
+                  value={comState.settings.menuWidth}
                   onChange={(value) => {
                     const newSetting = {
-                      ...settings,
+                      ...comState.settings,
                       [option.value]: value,
                     };
-                    dispatch({
-                      type: 'update-settings',
-                      payload: { settings: newSetting },
+                    setComState({
+                      ...comState,
+                      settings: newSetting,
                     });
                   }}
                 />

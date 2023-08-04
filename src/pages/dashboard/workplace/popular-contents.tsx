@@ -2,12 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, Card, Radio, Table, Typography } from '@arco-design/web-react';
 import { IconCaretDown, IconCaretUp } from '@arco-design/web-react/icon';
 import axios from 'axios';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/popular-contents.module.less';
 
 function PopularContent() {
-  const t = useLocale(locale);
   const [type, setType] = useState(0);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,12 +33,12 @@ function PopularContent() {
 
   const columns = [
     {
-      title: t['workplace.column.rank'],
+      title: ['workplace.column.rank'],
       dataIndex: 'rank',
       width: 65,
     },
     {
-      title: t['workplace.column.title'],
+      title: ['workplace.column.title'],
       dataIndex: 'title',
       render: (x) => (
         <Typography.Paragraph style={{ margin: 0 }} ellipsis>
@@ -49,7 +47,7 @@ function PopularContent() {
       ),
     },
     {
-      title: t['workplace.column.pv'],
+      title: ['workplace.column.pv'],
       dataIndex: 'pv',
       width: 100,
       render: (text) => {
@@ -57,7 +55,7 @@ function PopularContent() {
       },
     },
     {
-      title: t['workplace.column.increase'],
+      title: ['workplace.column.increase'],
       dataIndex: 'increase',
       sorter: (a, b) => a.increase - b.increase,
       width: 110,
@@ -82,18 +80,18 @@ function PopularContent() {
     <Card>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography.Title heading={6}>
-          {t['workplace.popularContents']}
+          {['workplace.popularContents']}
         </Typography.Title>
-        <Link>{t['workplace.seeMore']}</Link>
+        <Link>{['workplace.seeMore']}</Link>
       </div>
       <Radio.Group
         type="button"
         value={type}
         onChange={setType}
         options={[
-          { label: t['workplace.text'], value: 0 },
-          { label: t['workplace.image'], value: 1 },
-          { label: t['workplace.video'], value: 2 },
+          { label: ['workplace.text'], value: 0 },
+          { label: ['workplace.image'], value: 1 },
+          { label: ['workplace.video'], value: 2 },
         ]}
         style={{ marginBottom: 16 }}
       />

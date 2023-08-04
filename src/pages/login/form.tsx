@@ -11,8 +11,7 @@ import { IconLock, IconUser } from '@arco-design/web-react/icon';
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import useStorage from '@/utils/useStorage';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import styles from './style/index.module.less';
 
 export default function LoginForm() {
@@ -21,8 +20,6 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [loginParams, setLoginParams, removeLoginParams] =
     useStorage('loginParams');
-
-  const t = useLocale(locale);
 
   const [rememberPassword, setRememberPassword] = useState(!!loginParams);
 
@@ -49,7 +46,7 @@ export default function LoginForm() {
         if (status === 'ok') {
           afterLoginSuccess(params);
         } else {
-          setErrorMessage(msg || t['login.form.login.errMsg']);
+          setErrorMessage(msg || ['login.form.login.errMsg']);
         }
       })
       .finally(() => {
@@ -75,9 +72,9 @@ export default function LoginForm() {
 
   return (
     <div className={styles['login-form-wrapper']}>
-      <div className={styles['login-form-title']}>{t['login.form.title']}</div>
+      <div className={styles['login-form-title']}>{['login.form.title']}</div>
       <div className={styles['login-form-sub-title']}>
-        {t['login.form.title']}
+        {['login.form.title']}
       </div>
       <div className={styles['login-form-error-msg']}>{errorMessage}</div>
       <Form
@@ -88,40 +85,40 @@ export default function LoginForm() {
       >
         <Form.Item
           field="userName"
-          rules={[{ required: true, message: t['login.form.userName.errMsg'] }]}
+          rules={[{ required: true, message: ['login.form.userName.errMsg'] }]}
         >
           <Input
             prefix={<IconUser />}
-            placeholder={t['login.form.userName.placeholder']}
+            placeholder={['login.form.userName.placeholder']}
             onPressEnter={onSubmitClick}
           />
         </Form.Item>
         <Form.Item
           field="password"
-          rules={[{ required: true, message: t['login.form.password.errMsg'] }]}
+          rules={[{ required: true, message: ['login.form.password.errMsg'] }]}
         >
           <Input.Password
             prefix={<IconLock />}
-            placeholder={t['login.form.password.placeholder']}
+            placeholder={['login.form.password.placeholder']}
             onPressEnter={onSubmitClick}
           />
         </Form.Item>
         <Space size={16} direction="vertical">
           <div className={styles['login-form-password-actions']}>
             <Checkbox checked={rememberPassword} onChange={setRememberPassword}>
-              {t['login.form.rememberPassword']}
+              {['login.form.rememberPassword']}
             </Checkbox>
-            <Link>{t['login.form.forgetPassword']}</Link>
+            <Link>{['login.form.forgetPassword']}</Link>
           </div>
           <Button type="primary" long onClick={onSubmitClick} loading={loading}>
-            {t['login.form.login']}
+            {['login.form.login']}
           </Button>
           <Button
             type="text"
             long
             className={styles['login-form-register-btn']}
           >
-            {t['login.form.register']}
+            {['login.form.register']}
           </Button>
         </Space>
       </Form>

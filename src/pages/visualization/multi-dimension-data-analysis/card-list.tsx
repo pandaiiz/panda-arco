@@ -10,8 +10,6 @@ import {
 import cs from 'classnames';
 import { Chart, Line, Interval, Tooltip, Interaction } from 'bizcharts';
 import axios from 'axios';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
 
 import { IconArrowRise, IconArrowFall } from '@arco-design/web-react/icon';
 import styles from './style/card-block.module.less';
@@ -155,7 +153,6 @@ const cardInfo = [
   },
 ];
 function CardList() {
-  const t = useLocale(locale);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(
     cardInfo.map((item) => ({

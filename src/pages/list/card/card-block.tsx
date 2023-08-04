@@ -22,8 +22,7 @@ import {
   IconMore,
 } from '@arco-design/web-react/icon';
 import PermissionWrapper from '@/components/PermissionWrapper';
-import useLocale from '@/utils/useLocale';
-import locale from './locale';
+
 import { QualityInspection, BasicCard } from './interface';
 import styles from './style/index.module.less';
 
@@ -49,7 +48,6 @@ function CardBlock(props: CardBlockType) {
   const [status, setStatus] = useState(card.status);
   const [loading, setLoading] = useState(props.loading);
 
-  const t = useLocale(locale);
   const changeStatus = async () => {
     setLoading(true);
     await new Promise((resolve) =>
@@ -95,7 +93,7 @@ function CardBlock(props: CardBlockType) {
               style={{ marginLeft: '12px' }}
               loading={loading}
             >
-              {t['cardList.options.qualityInspection']}
+              {['cardList.options.qualityInspection']}
             </Button>
           </PermissionWrapper>
 
@@ -104,7 +102,7 @@ function CardBlock(props: CardBlockType) {
               { resource: /^menu.list.*/, actions: ['write'] },
             ]}
           >
-            <Button loading={loading}>{t['cardList.options.remove']}</Button>
+            <Button loading={loading}>{['cardList.options.remove']}</Button>
           </PermissionWrapper>
         </>
       );
@@ -115,13 +113,13 @@ function CardBlock(props: CardBlockType) {
         <>
           {status === 1 ? (
             <Button loading={loading} onClick={changeStatus}>
-              {t['cardList.options.cancel']}
+              {['cardList.options.cancel']}
             </Button>
           ) : (
             <Button type="outline" loading={loading} onClick={changeStatus}>
               {status === 0
-                ? t['cardList.options.subscribe']
-                : t['cardList.options.renewal']}
+                ? ['cardList.options.subscribe']
+                : ['cardList.options.renewal']}
             </Button>
           )}
         </>
@@ -142,7 +140,7 @@ function CardBlock(props: CardBlockType) {
           className={styles.status}
           size="small"
         >
-          {t['cardList.tag.activated']}
+          {['cardList.tag.activated']}
         </Tag>
       );
     }
@@ -155,7 +153,7 @@ function CardBlock(props: CardBlockType) {
             className={styles.status}
             size="small"
           >
-            {t['cardList.tag.opened']}
+            {['cardList.tag.opened']}
           </Tag>
         );
       case 2:
@@ -166,7 +164,7 @@ function CardBlock(props: CardBlockType) {
             className={styles.status}
             size="small"
           >
-            {t['cardList.tag.expired']}
+            {['cardList.tag.expired']}
           </Tag>
         );
       default:
