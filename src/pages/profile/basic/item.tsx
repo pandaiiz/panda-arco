@@ -21,72 +21,72 @@ function ProfileItem(props: ProfileItemProps) {
   }[] = [];
 
   blockDataList.push({
-    title: t[`basicProfile.title.${type}Video`],
+    title: `basicProfile.title.${type}Video`,
     data: [
       {
-        label: ['basicProfile.label.video.mode'],
+        label: 'basicProfile.label.video.mode',
         value: data?.video?.mode || '-',
       },
       {
-        label: ['basicProfile.label.video.acquisition.resolution'],
+        label: 'basicProfile.label.video.acquisition.resolution',
         value: data?.video?.acquisition.resolution || '-',
       },
       {
-        label: ['basicProfile.label.video.acquisition.frameRate'],
+        label: 'basicProfile.label.video.acquisition.frameRate',
         value: `${data?.video?.acquisition.frameRate || '-'} fps`,
       },
       {
-        label: ['basicProfile.label.video.encoding.resolution'],
+        label: 'basicProfile.label.video.encoding.resolution',
         value: data?.video?.encoding.resolution || '-',
       },
       {
-        label: ['basicProfile.label.video.encoding.rate.min'],
+        label: 'basicProfile.label.video.encoding.rate.min',
         value: `${data?.video?.encoding.rate.min || '-'} bps`,
       },
       {
-        label: ['basicProfile.label.video.encoding.rate.max'],
+        label: 'basicProfile.label.video.encoding.rate.max',
         value: `${data?.video?.encoding.rate.max || '-'} bps`,
       },
       {
-        label: ['basicProfile.label.video.encoding.rate.default'],
+        label: 'basicProfile.label.video.encoding.rate.default',
         value: `${data?.video?.encoding.rate.default || '-'} bps`,
       },
       {
-        label: ['basicProfile.label.video.encoding.frameRate'],
+        label: 'basicProfile.label.video.encoding.frameRate',
         value: `${data?.video?.encoding.frameRate || '-'} fpx`,
       },
       {
-        label: ['basicProfile.label.video.encoding.profile'],
+        label: 'basicProfile.label.video.encoding.profile',
         value: data?.video?.encoding.profile || '-',
       },
     ],
   });
 
   blockDataList.push({
-    title: t[`basicProfile.title.${type}Audio`],
+    title: `basicProfile.title.${type}Audio`,
     data: [
       {
-        label: ['basicProfile.label.audio.mode'],
+        label: 'basicProfile.label.audio.mode',
         value: data?.audio?.mode || '-',
       },
       {
-        label: ['basicProfile.label.audio.acquisition.channels'],
+        label: 'basicProfile.label.audio.acquisition.channels',
         value: `${data?.audio?.acquisition.channels || '-'} ${[
           'basicProfile.unit.audio.channels',
         ]}`,
       },
       {
-        label: ['basicProfile.label.audio.encoding.channels'],
+        label: 'basicProfile.label.audio.encoding.channels',
         value: `${data?.audio?.encoding.channels || '-'} ${[
           'basicProfile.unit.audio.channels',
         ]}`,
       },
       {
-        label: ['basicProfile.label.audio.encoding.rate'],
+        label: 'basicProfile.label.audio.encoding.rate',
         value: `${data?.audio?.encoding.rate || '-'} kbps`,
       },
       {
-        label: ['basicProfile.label.audio.encoding.profile'],
+        label: 'basicProfile.label.audio.encoding.profile',
         value: data?.audio?.encoding.profile || '-',
       },
     ],

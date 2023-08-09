@@ -25,9 +25,9 @@ if (!isSSR) {
           introduction: '王力群并非是一个真实存在的人。',
           personalWebsite: 'https://www.arco.design',
           verified: true,
-          phoneNumber: /177[*]{6}[0-9]{2}/,
-          accountId: /[a-z]{4}[-][0-9]{8}/,
-          registrationTime: Mock.Random.datetime('yyyy-MM-dd HH:mm:ss'),
+          phoneNumber: 13823333333,
+          accountId: 'kgim-15153424',
+          registrationTime: '2021-12-09 05:07:52',
           permissions: generatePermission(userRole),
         });
       });

@@ -42,9 +42,9 @@ function UserInfo() {
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '20px' }}>
-                {['userInfo.title.project']}
+                我的项目
               </Title>
-              <Link>{['userInfo.btn.more']}</Link>
+              <Link>查看更多</Link>
             </div>
             <MyProject />
           </Card>
@@ -53,7 +53,7 @@ function UserInfo() {
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '12px' }}>
-                {['userInfo.title.team']}
+                我的团队
               </Title>
             </div>
             <MyTeam />
@@ -65,9 +65,9 @@ function UserInfo() {
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
               <Title heading={6} style={{ marginBottom: '8px' }}>
-                {['userInfo.title.news']}
+                最新动态
               </Title>
-              <Link>{['userInfo.btn.all']}</Link>
+              <Link>查看全部</Link>
             </div>
             <LatestNews />
           </Card>
@@ -75,14 +75,14 @@ function UserInfo() {
         <Col span={8}>
           <Card className={styles.wrapper}>
             <div className={styles['card-title-wrapper']}>
-              <Title heading={6}>{['userInfo.title.notice']}</Title>
+              <Title heading={6}>站内通知</Title>
             </div>
             {noticeLoading ? (
               <Skeleton text={{ rows: 10 }} animation />
             ) : (
               <Result
                 status="404"
-                subTitle={['userInfo.notice.empty']}
+                subTitle={'暂无数据'}
                 style={{ paddingTop: '60px', paddingBottom: '130px' }}
               />
             )}

@@ -187,9 +187,9 @@ function CardList() {
   const formatData = useMemo(() => {
     return data.map((item) => ({
       ...item,
-      title: t[`multiDAnalysis.cardList.${item.key}`],
+      title: `multiDAnalysis.cardList.${item.key}`,
     }));
-  }, [t, data]);
+  }, [data]);
 
   return (
     <Row gutter={16}>

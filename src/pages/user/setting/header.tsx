@@ -60,49 +60,15 @@ export default function Info({
         labelStyle={{ textAlign: 'right' }}
         data={[
           {
-            label: ['userSetting.label.name'],
+            label: '用户名',
             value: loading ? loadingNode : userInfo.name,
           },
           {
-            label: ['userSetting.label.verified'],
-            value: loading ? (
-              loadingNode
-            ) : (
-              <span>
-                {userInfo.verified ? (
-                  <Tag color="green" className={styles['verified-tag']}>
-                    {['userSetting.value.verified']}
-                  </Tag>
-                ) : (
-                  <Tag color="red" className={styles['verified-tag']}>
-                    {['userSetting.value.notVerified']}
-                  </Tag>
-                )}
-                <Link role="button" className={styles['edit-btn']}>
-                  {['userSetting.btn.edit']}
-                </Link>
-              </span>
-            ),
-          },
-          {
-            label: ['userSetting.label.accountId'],
+            label: '账户ID',
             value: loading ? loadingNode : userInfo.accountId,
           },
           {
-            label: ['userSetting.label.phoneNumber'],
-            value: loading ? (
-              loadingNode
-            ) : (
-              <span>
-                {userInfo.phoneNumber}
-                <Link role="button" className={styles['edit-btn']}>
-                  {['userSetting.btn.edit']}
-                </Link>
-              </span>
-            ),
-          },
-          {
-            label: ['userSetting.label.registrationTime'],
+            label: '注册时间',
             value: loading ? loadingNode : userInfo.registrationTime,
           },
         ]}

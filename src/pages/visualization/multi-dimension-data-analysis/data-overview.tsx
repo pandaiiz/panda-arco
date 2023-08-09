@@ -70,7 +70,7 @@ export default () => {
         color: 'rgb(var(--purple-6))',
       },
     ];
-  }, [t, overview]);
+  }, [overview]);
 
   return (
     <Grid.Row justify="space-between">

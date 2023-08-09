@@ -9,13 +9,10 @@
     "build": "vite build",
     "eslint": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix --cache",
     "stylelint": "stylelint 'src/**/*.less' 'src/**/*.css' --fix --cache",
-    "pre-commit": "pretty-quick --staged && npm run eslint && npm run stylelint",
-    "codegen": "graphql-codegen --config codegen.yml",
-    "fetch-schema": "node ./scripts/fetch-schema"
+    "pre-commit": "pretty-quick --staged && npm run eslint && npm run stylelint"
   },
   "dependencies": {
     "@antv/data-set": "^0.11.8",
-    "@apollo/client": "^3.7.17",
     "@arco-design/color": "^0.4.0",
     "@arco-design/web-react": "^2.32.2",
     "@arco-plugins/vite-react": "^1.0.5",
@@ -28,7 +25,6 @@
     "classnames": "^2.3.1",
     "copy-to-clipboard": "^3.3.1",
     "default-passive-events": "^2.0.0",
-    "graphql": "^16.7.1",
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
@@ -40,15 +36,12 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "recoil": "^0.7.7",
-    "redux": "^4.1.2"
+    "redux": "^4.1.2",
+    "swr": "^2.2.0"
   },
   "devDependencies": {
     "@arco-design/webpack-plugin": "^1.6.0",
     "@arco-plugins/vite-plugin-svgr": "^0.7.2",
-    "@graphql-codegen/cli": "^5.0.0",
-    "@graphql-codegen/typescript": "^4.0.1",
-    "@graphql-codegen/typescript-operations": "^4.0.1",
-    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@svgr/webpack": "^5.5.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",

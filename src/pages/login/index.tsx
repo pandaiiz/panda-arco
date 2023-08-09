@@ -13,10 +13,7 @@ function Login() {
     <div className={styles.container}>
       <div className={styles.logo}>
         <Logo />
-        <div className={styles['logo-text']}>Arco Design Pro</div>
-      </div>
-      <div className={styles.banner}>
-        <div className={styles['banner-inner']}></div>
+        <div className={styles['logo-text']}>Cyan</div>
       </div>
       <div className={styles.content}>
         <div className={styles['content-inner']}>

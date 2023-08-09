@@ -12,7 +12,6 @@ function ColorPanel() {
     document.querySelector('body').getAttribute('arco-theme') || 'light';
 
   const [comState, setComState] = useRecoilState(commonState);
-  const locale = useLocale();
   const themeColor = comState.settings.themeColor;
   const list = generate(themeColor, { list: true });
 
@@ -63,7 +62,7 @@ function ColorPanel() {
         ))}
       </ul>
       <Typography.Paragraph style={{ fontSize: 12 }}>
-        {locale['settings.color.tooltip']}
+        根据主题颜色生成的 10 个梯度色
       </Typography.Paragraph>
     </div>
   );

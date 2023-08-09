@@ -37,32 +37,36 @@ function Setting(props: SettingProps) {
         title={
           <>
             <IconSettings />
-            {['settings.title']}
+            页面配置
           </>
         }
         visible={visible}
-        okText={['settings.copySettings']}
-        cancelText={['settings.close']}
+        okText={'复制配置'}
+        cancelText={'关闭'}
         onOk={onCopySettings}
         onCancel={() => setVisible(false)}
       >
-        <Block title={['settings.themeColor']}>
+        <Block title={'主题色'}>
           <ColorPanel />
         </Block>
         <Block
-          title={['settings.content']}
+          title={'内容区域'}
           options={[
-            { name: 'settings.navbar', value: 'navbar' },
-            { name: 'settings.menu', value: 'menu' },
-            { name: 'settings.footer', value: 'footer' },
-            { name: 'settings.menuWidth', value: 'menuWidth', type: 'number' },
+            { name: '导航栏', value: 'navbar' },
+            { name: '菜单栏', value: 'menu' },
+            { name: '底部', value: 'footer' },
+            { name: '菜单宽度 (px)', value: 'menuWidth', type: 'number' },
           ]}
         />
         <Block
-          title={['settings.otherSettings']}
-          options={[{ name: 'settings.colorWeek', value: 'colorWeek' }]}
+          title={'其他设置'}
+          options={[{ name: '色弱模式', value: 'colorWeek' }]}
         />
-        <Alert content={['settings.alertContent']} />
+        <Alert
+          content={
+            '配置之后仅是临时生效，要想真正作用于项目，点击下方的 "复制配置" 按钮，将配置替换到 settings.json 中即可。'
+          }
+        />
       </Drawer>
     </>
   );

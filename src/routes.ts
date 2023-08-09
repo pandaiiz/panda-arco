@@ -23,7 +23,9 @@ export const routes: IRoute[] = [
       {
         name: '实时监控',
         key: 'dashboard/monitor',
-        // requiredPermissions: [{ resource: '实时监控', actions: ['write'] }],
+        /* requiredPermissions: [
+          { resource: 'dashboard.monitor', actions: ['read'] },
+        ],*/
       },
     ],
   },

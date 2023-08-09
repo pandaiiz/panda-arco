@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Tooltip,
   Avatar,
   Dropdown,
   Menu,
@@ -10,8 +9,6 @@ import {
 } from '@arco-design/web-react';
 import {
   IconNotification,
-  IconSunFill,
-  IconMoonFill,
   IconUser,
   IconPoweroff,
   IconTag,

@@ -82,7 +82,7 @@ function Overview() {
     <Card>
       <Typography.Title heading={5}>
         欢迎回来，
-        {userInfo.name}
+        {userInfo?.name}
       </Typography.Title>
       <Divider />
       <Row>

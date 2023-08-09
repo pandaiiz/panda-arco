@@ -30,15 +30,14 @@ export default defineConfig({
   },
   server: {
     port: 9000,
-    /*proxy: {
+    proxy: {
       '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
+        target: 'http://localhost:7000',
       },
       '/static': {
         target: 'http://localhost:5000',
         changeOrigin: true,
       },
-    },*/
+    },
   },
 });
