@@ -56,6 +56,7 @@ request.interceptors.response.use(
 export const getFetcher = (url) => request.get(url).then((res) => res.data);
 export const postFetcher = (url, { arg }) =>
   request.post(url, arg).then((res) => res.data);
-export const putFetcher = (url) => request.put(url).then((res) => res.data);
-export const deleteFetcher = (url) =>
-  request.delete(url).then((res) => res.data);
+export const patchFetcher = (url, { arg }) =>
+  request.patch(`${url}/${arg.id}`, arg.data).then((res) => res.data);
+export const deleteFetcher = (url, { arg }) =>
+  request.delete(`${url}/${arg}`).then((res) => res.data);

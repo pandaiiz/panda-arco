@@ -50,6 +50,8 @@ function getIconFromKey(key) {
       return <IconExclamationCircle className={styles.icon} />;
     case 'user':
       return <IconUser className={styles.icon} />;
+    case 'setting':
+      return <IconSettings className={styles.icon} />;
     default:
       return <div className={styles['icon-empty']} />;
   }
@@ -90,7 +92,7 @@ function PageLayout() {
 
   const [{ settings, userLoading, userInfo }] = useRecoilState(commonState);
 
-  const [routes, defaultRoute] = useRoute(userInfo?.permissions);
+  const [routes, defaultRoute] = useRoute(userInfo?.routes);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);

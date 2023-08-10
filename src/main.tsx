@@ -8,7 +8,6 @@ import 'default-passive-events';
 import PageLayout from './layout';
 import Login from './pages/login';
 import checkLogin from './utils/checkLogin';
-import './mock';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { createRoot } from 'react-dom/client';
 import { getFetcher } from '@/utils/request';

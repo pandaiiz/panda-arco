@@ -13,7 +13,7 @@ export type IRoute = AuthParams & {
 
 export const routes: IRoute[] = [
   {
-    name: '仪表盘',
+    name: '仪表盘2',
     key: 'dashboard',
     children: [
       {
@@ -23,9 +23,7 @@ export const routes: IRoute[] = [
       {
         name: '实时监控',
         key: 'dashboard/monitor',
-        /* requiredPermissions: [
-          { resource: 'dashboard.monitor', actions: ['read'] },
-        ],*/
+        // requiredPermissions: [{ resource: '实时监控', actions: ['read'] }],
       },
     ],
   },
@@ -146,6 +144,20 @@ export const routes: IRoute[] = [
       },
     ],
   },
+  {
+    name: '系统设置',
+    key: 'setting',
+    children: [
+      {
+        name: '角色管理',
+        key: 'setting/role',
+      },
+      {
+        name: '菜单管理',
+        key: 'setting/menu',
+      },
+    ],
+  },
 ];
 
 export const getName = (path: string, routes) => {
@@ -157,19 +169,6 @@ export const getName = (path: string, routes) => {
       return getName(path, item.children);
     }
   });
-};
-
-export const generatePermission = (role: string) => {
-  const actions = role === 'admin' ? ['*'] : ['read'];
-  const result = {};
-  routes.forEach((item) => {
-    if (item.children) {
-      item.children.forEach((child) => {
-        result[child.name] = actions;
-      });
-    }
-  });
-  return result;
 };
 
 const useRoute = (userPermission): [IRoute[], string] => {

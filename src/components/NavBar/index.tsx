@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Avatar,
   Dropdown,
@@ -9,9 +9,7 @@ import {
 } from '@arco-design/web-react';
 import {
   IconNotification,
-  IconUser,
   IconPoweroff,
-  IconTag,
   IconLoading,
   IconSettings,
 } from '@arco-design/web-react/icon';
@@ -22,14 +20,12 @@ import IconButton from './IconButton';
 import Settings from '../Settings';
 import styles from './style/index.module.less';
 import useStorage from '@/utils/useStorage';
-import { generatePermission } from '@/routes';
 import { useRecoilState } from 'recoil';
 
 function Navbar({ show }: { show: boolean }) {
-  const [comState, setComState] = useRecoilState(commonState);
+  const [comState] = useRecoilState(commonState);
 
   const [_, setUserStatus] = useStorage('userStatus');
-  const [role, setRole] = useStorage('userRole', 'admin');
 
   function logout() {
     setUserStatus('logout');
@@ -44,16 +40,6 @@ function Navbar({ show }: { show: boolean }) {
     }
   }
 
-  useEffect(() => {
-    setComState({
-      ...comState,
-      userInfo: {
-        ...comState.userInfo,
-        permissions: generatePermission(role),
-      },
-    });
-  }, [role]);
-
   if (!show) {
     return (
       <div className={styles['fixed-settings']}>
@@ -66,29 +52,8 @@ function Navbar({ show }: { show: boolean }) {
     );
   }
 
-  const handleChangeRole = () => {
-    const newRole = role === 'admin' ? 'user' : 'admin';
-    setRole(newRole);
-  };
-
   const droplist = (
     <Menu onClickMenuItem={onMenuItemClick}>
-      <Menu.SubMenu
-        key="role"
-        title={
-          <>
-            <IconUser className={styles['dropdown-icon']} />
-            <span className={styles['user-role']}>
-              {role === 'admin' ? '管理员' : '用户'}
-            </span>
-          </>
-        }
-      >
-        <Menu.Item onClick={handleChangeRole} key="switch role">
-          <IconTag className={styles['dropdown-icon']} />
-          切换角色
-        </Menu.Item>
-      </Menu.SubMenu>
       <Menu.Item key="setting">
         <IconSettings className={styles['dropdown-icon']} />
         用户设置
