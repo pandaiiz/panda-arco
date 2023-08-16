@@ -1,98 +1,69 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  Table,
-  Card,
-  PaginationProps,
-  Button,
-  Space,
-} from '@arco-design/web-react';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
-import axios from 'axios';
+import { Table, Card, Button, Space } from '@arco-design/web-react';
+import { IconPlus } from '@arco-design/web-react/icon';
 
 import SearchForm from './form';
 
 import styles from './style/index.module.less';
-import './mock';
 import { getColumns } from './constants';
-
-export const Status = ['已上线', '未上线'];
+import Edit from './edit';
+import useSWR from 'swr';
+import { deleteFetcher, getFetcher } from '@/utils/request';
+import useSWRMutation from 'swr/mutation';
 
 function SearchTable() {
-  const tableCallback = async (record, type) => {
-    console.log(record, type);
-  };
+  const [visible, setVisible] = useState(false);
 
+  const { data: menuList, isLoading } = useSWR('/api/menu', getFetcher);
+  const { trigger, reset } = useSWRMutation(`/api/menu`, deleteFetcher);
+
+  const [data, setData] = useState({});
+
+  const tableCallback = async (record, type) => {
+    switch (type) {
+      case 'delete':
+        await trigger(record.id);
+        reset();
+        break;
+      case 'edit':
+        setData(record);
+        setVisible(true);
+        break;
+    }
+  };
   const columns = useMemo(() => getColumns(tableCallback), []);
 
-  const [data, setData] = useState([]);
-  const [pagination, setPatination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
-    pageSize: 10,
-    current: 1,
-    pageSizeChangeResetCurrent: true,
-  });
-  const [loading, setLoading] = useState(true);
-  const [formParams, setFormParams] = useState({});
-
-  useEffect(() => {
-    fetchData();
-  }, [pagination.current, pagination.pageSize, JSON.stringify(formParams)]);
-
-  function fetchData() {
-    const { current, pageSize } = pagination;
-    setLoading(true);
-    axios
-      .get('/api/list', {
-        params: {
-          page: current,
-          pageSize,
-          ...formParams,
-        },
-      })
-      .then((res) => {
-        setData(res.data.list);
-        setPatination({
-          ...pagination,
-          current,
-          pageSize,
-          total: res.data.total,
-        });
-        setLoading(false);
-      });
-  }
-
-  function onChangeTable({ current, pageSize }) {
-    setPatination({
-      ...pagination,
-      current,
-      pageSize,
-    });
-  }
-
-  function handleSearch(params) {
-    setPatination({ ...pagination, current: 1 });
-    setFormParams(params);
-  }
-
+  const modalClose = () => {
+    setVisible(false);
+    // mutate();
+  };
   return (
     <Card>
-      <SearchForm onSearch={handleSearch} />
+      {visible && <Edit data={data} onClose={modalClose} />}
       <div className={styles['button-group']}>
         <Space>
-          <Button type="primary" icon={<IconPlus />}>
+          <Button
+            type="primary"
+            icon={<IconPlus />}
+            onClick={() => {
+              setData({});
+              setVisible(true);
+            }}
+          >
             新建
           </Button>
         </Space>
       </div>
-      <Table
-        rowKey="id"
-        loading={loading}
-        onChange={onChangeTable}
-        pagination={pagination}
-        columns={columns}
-        data={data}
-      />
+      {menuList?.length > 0 && (
+        <Table
+          rowKey="id"
+          pagination={false}
+          loading={isLoading}
+          columns={columns}
+          data={menuList}
+          defaultExpandAllRows={true}
+        />
+      )}
     </Card>
   );
 }

@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { ConfigProvider } from '@arco-design/web-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { commonState } from '@/store';
-import 'default-passive-events';
 
 import PageLayout from './layout';
 import Login from './pages/login';
