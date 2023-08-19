@@ -156,6 +156,10 @@ export const routes: IRoute[] = [
         name: '菜单管理',
         key: 'setting/menu',
       },
+      {
+        name: '用户管理',
+        key: 'setting/user',
+      },
     ],
   },
 ];

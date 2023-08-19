@@ -14,7 +14,10 @@ const FormItem = Form.Item;
 
 function MenuList({ data, onClose }) {
   const [form] = Form.useForm();
-  const { data: menuList, isLoading } = useSWR('/api/menu', getFetcher);
+  const { data: menuList, isLoading } = useSWR(
+    { url: '/api/menu' },
+    getFetcher
+  );
   const { trigger: addMenuTrigger } = useSWRMutation('/api/menu', postFetcher);
   const { trigger: updateMenuTrigger } = useSWRMutation(
     '/api/menu',

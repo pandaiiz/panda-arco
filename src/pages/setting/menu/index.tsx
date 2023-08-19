@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Table, Card, Button, Space } from '@arco-design/web-react';
 import { IconPlus } from '@arco-design/web-react/icon';
-
-import SearchForm from './form';
 
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
@@ -14,7 +12,10 @@ import useSWRMutation from 'swr/mutation';
 function SearchTable() {
   const [visible, setVisible] = useState(false);
 
-  const { data: menuList, isLoading } = useSWR('/api/menu', getFetcher);
+  const { data: menuList, isLoading } = useSWR(
+    { url: '/api/menu' },
+    getFetcher
+  );
   const { trigger, reset } = useSWRMutation(`/api/menu`, deleteFetcher);
 
   const [data, setData] = useState({});

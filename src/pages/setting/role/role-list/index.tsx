@@ -5,11 +5,13 @@ import { deleteFetcher, getFetcher } from '@/utils/request';
 import useSWR from 'swr';
 import { Menu } from '@arco-design/web-react';
 import useSWRMutation from 'swr/mutation';
+import { useRecoilState } from 'recoil';
+import { selectedRoleState } from '@/pages/setting/role';
 const MenuItem = Menu.Item;
 function RoleList() {
+  const [selectedRole, setSelectedRole] = useRecoilState(selectedRoleState);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState({});
-  const { data: roleList, mutate } = useSWR('/api/role', getFetcher);
+  const { data: roleList, mutate } = useSWR({ url: '/api/role' }, getFetcher);
   const { trigger, reset } = useSWRMutation(`/api/role`, deleteFetcher);
   function confirm(item) {
     Modal.confirm({
@@ -33,7 +35,7 @@ function RoleList() {
         <Button
           type="text"
           onClick={() => {
-            setData({});
+            setSelectedRole({});
             setVisible(true);
           }}
         >
@@ -44,6 +46,9 @@ function RoleList() {
       <Menu style={{ height: '100%' }}>
         {roleList?.map((item) => (
           <MenuItem
+            onClick={() => {
+              setSelectedRole(item);
+            }}
             key={item.id}
             style={{ display: 'flex', justifyContent: 'space-between' }}
           >
@@ -53,7 +58,7 @@ function RoleList() {
                 type="primary"
                 size="mini"
                 onClick={() => {
-                  setData(item);
+                  setSelectedRole(item);
                   setVisible(true);
                 }}
               >
@@ -71,7 +76,7 @@ function RoleList() {
           </MenuItem>
         ))}
       </Menu>
-      {visible && <Edit data={data} onClose={modalClose} />}
+      {visible && <Edit data={selectedRole} onClose={modalClose} />}
     </Card>
   );
 }

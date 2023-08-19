@@ -18,7 +18,7 @@ function Index() {
     data: userInfo,
     mutate: fetchUserInfo,
     isLoading,
-  } = useSWRImmutable('/api/user/info', getFetcher);
+  } = useSWRImmutable({ url: '/api/user/info' }, getFetcher);
 
   useEffect(() => {
     if (checkLogin()) {
