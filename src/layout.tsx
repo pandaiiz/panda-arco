@@ -25,6 +25,7 @@ import lazyload from './utils/lazyload';
 import { commonState } from './store';
 import styles from './style/layout.module.less';
 import { useRecoilState } from 'recoil';
+import { cloneDeep } from 'lodash';
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
@@ -58,10 +59,12 @@ function getIconFromKey(key) {
 }
 
 function getFlattenRoutes(routes) {
+  console.log(routes);
   const mod = import.meta.glob('./pages/**/[a-z[]*.tsx');
   const res = [];
   function travel(_routes) {
-    _routes.forEach((route) => {
+    _routes.forEach((route1) => {
+      const route = cloneDeep(route1);
       const visibleChildren = (route.children || []).filter(
         (child) => !child.ignore
       );
@@ -70,7 +73,6 @@ function getFlattenRoutes(routes) {
           route.component = lazyload(mod[`./pages/${route.key}/index.tsx`]);
           res.push(route);
         } catch (e) {
-          console.log(route.key);
           console.error(e);
         }
       }
@@ -92,7 +94,8 @@ function PageLayout() {
 
   const [{ settings, userLoading, userInfo }] = useRecoilState(commonState);
 
-  const [routes, defaultRoute] = useRoute(userInfo?.routes);
+  const [routes, defaultRoute] = [userInfo?.menus || [], 'setting/menu'];
+  // const [routes, defaultRoute] = useRoute(userInfo?.menus);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
@@ -116,6 +119,7 @@ function PageLayout() {
   const showFooter = settings.footer && urlParams.footer !== false;
 
   const flattenRoutes = useMemo(() => getFlattenRoutes(routes) || [], [routes]);
+  console.log(flattenRoutes);
 
   function onClickMenuItem(key) {
     const currentRoute = flattenRoutes.find((r) => r.key === key);
@@ -144,13 +148,13 @@ function PageLayout() {
         const iconDom = getIconFromKey(route.key);
         const titleDom = (
           <>
-            {iconDom} {route.name}
+            {iconDom} {route.title}
           </>
         );
 
         routeMap.current.set(
           `/${route.key}`,
-          breadcrumb ? [...parentNode, route.name] : []
+          breadcrumb ? [...parentNode, route.title] : []
         );
 
         const visibleChildren = (route.children || []).filter((child) => {
@@ -158,7 +162,7 @@ function PageLayout() {
           if (ignore || route.ignore) {
             routeMap.current.set(
               `/${child.key}`,
-              breadcrumb ? [...parentNode, route.name, child.name] : []
+              breadcrumb ? [...parentNode, route.title, child.title] : []
             );
           }
 
@@ -172,7 +176,7 @@ function PageLayout() {
           menuMap.current.set(route.key, { subMenu: true });
           return (
             <SubMenu key={route.key} title={titleDom}>
-              {travel(visibleChildren, level + 1, [...parentNode, route.name])}
+              {travel(visibleChildren, level + 1, [...parentNode, route.title])}
             </SubMenu>
           );
         }

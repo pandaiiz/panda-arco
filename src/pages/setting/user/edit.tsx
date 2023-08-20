@@ -12,23 +12,23 @@ import { getFetcher, patchFetcher, postFetcher } from '@/utils/request';
 import useSWR from 'swr';
 const FormItem = Form.Item;
 
-function MenuEdit({ data, onClose }) {
+function MenuList({ data, onClose }) {
   const [form] = Form.useForm();
-  const { data: menuList, isLoading } = useSWR(
-    { url: '/api/menu' },
+  const { data: roleList, isLoading } = useSWR(
+    { url: '/api/role' },
     getFetcher
   );
-  const { trigger: addMenuTrigger } = useSWRMutation('/api/menu', postFetcher);
-  const { trigger: updateMenuTrigger } = useSWRMutation(
-    '/api/menu',
+  const { trigger: addUserTrigger } = useSWRMutation('/api/user', postFetcher);
+  const { trigger: updateUserTrigger } = useSWRMutation(
+    '/api/user',
     patchFetcher
   );
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateMenuTrigger({ data: formData, id: data.id });
-    else await addMenuTrigger(formData);
+    if (data.id) await updateUserTrigger({ data: formData, id: data.id });
+    else await addUserTrigger(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -63,7 +63,7 @@ function MenuEdit({ data, onClose }) {
           <FormItem label="上级节点" field="parentId">
             <TreeSelect
               placeholder="请选择上级节点"
-              treeData={menuList}
+              treeData={roleList}
               allowClear
               fieldNames={{ key: 'id' }}
               onChange={(value) => {
@@ -108,4 +108,4 @@ function MenuEdit({ data, onClose }) {
   );
 }
 
-export default MenuEdit;
+export default MenuList;

@@ -7,7 +7,7 @@ export function getColumns(
   return [
     {
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'title',
     },
     {
       title: '地址',

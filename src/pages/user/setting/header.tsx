@@ -64,10 +64,6 @@ export default function Info({
             value: loading ? loadingNode : userInfo.name,
           },
           {
-            label: '账户ID',
-            value: loading ? loadingNode : userInfo.accountId,
-          },
-          {
             label: '注册时间',
             value: loading ? loadingNode : userInfo.registrationTime,
           },

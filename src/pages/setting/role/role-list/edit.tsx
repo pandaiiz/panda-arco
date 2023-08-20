@@ -15,8 +15,8 @@ function RoleList({ data, onClose }) {
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) updateRoleTrigger({ data: formData, id: data.id });
-    else addRoleTrigger(formData);
+    if (data.id) await updateRoleTrigger({ data: formData, id: data.id });
+    else await addRoleTrigger(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -31,8 +31,11 @@ function RoleList({ data, onClose }) {
         onCancel={onClose}
       >
         <Form labelCol={{ span: 4 }} form={form} initialValues={data}>
-          <FormItem label="名称" field="name" rules={[{ required: true }]}>
+          <FormItem label="名称" field="title" rules={[{ required: true }]}>
             <Input placeholder="请输入角色名称" />
+          </FormItem>
+          <FormItem label="KEY" field="key" rules={[{ required: true }]}>
+            <Input placeholder="请输入KEY" />
           </FormItem>
         </Form>
       </Modal>

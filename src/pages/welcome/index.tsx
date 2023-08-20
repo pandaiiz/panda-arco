@@ -15,9 +15,6 @@ export default function Welcome() {
         <Typography.Title heading={5} style={{ marginTop: 0 }}>
           {['welcome.title.welcome']}
         </Typography.Title>
-        <Typography.Text type="secondary">
-          {userInfo.name}, {userInfo.email}
-        </Typography.Text>
       </div>
       <div>
         <Alert

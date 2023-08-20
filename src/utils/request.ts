@@ -42,10 +42,9 @@ request.interceptors.response.use(
   }
 );
 
-export const getFetcher = ({ url, params }) => {
-  console.log(url);
-  return request.get(url, { params }).then((res) => res.data);
-};
+export const getFetcher = ({ url, params }) =>
+  request.get(url, { params }).then((res) => res.data);
+
 export const postFetcher = (url, { arg }) =>
   request.post(url, arg).then((res) => res.data);
 export const patchFetcher = (url, { arg }) =>

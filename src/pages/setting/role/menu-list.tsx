@@ -24,11 +24,11 @@ function MenuList() {
     patchFetcher
   );
 
-  const allCheckedKeys = menuList?.map((item) => item.id);
+  const allCheckedKeys = menuList?.map((item: { id: string }) => item.id);
   const [checkedKeys, setCheckedKeys] = useState([]);
 
   useEffect(() => {
-    setCheckedKeys(selectedRole?.menus?.map((item) => item.menuId));
+    setCheckedKeys(selectedRole?.menus?.map((item) => item.menuId) || []);
   }, [selectedRole]);
 
   return (
@@ -55,6 +55,7 @@ function MenuList() {
                   id: selectedRole?.id,
                 });
                 Message.success('保存成功！');
+                setTimeout(() => window.location.reload(), 500);
               }}
             >
               保存
@@ -70,13 +71,12 @@ function MenuList() {
               checkable
               selectable={false}
               checkedKeys={checkedKeys}
-              onCheck={(keys, extra) => {
-                console.log(keys, extra);
+              onCheck={(keys) => {
                 setCheckedKeys(keys);
               }}
               treeData={menuList}
               autoExpandParent
-              fieldNames={{ key: 'id', title: 'name' }}
+              fieldNames={{ key: 'id' }}
             />
           )}
         </>

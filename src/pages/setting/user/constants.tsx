@@ -6,14 +6,13 @@ export function getColumns(
 ) {
   return [
     {
-      title: 'ID',
-      dataIndex: 'id',
-    },
-    {
       title: '用户名',
       dataIndex: 'account',
     },
-
+    {
+      title: '姓名',
+      dataIndex: 'name',
+    },
     {
       title: '操作',
       dataIndex: 'operations',

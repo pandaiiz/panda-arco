@@ -8,7 +8,6 @@ export interface ProjectProps {
   enTitle?: string;
   contributors?: {
     name?: string;
-    email?: string;
     avatar?: string;
   }[];
   contributorsLength?: number;

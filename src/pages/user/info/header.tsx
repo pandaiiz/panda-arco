@@ -12,9 +12,6 @@ interface HeaderProps {
   userInfo?: {
     name?: string;
     avatar?: string;
-    jobName?: string;
-    organizationName?: string;
-    locationName?: string;
   };
   loading?: boolean;
 }
@@ -56,28 +53,6 @@ function UserInfoHeader(props: HeaderProps) {
         )}
         <div className={styles.username}>
           {loading ? loadingNode : userInfo.name}
-        </div>
-        <div className={styles['user-msg']}>
-          <Space size={18}>
-            <div>
-              <IconUser />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.jobName}
-              </span>
-            </div>
-            <div>
-              <IconHome />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.organizationName}
-              </span>
-            </div>
-            <div>
-              <IconLocation />
-              <span className={styles['user-msg-text']}>
-                {loading ? loadingNode : userInfo.locationName}
-              </span>
-            </div>
-          </Space>
         </div>
       </Space>
     </div>

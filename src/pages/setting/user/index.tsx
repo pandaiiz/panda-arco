@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  Table,
-  Card,
-  PaginationProps,
-  Button,
-  Space,
-  Typography,
-} from '@arco-design/web-react';
+import { Table, Card, Button, Space, Typography } from '@arco-design/web-react';
 import { IconPlus } from '@arco-design/web-react/icon';
 
 import SearchForm from './form';
@@ -17,7 +10,6 @@ import useSWRImmutable from 'swr/immutable';
 import { getFetcher } from '@/utils/request';
 
 const { Title } = Typography;
-export const Status = ['已上线', '未上线'];
 
 function UserTable() {
   const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
@@ -31,7 +23,7 @@ function UserTable() {
     getFetcher
   );
 
-  const tableCallback = async (record, type) => {
+  const tableCallback = async (record: any, type: any) => {
     console.log(record, type);
   };
 
@@ -53,7 +45,9 @@ function UserTable() {
     });
   }
 
-  function handleSearch(params) {
+  function handleSearch(
+    params: React.SetStateAction<{ pageSize: number; current: number }>
+  ) {
     setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
   }
 

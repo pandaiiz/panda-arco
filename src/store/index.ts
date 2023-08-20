@@ -12,19 +12,19 @@ interface IBaseStore {
   userLoading: boolean;
   language: string;
   developer: string;
-  email: string;
   children: React.ReactNode[] | React.ReactNode;
 }
 export const commonState = atom<IBaseStore>({
   key: KEYS.COMMON_STATE,
   default: {
-    userInfo: {},
+    userInfo: {
+      menus: [],
+    },
     settings: defaultSettings,
     userLoading: false,
     language: 'zh',
     developer: 'laisheng',
     children: [],
-    email: '18826262167@163.com',
   },
 });
 export const productCount = selector({

@@ -8,15 +8,18 @@ import Edit from './edit';
 import useSWR from 'swr';
 import { deleteFetcher, getFetcher } from '@/utils/request';
 import useSWRMutation from 'swr/mutation';
+import useSWRImmutable from 'swr/immutable';
 
 function SearchTable() {
   const [visible, setVisible] = useState(false);
 
-  const { data: menuList, isLoading } = useSWR(
-    { url: '/api/menu' },
-    getFetcher
-  );
-  const { trigger, reset } = useSWRMutation(`/api/menu`, deleteFetcher);
+  const {
+    data: menuList,
+    isLoading,
+    mutate,
+  } = useSWRImmutable({ url: '/api/menu' }, getFetcher);
+
+  const { trigger } = useSWRMutation(`/api/menu`, deleteFetcher);
 
   const [data, setData] = useState({});
 
@@ -24,7 +27,7 @@ function SearchTable() {
     switch (type) {
       case 'delete':
         await trigger(record.id);
-        reset();
+        await mutate();
         break;
       case 'edit':
         setData(record);
@@ -34,9 +37,9 @@ function SearchTable() {
   };
   const columns = useMemo(() => getColumns(tableCallback), []);
 
-  const modalClose = () => {
+  const modalClose = async () => {
     setVisible(false);
-    // mutate();
+    await mutate();
   };
   return (
     <Card>
