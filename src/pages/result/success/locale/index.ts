@@ -5,7 +5,7 @@ const i18n = {
     'success.result.title': 'Submit Success',
     'success.result.subTitle': 'Submit form success!',
     'success.result.printResult': 'Print result',
-    'success.result.projectList': 'Project List',
+    'success.result.projectList': 'Project DictTable',
     'success.result.progress': 'Progress',
     'success.submitApplication': 'Submit Application',
     'success.leaderReview': 'Leader Review',

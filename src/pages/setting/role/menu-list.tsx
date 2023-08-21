@@ -26,6 +26,7 @@ function MenuList() {
 
   const allCheckedKeys = menuList?.map((item: { id: string }) => item.id);
   const [checkedKeys, setCheckedKeys] = useState([]);
+  console.log(checkedKeys);
 
   useEffect(() => {
     setCheckedKeys(selectedRole?.menus?.map((item) => item.menuId) || []);

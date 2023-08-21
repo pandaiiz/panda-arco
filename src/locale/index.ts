@@ -13,7 +13,7 @@ const i18n = {
     'menu.exception.404': '404',
     'menu.exception.500': '500',
     'menu.profile.basic': 'Basic Profile',
-    'menu.list.cardList': 'Card List',
+    'menu.list.cardList': 'Card DictTable',
     'menu.visualization.dataAnalysis': 'Analysis',
     'menu.result.error': 'Error',
     'menu.form.group': 'Group Form',

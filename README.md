@@ -1,13 +1,2 @@
-# Arco Design Pro
-
-## 快速开始
-
-```
-// 初始化项目
-npm install
-
-// 开发模式
-npm run dev
-
-// 构建
-npm run build
+# BUG
+### 菜单列表bug，父级节点应该不保存到数据库里面，仅保存子节点，需要做判断

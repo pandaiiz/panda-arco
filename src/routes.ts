@@ -59,7 +59,7 @@ export const routes: IRoute[] = [
     children: [
       {
         title: '查询表格',
-        key: 'list/search-table',
+        key: 'list/search-dict-list',
       },
       {
         title: '卡片列表',

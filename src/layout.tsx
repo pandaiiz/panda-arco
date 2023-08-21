@@ -59,7 +59,6 @@ function getIconFromKey(key) {
 }
 
 function getFlattenRoutes(routes) {
-  console.log(routes);
   const mod = import.meta.glob('./pages/**/[a-z[]*.tsx');
   const res = [];
   function travel(_routes) {
@@ -119,7 +118,6 @@ function PageLayout() {
   const showFooter = settings.footer && urlParams.footer !== false;
 
   const flattenRoutes = useMemo(() => getFlattenRoutes(routes) || [], [routes]);
-  console.log(flattenRoutes);
 
   function onClickMenuItem(key) {
     const currentRoute = flattenRoutes.find((r) => r.key === key);

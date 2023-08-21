@@ -5,7 +5,6 @@ import { IconPlus } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import Edit from './edit';
-import useSWR from 'swr';
 import { deleteFetcher, getFetcher } from '@/utils/request';
 import useSWRMutation from 'swr/mutation';
 import useSWRImmutable from 'swr/immutable';

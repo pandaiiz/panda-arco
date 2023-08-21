@@ -14,6 +14,11 @@ export function getColumns(
       dataIndex: 'key',
     },
     {
+      title: '启用',
+      dataIndex: 'enabled',
+      render: (value) => (value ? '是' : '否'),
+    },
+    {
       title: '操作',
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },

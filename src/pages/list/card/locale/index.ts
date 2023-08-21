@@ -1,7 +1,7 @@
 const i18n = {
   'en-US': {
     'menu.list': 'List',
-    'menu.list.card': 'Card List',
+    'menu.list.card': 'Card DictTable',
     'cardList.tab.title.all': 'All',
     'cardList.tab.title.quality': 'Content quality',
     'cardList.tab.title.service': 'Service opening',
