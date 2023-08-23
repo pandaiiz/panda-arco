@@ -6,33 +6,29 @@ import SearchForm from './form';
 
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
-import useSWRImmutable from 'swr/immutable';
-import { getFetcher } from '@/utils/request';
-import { useAsyncEffect } from 'ahooks';
-import Edit from '@/pages/order/specifications/edit';
+import { useAsyncEffect, useRequest } from 'ahooks';
+import Edit from '@/pages/information/customer/edit';
+import {
+  deleteCustomerById,
+  getCustomerByPaging,
+} from '@/pages/information/customer/service';
 
 const { Title } = Typography;
 
-function SpecificationsTable() {
+function CustomerTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
   const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
 
-  const {
-    data: dataList,
-    mutate: fetchDataList,
-    isLoading,
-  } = useSWRImmutable(
-    { url: '/api/specifications/paging', params: formParams },
-    getFetcher
-  );
+  const { data: dataList, loading, run } = useRequest(getCustomerByPaging);
 
-  const tableCallback = async (record: any, type: any) => {
+  const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        // await trigger(record.id);
-        // await mutate();
+        await deleteCustomerById(record.id);
+        setFormParams({ ...formParams, current: 1 });
+        await run(formParams);
         break;
       case 'edit':
         setData(record);
@@ -44,7 +40,7 @@ function SpecificationsTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    await fetchDataList(formParams);
+    await run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -63,7 +59,7 @@ function SpecificationsTable() {
 
   return (
     <Card>
-      <Title heading={6}>款式列表</Title>
+      <Title heading={6}>客户列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -78,7 +74,7 @@ function SpecificationsTable() {
       </div>
       <Table
         rowKey="id"
-        loading={isLoading}
+        loading={loading}
         onChange={onChangeTable}
         pagination={{
           sizeCanChange: true,
@@ -86,6 +82,7 @@ function SpecificationsTable() {
           pageSizeChangeResetCurrent: true,
           current: formParams.current,
           pageSize: formParams.pageSize,
+          total: dataList?.pagination?.total,
         }}
         columns={columns}
         data={dataList?.data}
@@ -96,6 +93,8 @@ function SpecificationsTable() {
           data={data}
           onClose={() => {
             setVisible(false);
+
+            run(formParams);
           }}
         />
       )}
@@ -103,4 +102,4 @@ function SpecificationsTable() {
   );
 }
 
-export default SpecificationsTable;
+export default CustomerTable;

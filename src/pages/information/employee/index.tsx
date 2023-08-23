@@ -9,7 +9,7 @@ import { getColumns } from './constants';
 import useSWRImmutable from 'swr/immutable';
 import { getFetcher } from '@/utils/request';
 import { useAsyncEffect } from 'ahooks';
-import Edit from '@/pages/order/specifications/edit';
+import Edit from '@/pages/information/employee/edit';
 
 const { Title } = Typography;
 
@@ -63,7 +63,7 @@ function SpecificationsTable() {
 
   return (
     <Card>
-      <Title heading={6}>款式列表</Title>
+      <Title heading={6}>员工列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>

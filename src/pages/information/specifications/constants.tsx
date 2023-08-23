@@ -10,7 +10,22 @@ export function getColumns(
       dataIndex: 'styleNumber',
     },
     {
-      title: '姓名',
+      title: '圈号',
+      dataIndex: 'circleNumber',
+      render: (text) => text && JSON.parse(text).title,
+    },
+    {
+      title: '件重',
+      dataIndex: 'singleWeight',
+      render: (text) => text && JSON.parse(text).title,
+    },
+    {
+      title: '品类',
+      dataIndex: 'category',
+      render: (text) => text && JSON.parse(text).title,
+    },
+    {
+      title: '圈号',
       dataIndex: 'name',
     },
     {
@@ -18,14 +33,14 @@ export function getColumns(
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => [
-        <Button
+        /*<Button
           type="text"
           size="small"
           key="view"
           onClick={() => callback(record, 'view')}
         >
           详情
-        </Button>,
+        </Button>,*/
         <Popconfirm
           key="delete"
           focusLock
