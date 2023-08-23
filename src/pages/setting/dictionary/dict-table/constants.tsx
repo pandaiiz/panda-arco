@@ -8,15 +8,21 @@ export function getColumns(
     {
       title: '字段名',
       dataIndex: 'title',
+      width: 300,
+      align: 'center',
     },
     {
       title: '值',
       dataIndex: 'itemKey',
+      width: 300,
+      align: 'center',
     },
     {
       title: '操作',
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
+      width: 300,
+      align: 'center',
       render: (_, record) => [
         <Button
           type="text"

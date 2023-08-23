@@ -4,14 +4,13 @@ import { IconLock, IconUser } from '@arco-design/web-react/icon';
 import React, { useEffect, useRef } from 'react';
 
 import styles from './style/index.module.less';
-import { postFetcher } from '@/utils/request';
-import useSWRMutation from 'swr/mutation';
+import { useRequest } from 'ahooks';
+import { login } from '@/pages/login/service';
 
 export default function LoginForm() {
-  const { trigger, isMutating, data } = useSWRMutation(
-    '/api/auth/login',
-    postFetcher
-  );
+  const { data, loading, run } = useRequest(login, {
+    manual: true,
+  });
   const formRef = useRef<FormInstance>();
 
   useEffect(() => afterLoginSuccess(), [data]);
@@ -27,7 +26,7 @@ export default function LoginForm() {
 
   async function onSubmitClick() {
     const values = await formRef.current.validate();
-    await trigger(values);
+    await run(values);
   }
 
   return (
@@ -60,12 +59,7 @@ export default function LoginForm() {
           />
         </Form.Item>
         <Space size={16} direction="vertical">
-          <Button
-            type="primary"
-            long
-            onClick={onSubmitClick}
-            loading={isMutating}
-          >
+          <Button type="primary" long onClick={onSubmitClick} loading={loading}>
             登录
           </Button>
         </Space>

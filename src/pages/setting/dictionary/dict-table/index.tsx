@@ -7,15 +7,17 @@ import {
   Space,
   Table,
 } from '@arco-design/web-react';
-import { deleteFetcher, getFetcher } from '@/utils/request';
 import { useRecoilValue } from 'recoil';
 import { selectedDictState } from '@/pages/setting/dictionary';
 import styles from '@/pages/setting/user/style/index.module.less';
 import { IconPlus } from '@arco-design/web-react/icon';
 import { getColumns } from '@/pages/setting/dictionary/dict-table/constants';
 import Edit from '@/pages/setting/dictionary/dict-table/edit';
-import useSWRMutation from 'swr/mutation';
-import { useAsyncEffect } from 'ahooks';
+import { useAsyncEffect, useRequest } from 'ahooks';
+import {
+  deleteDictItemById,
+  getDictsItemById,
+} from '@/pages/setting/dictionary/service';
 
 function DictTable() {
   const selectedDict = useRecoilValue(selectedDictState);
@@ -23,17 +25,12 @@ function DictTable() {
   const [data, setData] = useState({});
   const {
     data: dictItemList,
-    isMutating,
-    trigger: itemTrigger,
-  } = useSWRMutation(
-    { url: `/api/dictionary/item/${selectedDict?.id}` },
-    getFetcher
-  );
-
-  const { trigger } = useSWRMutation(`/api/dictionary/item`, deleteFetcher);
+    loading,
+    run,
+  } = useRequest(getDictsItemById, { manual: true });
 
   useAsyncEffect(async () => {
-    await itemTrigger();
+    await run(selectedDict?.id);
   }, [selectedDict?.id]);
 
   const tableCallback = async (record: any, type: any) => {
@@ -42,9 +39,9 @@ function DictTable() {
       setVisible(true);
     }
     if (type === 'delete') {
-      await trigger(record.id);
+      await deleteDictItemById(record.id);
       Message.success('删除成功！');
-      await itemTrigger();
+      await run(selectedDict?.id);
     }
   };
   const columns = useMemo(() => getColumns(tableCallback), []);
@@ -69,7 +66,7 @@ function DictTable() {
           </div>
           <Table
             rowKey="id"
-            loading={isMutating}
+            loading={loading}
             pagination={false}
             columns={columns}
             data={dictItemList || []}
@@ -84,7 +81,7 @@ function DictTable() {
           data={data}
           onClose={async () => {
             setVisible(false);
-            await itemTrigger();
+            await run(selectedDict?.id);
           }}
         />
       )}

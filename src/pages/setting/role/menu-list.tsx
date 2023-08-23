@@ -7,26 +7,18 @@ import {
   Space,
   Message,
 } from '@arco-design/web-react';
-import useSWR from 'swr';
-import { getFetcher, patchFetcher } from '@/utils/request';
 import { useRecoilValue } from 'recoil';
 import { selectedRoleState } from '@/pages/setting/role/index';
-import useSWRMutation from 'swr/mutation';
+import { useRequest } from 'ahooks';
+import { getMenus } from '@/pages/setting/menu/service';
+import { updateRole } from '@/pages/setting/role/service';
 
 function MenuList() {
   const selectedRole = useRecoilValue(selectedRoleState);
-  const { data: menuList, isLoading } = useSWR(
-    { url: '/api/menu' },
-    getFetcher
-  );
-  const { trigger: updateRoleTrigger } = useSWRMutation(
-    '/api/role',
-    patchFetcher
-  );
+  const { data: menuList, loading } = useRequest(getMenus);
 
   const allCheckedKeys = menuList?.map((item: { id: string }) => item.id);
   const [checkedKeys, setCheckedKeys] = useState([]);
-  console.log(checkedKeys);
 
   useEffect(() => {
     setCheckedKeys(selectedRole?.menus?.map((item) => item.menuId) || []);
@@ -36,7 +28,7 @@ function MenuList() {
     <Card
       title="角色权限"
       style={{ width: '100%' }}
-      loading={isLoading}
+      loading={loading}
       extra={
         selectedRole?.id && (
           <Space>
@@ -51,10 +43,7 @@ function MenuList() {
             <Button
               type="text"
               onClick={async () => {
-                await updateRoleTrigger({
-                  data: { menus: checkedKeys },
-                  id: selectedRole?.id,
-                });
+                await updateRole(selectedRole?.id, { menus: checkedKeys });
                 Message.success('保存成功！');
                 setTimeout(() => window.location.reload(), 500);
               }}

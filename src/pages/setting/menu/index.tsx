@@ -5,28 +5,21 @@ import { IconPlus } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import Edit from './edit';
-import { deleteFetcher, getFetcher } from '@/utils/request';
-import useSWRMutation from 'swr/mutation';
-import useSWRImmutable from 'swr/immutable';
+import { useRequest } from 'ahooks';
+import { deleteMenuById, getMenus } from '@/pages/setting/menu/service';
 
-function SearchTable() {
+function Menu() {
   const [visible, setVisible] = useState(false);
 
-  const {
-    data: menuList,
-    isLoading,
-    mutate,
-  } = useSWRImmutable({ url: '/api/menu' }, getFetcher);
-
-  const { trigger } = useSWRMutation(`/api/menu`, deleteFetcher);
+  const { data: menuList, loading, refresh } = useRequest(getMenus);
 
   const [data, setData] = useState({});
 
   const tableCallback = async (record, type) => {
     switch (type) {
       case 'delete':
-        await trigger(record.id);
-        await mutate();
+        await deleteMenuById(record.id);
+        refresh();
         break;
       case 'edit':
         setData(record);
@@ -38,7 +31,7 @@ function SearchTable() {
 
   const modalClose = async () => {
     setVisible(false);
-    await mutate();
+    refresh();
   };
   return (
     <Card>
@@ -61,7 +54,7 @@ function SearchTable() {
         <Table
           rowKey="id"
           pagination={false}
-          loading={isLoading}
+          loading={loading}
           columns={columns}
           data={menuList}
           defaultExpandAllRows={true}
@@ -71,4 +64,4 @@ function SearchTable() {
   );
 }
 
-export default SearchTable;
+export default Menu;

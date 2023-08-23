@@ -1,25 +1,16 @@
 import React from 'react';
 import { Modal, Form, Input, Message, Switch } from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
-import { patchFetcher, postFetcher } from '@/utils/request';
+import { addDict, updateDict } from '@/pages/setting/dictionary/service';
 const FormItem = Form.Item;
 
 function RoleList({ data, onClose }) {
   const [form] = Form.useForm();
-  const { trigger: addDictTrigger } = useSWRMutation(
-    '/api/dictionary',
-    postFetcher
-  );
-  const { trigger: updateDictTrigger } = useSWRMutation(
-    '/api/dictionary',
-    patchFetcher
-  );
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateDictTrigger({ data: formData, id: data.id });
-    else await addDictTrigger(formData);
+    if (data.id) await updateDict(data.id, formData);
+    else await addDict(formData);
     Message.success('提交成功 !');
     onClose();
   }

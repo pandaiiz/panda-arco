@@ -18,13 +18,13 @@ import qs from 'query-string';
 import NProgress from 'nprogress';
 import Navbar from './components/NavBar';
 import Footer from './components/Footer';
-import useRoute, { IRoute } from '@/routes';
+import { IRoute } from '@/routes';
 import { isArray } from './utils/is';
 import getUrlParams from './utils/getUrlParams';
 import lazyload from './utils/lazyload';
 import { commonState } from './store';
 import styles from './style/layout.module.less';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { cloneDeep } from 'lodash';
 
 const MenuItem = Menu.Item;
@@ -37,7 +37,7 @@ function getIconFromKey(key) {
   switch (key) {
     case 'dashboard':
       return <IconDashboard className={styles.icon} />;
-    case 'list':
+    case 'order':
       return <IconList className={styles.icon} />;
     case 'form':
       return <IconSettings className={styles.icon} />;
@@ -86,12 +86,11 @@ function getFlattenRoutes(routes) {
 }
 
 function PageLayout() {
+  const { settings, userInfo } = useRecoilValue(commonState);
   const urlParams = getUrlParams();
   const history = useHistory();
   const pathname = history.location.pathname;
   const currentComponent = qs.parseUrl(pathname).url.slice(1);
-
-  const [{ settings, userLoading, userInfo }] = useRecoilState(commonState);
 
   const [routes, defaultRoute] = [userInfo?.menus || [], 'setting/menu'];
   // const [routes, defaultRoute] = useRoute(userInfo?.menus);
@@ -219,77 +218,73 @@ function PageLayout() {
       >
         <Navbar show={showNavbar} />
       </div>
-      {userLoading ? (
-        <Spin className={styles['spin']} />
-      ) : (
-        <Layout>
-          {showMenu && (
-            <Sider
-              className={styles['layout-sider']}
-              width={menuWidth}
-              collapsed={collapsed}
-              onCollapse={setCollapsed}
-              trigger={null}
-              collapsible
-              breakpoint="xl"
-              style={paddingTop}
-            >
-              <div className={styles['menu-wrapper']}>
-                <Menu
-                  collapse={collapsed}
-                  onClickMenuItem={onClickMenuItem}
-                  selectedKeys={selectedKeys}
-                  openKeys={openKeys}
-                  onClickSubMenu={(_, openKeys) => {
-                    setOpenKeys(openKeys);
-                  }}
-                >
-                  {renderRoutes()(routes, 1)}
-                </Menu>
-              </div>
-              <div className={styles['collapse-btn']} onClick={toggleCollapse}>
-                {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
-              </div>
-            </Sider>
-          )}
-          <Layout className={styles['layout-content']} style={paddingStyle}>
-            <div className={styles['layout-content-wrapper']}>
-              {!!breadcrumb.length && (
-                <div className={styles['layout-breadcrumb']}>
-                  <Breadcrumb>
-                    {breadcrumb.map((node, index) => (
-                      <Breadcrumb.Item key={index}>
-                        {typeof node === 'string' ? node || node : node}
-                      </Breadcrumb.Item>
-                    ))}
-                  </Breadcrumb>
-                </div>
-              )}
-              <Content>
-                <Switch>
-                  {flattenRoutes.map((route, index) => {
-                    return (
-                      <Route
-                        key={index}
-                        path={`/${route.key}`}
-                        component={route.component}
-                      />
-                    );
-                  })}
-                  <Route exact path="/">
-                    <Redirect to={`/${defaultRoute}`} />
-                  </Route>
-                  <Route
-                    path="*"
-                    component={lazyload(() => import('./pages/exception/403'))}
-                  />
-                </Switch>
-              </Content>
+      <Layout>
+        {showMenu && (
+          <Sider
+            className={styles['layout-sider']}
+            width={menuWidth}
+            collapsed={collapsed}
+            onCollapse={setCollapsed}
+            trigger={null}
+            collapsible
+            breakpoint="xl"
+            style={paddingTop}
+          >
+            <div className={styles['menu-wrapper']}>
+              <Menu
+                collapse={collapsed}
+                onClickMenuItem={onClickMenuItem}
+                selectedKeys={selectedKeys}
+                openKeys={openKeys}
+                onClickSubMenu={(_, openKeys) => {
+                  setOpenKeys(openKeys);
+                }}
+              >
+                {renderRoutes()(routes, 1)}
+              </Menu>
             </div>
-            {showFooter && <Footer />}
-          </Layout>
+            <div className={styles['collapse-btn']} onClick={toggleCollapse}>
+              {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
+            </div>
+          </Sider>
+        )}
+        <Layout className={styles['layout-content']} style={paddingStyle}>
+          <div className={styles['layout-content-wrapper']}>
+            {!!breadcrumb.length && (
+              <div className={styles['layout-breadcrumb']}>
+                <Breadcrumb>
+                  {breadcrumb.map((node, index) => (
+                    <Breadcrumb.Item key={index}>
+                      {typeof node === 'string' ? node || node : node}
+                    </Breadcrumb.Item>
+                  ))}
+                </Breadcrumb>
+              </div>
+            )}
+            <Content>
+              <Switch>
+                {flattenRoutes.map((route, index) => {
+                  return (
+                    <Route
+                      key={index}
+                      path={`/${route.key}`}
+                      component={route.component}
+                    />
+                  );
+                })}
+                <Route exact path="/">
+                  <Redirect to={`/${defaultRoute}`} />
+                </Route>
+                <Route
+                  path="*"
+                  component={lazyload(() => import('./pages/exception/403'))}
+                />
+              </Switch>
+            </Content>
+          </div>
+          {showFooter && <Footer />}
         </Layout>
-      )}
+      </Layout>
     </Layout>
   );
 }

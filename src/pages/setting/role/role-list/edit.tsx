@@ -1,22 +1,16 @@
 import React from 'react';
 import { Modal, Form, Input, Message } from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
-import { patchFetcher, postFetcher } from '@/utils/request';
+import { addRole, updateRole } from '@/pages/setting/role/service';
 const FormItem = Form.Item;
 
-function RoleList({ data, onClose }) {
+function RoleEdit({ data, onClose }) {
   const [form] = Form.useForm();
-  const { trigger: addRoleTrigger } = useSWRMutation('/api/role', postFetcher);
-  const { trigger: updateRoleTrigger } = useSWRMutation(
-    '/api/role',
-    patchFetcher
-  );
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateRoleTrigger({ data: formData, id: data.id });
-    else await addRoleTrigger(formData);
+    if (data.id) await updateRole(data.id, formData);
+    else await addRole(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -43,4 +37,4 @@ function RoleList({ data, onClose }) {
   );
 }
 
-export default RoleList;
+export default RoleEdit;

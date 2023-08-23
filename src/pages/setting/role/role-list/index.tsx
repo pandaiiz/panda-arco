@@ -1,34 +1,30 @@
 import React, { useState } from 'react';
 import { Button, Card, Message, Modal, Space } from '@arco-design/web-react';
 import Edit from '@/pages/setting/role/role-list/edit';
-import { deleteFetcher, getFetcher } from '@/utils/request';
 import { Menu } from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
 import { useRecoilState } from 'recoil';
 import { selectedRoleState } from '@/pages/setting/role';
-import useSWRImmutable from 'swr/immutable';
+import { useRequest } from 'ahooks';
+import { deleteRoleById, getRoles } from '@/pages/setting/role/service';
 const MenuItem = Menu.Item;
 function RoleList() {
   const [selectedRole, setSelectedRole] = useRecoilState(selectedRoleState);
   const [visible, setVisible] = useState(false);
-  const { data: roleList, mutate } = useSWRImmutable(
-    { url: '/api/role' },
-    getFetcher
-  );
-  const { trigger } = useSWRMutation(`/api/role`, deleteFetcher);
+
+  const { data: roleList, refresh } = useRequest(getRoles);
   function confirm(item: { id: any }) {
     Modal.confirm({
       title: '请确认是否要删除此数据！',
       onOk: async () => {
-        await trigger(item.id);
-        await mutate();
+        await deleteRoleById(item.id);
+        await refresh();
         Message.success('删除成功！');
       },
     });
   }
   const modalClose = async () => {
     setVisible(false);
-    await mutate();
+    await refresh();
   };
   return (
     <Card

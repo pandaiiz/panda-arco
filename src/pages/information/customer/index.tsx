@@ -8,13 +8,12 @@ import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import useSWRImmutable from 'swr/immutable';
 import { getFetcher } from '@/utils/request';
-import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/setting/user/edit';
-import { getUsersByPaging } from '@/pages/setting/user/service';
+import { useAsyncEffect } from 'ahooks';
+import Edit from '@/pages/order/specifications/edit';
 
 const { Title } = Typography;
 
-function UsersTable() {
+function SpecificationsTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
@@ -28,8 +27,6 @@ function UsersTable() {
     { url: '/api/specifications/paging', params: formParams },
     getFetcher
   );
-
-  useRequest(() => getUsersByPaging(formParams));
 
   const tableCallback = async (record: any, type: any) => {
     switch (type) {
@@ -106,4 +103,4 @@ function UsersTable() {
   );
 }
 
-export default UsersTable;
+export default SpecificationsTable;

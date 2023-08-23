@@ -1,5 +1,5 @@
 import './style/global.less';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ConfigProvider } from '@arco-design/web-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { commonState } from '@/store';
@@ -9,26 +9,20 @@ import Login from './pages/login';
 import checkLogin from './utils/checkLogin';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { createRoot } from 'react-dom/client';
-import { getFetcher } from '@/utils/request';
-import useSWRImmutable from 'swr/immutable';
+import { useAsyncEffect } from 'ahooks';
+import { getUserInfo } from '@/utils/commonService';
 
-function Index() {
+function Main() {
   const [comState, setComState] = useRecoilState(commonState);
-  const {
-    data: userInfo,
-    mutate: fetchUserInfo,
-    isLoading,
-  } = useSWRImmutable({ url: '/api/user/info' }, getFetcher);
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (checkLogin()) {
-      fetchUserInfo().then(() =>
-        setComState({ ...comState, userInfo, userLoading: isLoading })
-      );
+      const userInfo = await getUserInfo();
+      setComState({ ...comState, userInfo });
     } else if (window.location.pathname.replace(/\//g, '') !== 'login') {
       window.location.pathname = '/login';
     }
-  }, [userInfo]);
+  }, []);
 
   return (
     <BrowserRouter>
@@ -57,7 +51,7 @@ function Index() {
 const container = document.getElementById('root');
 const root = (
   <RecoilRoot>
-    <Index />
+    <Main />
   </RecoilRoot>
 );
 createRoot(container).render(root);

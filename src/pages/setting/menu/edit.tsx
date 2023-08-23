@@ -7,28 +7,19 @@ import {
   TreeSelect,
   Switch,
 } from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
-import { getFetcher, patchFetcher, postFetcher } from '@/utils/request';
-import useSWR from 'swr';
+import { useRequest } from 'ahooks';
+import { addMenu, getMenus, updateMenu } from '@/pages/setting/menu/service';
 const FormItem = Form.Item;
 
 function MenuEdit({ data, onClose }) {
   const [form] = Form.useForm();
-  const { data: menuList, isLoading } = useSWR(
-    { url: '/api/menu' },
-    getFetcher
-  );
-  const { trigger: addMenuTrigger } = useSWRMutation('/api/menu', postFetcher);
-  const { trigger: updateMenuTrigger } = useSWRMutation(
-    '/api/menu',
-    patchFetcher
-  );
+  const { data: menuList, loading } = useRequest(getMenus);
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateMenuTrigger({ data: formData, id: data.id });
-    else await addMenuTrigger(formData);
+    if (data.id) await updateMenu(data.id, formData);
+    else await addMenu(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -41,7 +32,7 @@ function MenuEdit({ data, onClose }) {
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
-        confirmLoading={isLoading}
+        confirmLoading={loading}
       >
         <Form
           labelCol={{ span: 5 }}

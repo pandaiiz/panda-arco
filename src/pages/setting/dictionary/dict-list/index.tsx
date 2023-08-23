@@ -1,34 +1,29 @@
 import React, { useState } from 'react';
 import { Button, Card, Message, Modal, Space } from '@arco-design/web-react';
 import Edit from '@/pages/setting/dictionary/dict-list/edit';
-import { deleteFetcher, getFetcher } from '@/utils/request';
 import { Menu } from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
 import { useRecoilState } from 'recoil';
-import useSWRImmutable from 'swr/immutable';
 import { selectedDictState } from '@/pages/setting/dictionary';
+import { useRequest } from 'ahooks';
+import { deleteDictById, getDicts } from '@/pages/setting/dictionary/service';
 const MenuItem = Menu.Item;
-function RoleList() {
+function DictList() {
   const [selectedDict, setSelectedDict] = useRecoilState(selectedDictState);
   const [visible, setVisible] = useState(false);
-  const { data: dictionaryList, mutate } = useSWRImmutable(
-    { url: '/api/dictionary' },
-    getFetcher
-  );
-  const { trigger } = useSWRMutation(`/api/dictionary`, deleteFetcher);
+  const { data: dictionaryList, refresh } = useRequest(getDicts);
   function confirm(item: { id: any }) {
     Modal.confirm({
       title: '请确认是否要删除此数据！',
       onOk: async () => {
-        await trigger(item.id);
-        await mutate();
+        await deleteDictById(item.id);
+        await refresh();
         Message.success('删除成功！');
       },
     });
   }
   const modalClose = async () => {
     setVisible(false);
-    await mutate();
+    await refresh();
   };
   return (
     <Card
@@ -80,4 +75,4 @@ function RoleList() {
   );
 }
 
-export default RoleList;
+export default DictList;

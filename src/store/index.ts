@@ -9,7 +9,6 @@ const KEYS = {
 interface IBaseStore {
   userInfo: any;
   settings?: typeof defaultSettings;
-  userLoading: boolean;
   language: string;
   developer: string;
   children: React.ReactNode[] | React.ReactNode;
@@ -21,7 +20,6 @@ export const commonState = atom<IBaseStore>({
       menus: [],
     },
     settings: defaultSettings,
-    userLoading: false,
     language: 'zh',
     developer: 'laisheng',
     children: [],

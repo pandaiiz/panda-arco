@@ -29,18 +29,21 @@ request.interceptors.request.use(
 // response interceptor
 request.interceptors.response.use(
   (response) => {
-    return response;
+    return response.data;
   },
   (error) => {
     if (error.response.status === 401) {
       localStorage.setItem('userStatus', 'logout');
       Message.error('登录过期，请重新登录！');
+      window.location.pathname = '/login';
     } else {
       Message.error(error.response.data.message || '请求失败！');
     }
     return Promise.reject(error.response);
   }
 );
+
+export default request;
 
 export const getFetcher = ({ url, params }) =>
   request.get(url, { params }).then((res) => res.data);

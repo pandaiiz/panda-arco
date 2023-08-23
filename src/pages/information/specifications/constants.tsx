@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button, Popconfirm } from '@arco-design/web-react';
 
 export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
@@ -7,7 +7,7 @@ export function getColumns(
   return [
     {
       title: '款号',
-      dataIndex: 'account',
+      dataIndex: 'styleNumber',
     },
     {
       title: '姓名',
@@ -17,15 +17,28 @@ export function getColumns(
       title: '操作',
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
-      render: (_, record) => (
+      render: (_, record) => [
         <Button
           type="text"
           size="small"
+          key="view"
           onClick={() => callback(record, 'view')}
         >
           详情
-        </Button>
-      ),
+        </Button>,
+        <Popconfirm
+          key="delete"
+          focusLock
+          title="确认删除吗？"
+          onOk={async () => {
+            await callback(record, 'delete');
+          }}
+        >
+          <Button type="text" size="small">
+            删除
+          </Button>
+        </Popconfirm>,
+      ],
     },
   ];
 }

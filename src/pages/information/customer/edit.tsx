@@ -6,14 +6,23 @@ import {
   Message,
   TreeSelect,
   Switch,
+  Select,
 } from '@arco-design/web-react';
 import useSWRMutation from 'swr/mutation';
-import { getFetcher, patchFetcher, postFetcher } from '@/utils/request';
+import request, {
+  getFetcher,
+  patchFetcher,
+  postFetcher,
+} from '@/utils/request';
 import useSWR from 'swr';
+import { useRequest } from 'ahooks';
+import { getEnum } from '@/utils/commonService';
 const FormItem = Form.Item;
 
-function MenuList({ data, onClose }) {
+function SpecificationsEdit({ data, onClose }) {
   const [form] = Form.useForm();
+  const { data: circleEnum, loading } = useRequest(() => getEnum('CIRCLE'));
+  console.log(circleEnum, 'circleEnum');
   const { data: roleList, isLoading } = useSWR(
     { url: '/api/role' },
     getFetcher
@@ -60,19 +69,18 @@ function MenuList({ data, onClose }) {
             },
           }}
         >
-          <FormItem label="上级节点" field="parentId">
-            <TreeSelect
-              placeholder="请选择上级节点"
-              treeData={roleList}
+          <FormItem label="款号" field="parentId">
+            <Select
+              placeholder="Please select"
+              style={{ width: 154 }}
               allowClear
-              fieldNames={{ key: 'id' }}
-              onChange={(value) => {
-                if (value === data.id) {
-                  Message.error('不能选择自己作为上级节点！');
-                  form.setFieldsValue({ parentId: data.parentId });
-                }
-              }}
-            />
+            >
+              {circleEnum?.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
           </FormItem>
           <FormItem label="名称" field="title" rules={[{ required: true }]}>
             <Input placeholder="请输入菜单名称" />
@@ -108,4 +116,4 @@ function MenuList({ data, onClose }) {
   );
 }
 
-export default MenuList;
+export default SpecificationsEdit;
