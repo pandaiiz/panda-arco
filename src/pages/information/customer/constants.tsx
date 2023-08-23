@@ -26,22 +26,18 @@ export function getColumns(
       dataIndex: 'contactsPhone',
     },
     {
-      title: '圈号',
-      dataIndex: 'name',
-    },
-    {
       title: '操作',
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => [
-        /*<Button
+        <Button
           type="text"
           size="small"
           key="view"
-          onClick={() => callback(record, 'view')}
+          onClick={() => callback(record, 'edit')}
         >
-          详情
-        </Button>,*/
+          编辑
+        </Button>,
         <Popconfirm
           key="delete"
           focusLock

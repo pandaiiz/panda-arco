@@ -2,6 +2,7 @@ import request from '@/utils/request';
 
 export const getCustomerByPaging = (params): Promise<any> =>
   request.get(`/api/customer/paging`, { params });
+export const getCustomerList = (): Promise<any> => request.get(`/api/customer`);
 export const addCustomer = (data): Promise<any> =>
   request.post(`/api/customer`, data);
 export const updateCustomer = (id, data): Promise<any> =>

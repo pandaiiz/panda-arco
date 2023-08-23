@@ -12,17 +12,14 @@ export function getColumns(
     {
       title: '圈号',
       dataIndex: 'circleNumber',
-      render: (text) => text && JSON.parse(text).title,
     },
     {
       title: '件重',
       dataIndex: 'singleWeight',
-      render: (text) => text && JSON.parse(text).title,
     },
     {
       title: '品类',
       dataIndex: 'category',
-      render: (text) => text && JSON.parse(text).title,
     },
     {
       title: '圈号',
