@@ -25,7 +25,7 @@ function CustomerTable() {
       case 'delete':
         await deleteOrderById(record.id);
         setFormParams({ ...formParams, current: 1 });
-        await run(formParams);
+        run(formParams);
         break;
       case 'edit':
         setData(record);

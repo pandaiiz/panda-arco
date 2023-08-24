@@ -19,9 +19,14 @@ function MenuList() {
 
   const allCheckedKeys = menuList?.map((item: { id: string }) => item.id);
   const [checkedKeys, setCheckedKeys] = useState([]);
+  const [halfCheckedKeys, setHalfCheckedKeys] = useState([]);
 
   useEffect(() => {
-    setCheckedKeys(selectedRole?.menus?.map((item) => item.menuId) || []);
+    setCheckedKeys(
+      selectedRole?.menus?.map((item) => {
+        if (item.menu.parentId) return item.menuId;
+      }) || []
+    );
   }, [selectedRole]);
 
   return (
@@ -43,7 +48,11 @@ function MenuList() {
             <Button
               type="text"
               onClick={async () => {
-                await updateRole(selectedRole?.id, { menus: checkedKeys });
+                await updateRole(selectedRole?.id, {
+                  menus: [...checkedKeys, ...halfCheckedKeys].filter(
+                    (item) => item
+                  ),
+                });
                 Message.success('保存成功！');
                 setTimeout(() => window.location.reload(), 500);
               }}
@@ -61,7 +70,8 @@ function MenuList() {
               checkable
               selectable={false}
               checkedKeys={checkedKeys}
-              onCheck={(keys) => {
+              onCheck={(keys, extra) => {
+                setHalfCheckedKeys(extra.halfCheckedKeys);
                 setCheckedKeys(keys);
               }}
               treeData={menuList}

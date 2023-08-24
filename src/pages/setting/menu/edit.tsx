@@ -74,7 +74,12 @@ function MenuEdit({ data, onClose }) {
           <FormItem label="备注" field="remark">
             <Input placeholder="请输入备注" />
           </FormItem>
-          <FormItem label="启用" field="enabled" triggerPropName="checked">
+          <FormItem
+            label="启用"
+            field="enabled"
+            triggerPropName="checked"
+            disabled={!data.parentId}
+          >
             <Switch />
           </FormItem>
           <FormItem
