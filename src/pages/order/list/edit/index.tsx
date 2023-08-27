@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  Form,
-  Input,
-  Message,
-  Select,
-  Drawer,
-} from '@arco-design/web-react';
+import { Form, Input, Message, Select, Drawer } from '@arco-design/web-react';
 import { addOrder, updateOrder } from '@/pages/order/list/service';
 import { useRequest } from 'ahooks';
 import { getCustomerList } from '@/pages/information/customer/service';
@@ -72,7 +65,7 @@ function CustomerEdit({ data, onClose }) {
             <Input placeholder="请输入订单号" />
           </FormItem>
         </Form>
-        <EditableTable />
+        <EditableTable list={[]} />
       </Drawer>
     </div>
   );
