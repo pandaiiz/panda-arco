@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Message, Select, Drawer } from '@arco-design/web-react';
 import { addOrder, updateOrder } from '@/pages/order/list/service';
 import { useRequest } from 'ahooks';
@@ -9,10 +9,12 @@ const FormItem = Form.Item;
 function CustomerEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: customerList } = useRequest(getCustomerList);
+  const [rowData, setRowData] = useState(data.orderDetails);
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
+    formData.orderDetails = { create: rowData };
     if (data.id) await updateOrder(data.id, formData);
     else await addOrder(formData);
     Message.success('提交成功 !');
@@ -65,7 +67,7 @@ function CustomerEdit({ data, onClose }) {
             <Input placeholder="请输入订单号" />
           </FormItem>
         </Form>
-        <EditableTable list={[]} />
+        <EditableTable list={[]} rowData={rowData} setRowData={setRowData} />
       </Drawer>
     </div>
   );

@@ -1,17 +1,27 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Button } from '@arco-design/web-react';
 
 export const columnDefs = [
-  { field: 'make', filter: true },
-  { field: 'model', filter: true },
-  { field: 'price', editable: true },
+  { headerName: '款号', field: 'specifications', filter: true },
+  {
+    headerName: '件数',
+    field: 'quantity',
+    valueParser: (params) => Number(params.newValue),
+  },
+  {
+    headerName: '单价',
+    field: 'unitPrice',
+    valueParser: (params) => Number(params.newValue),
+  },
+  {
+    headerName: '总价',
+    field: 'totalPrice',
+    valueParser: (params) => Number(params.newValue),
+  },
+  // { headerName: '备注', field: 'make', filter: true },
+  // { headerName: '总重', field: 'make', filter: true },
+  // { headerName: '字印', field: 'make', filter: true },
   {
     headerName: '操作',
     editable: false,
@@ -20,9 +30,8 @@ export const columnDefs = [
     },
   },
 ];
-const EditableTable = ({ list }) => {
+const EditableTable = ({ list, rowData, setRowData }) => {
   const gridRef = useRef();
-  const [rowData, setRowData] = useState([]);
   const defaultColDef = useMemo(
     () => ({
       // sortable: true,
@@ -48,9 +57,11 @@ const EditableTable = ({ list }) => {
 
   // Example using Grid's API
   const buttonListener = useCallback((e) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     gridRef?.current?.api?.deselectAll();
   }, []);
-  const addRow = () => setRowData([...rowData, { make: 1 }]);
+  const addRow = () => setRowData([...rowData, { totalPrice: 0 }]);
   const removeRow = (key) => {
     setRowData(rowData.filter((item) => item.key !== key));
   };

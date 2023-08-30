@@ -34,6 +34,10 @@ function SpecificationsTable() {
         setFormParams({ ...formParams, current: 1 });
         await run(formParams);
         break;
+      case 'view':
+        setData(record);
+        setVisible(true);
+        break;
       case 'edit':
         setData(record);
         setVisible(true);

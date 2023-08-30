@@ -7,7 +7,7 @@ export function getColumns(
   return [
     {
       title: '款号',
-      dataIndex: 'styleNumber',
+      dataIndex: 'styleCode',
     },
     {
       title: '圈号',
@@ -22,22 +22,25 @@ export function getColumns(
       dataIndex: 'category',
     },
     {
-      title: '圈号',
-      dataIndex: 'name',
+      title: '图片',
+      dataIndex: 'pictures',
+      render: (_, record) => (
+        <img src={`http://localhost:7000${_[0].src}`} style={{ height: 60 }} />
+      ),
     },
     {
       title: '操作',
       dataIndex: 'operations',
       headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => [
-        /*<Button
+        <Button
           type="text"
           size="small"
           key="view"
           onClick={() => callback(record, 'view')}
         >
           详情
-        </Button>,*/
+        </Button>,
         <Popconfirm
           key="delete"
           focusLock
