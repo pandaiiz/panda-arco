@@ -10,23 +10,19 @@ export function getColumns(
       dataIndex: 'styleCode',
     },
     {
-      title: '圈号',
-      dataIndex: 'circleNumber',
-    },
-    {
-      title: '件重',
-      dataIndex: 'singleWeight',
-    },
-    {
       title: '品类',
       dataIndex: 'category',
     },
     {
       title: '图片',
       dataIndex: 'pictures',
-      render: (_, record) => (
-        <img src={`http://localhost:7000${_[0].src}`} style={{ height: 60 }} />
-      ),
+      render: (data, record) =>
+        data?.length > 0 && (
+          <img
+            src={`http://localhost:7000${data[0].src}`}
+            style={{ height: 60 }}
+          />
+        ),
     },
     {
       title: '操作',

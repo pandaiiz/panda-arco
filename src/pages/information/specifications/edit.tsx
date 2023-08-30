@@ -31,14 +31,14 @@ function SpecificationsEdit({ data, onClose }) {
       categoryId: formData.categoryId,
       category: categoryEnum.find((item) => item.id === formData.categoryId)
         .title,
-      circleNumberId: formData.circleNumberId,
+      /* circleNumberId: formData.circleNumberId,
       circleNumber: circleEnum.find(
         (item) => item.id === formData.circleNumberId
       ).title,
       singleWeightId: formData.singleWeightId,
       singleWeight: singleWeightEnum.find(
         (item) => item.id === formData.singleWeightId
-      ).title,
+      ).title,*/
     };
     if (pictures && pictures.length > 0) {
       submitData.pictures = pictures.map((item) => {

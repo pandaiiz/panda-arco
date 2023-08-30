@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 function CustomerEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: customerList } = useRequest(getCustomerList);
-  const [rowData, setRowData] = useState(data.orderDetails);
+  const [rowData, setRowData] = useState(data.orderDetails || []);
 
   async function onOk() {
     await form.validate();
@@ -67,7 +67,7 @@ function CustomerEdit({ data, onClose }) {
             <Input placeholder="请输入订单号" />
           </FormItem>
         </Form>
-        <EditableTable list={[]} rowData={rowData} setRowData={setRowData} />
+        <EditableTable rowData={rowData} setRowData={setRowData} />
       </Drawer>
     </div>
   );
