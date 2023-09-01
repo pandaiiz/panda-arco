@@ -1,54 +1,49 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Table, Card, Button, Space, Typography } from '@arco-design/web-react';
-import { IconPlus } from '@arco-design/web-react/icon';
 
 import SearchForm from './form';
 
-import styles from './style/index.module.less';
 import { getColumns } from './constants';
-import useSWRImmutable from 'swr/immutable';
-import { getFetcher } from '@/utils/request';
+import { useAsyncEffect, useRequest } from 'ahooks';
+import Edit from '@/pages/order/arrange/edit';
+import { getOrderDetailsList } from '@/pages/order/arrange/service';
+import { cloneDeep } from 'lodash';
+import styles from '@/pages/order/list/style/index.module.less';
+import { IconShrink } from '@arco-design/web-react/icon';
 
 const { Title } = Typography;
 
-function UserTable() {
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
+function CustomerTable() {
+  const [visible, setVisible] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
-  const {
-    data: userList,
-    mutate: fetchUserList,
-    isLoading,
-  } = useSWRImmutable(
-    { url: '/api/user/paging', params: formParams },
-    getFetcher
-  );
+  const [formParams, setFormParams] = useState({});
 
-  const tableCallback = async (record: any, type: any) => {
-    console.log(record, type);
+  const { data: dataList, loading, run } = useRequest(getOrderDetailsList);
+
+  const tableCallback = async (record: any, type: string) => {
+    /*switch (type) {
+      case 'delete':
+        await deleteOrderById(record.id);
+        setFormParams({ ...formParams });
+        run(formParams);
+        break;
+      case 'edit':
+        setData(record);
+        setVisible(true);
+        break;
+    }*/
   };
 
   const columns = useMemo(() => getColumns(tableCallback), []);
 
-  useEffect(() => {
-    fetchData();
+  useAsyncEffect(async () => {
+    await run(formParams);
   }, [JSON.stringify(formParams)]);
 
-  async function fetchData() {
-    await fetchUserList(formParams);
-  }
-
-  function onChangeTable({ current, pageSize }) {
-    setFormParams({
-      ...formParams,
-      current,
-      pageSize,
-    });
-  }
-
-  function handleSearch(
-    params: React.SetStateAction<{ pageSize: number; current: number }>
-  ) {
-    setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
+  function handleSearch(params: any) {
+    setFormParams(cloneDeep(params));
   }
 
   return (
@@ -57,27 +52,48 @@ function UserTable() {
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
-          <Button type="primary" icon={<IconPlus />}>
-            新增
+          <Button
+            type="primary"
+            icon={<IconShrink />}
+            onClick={() => setVisible(true)}
+          >
+            排单
           </Button>
         </Space>
       </div>
       <Table
         rowKey="id"
-        loading={isLoading}
-        onChange={onChangeTable}
-        pagination={{
-          sizeCanChange: true,
-          showTotal: true,
-          pageSizeChangeResetCurrent: true,
-          current: formParams.current,
-          pageSize: formParams.pageSize,
-        }}
+        loading={loading}
+        pagination={false}
         columns={columns}
-        data={userList?.data}
+        data={dataList}
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys,
+          onChange: (selectedRowKeys, selectedRows) => {
+            console.log(selectedRows);
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRows(selectedRows);
+          },
+          /*checkboxProps: (record) => {
+            return {
+              disabled: record.id === '4',
+            };
+          },*/
+        }}
       />
+
+      {visible && (
+        <Edit
+          data={selectedRows}
+          onClose={() => {
+            setVisible(false);
+            run(formParams);
+          }}
+        />
+      )}
     </Card>
   );
 }
 
-export default UserTable;
+export default CustomerTable;

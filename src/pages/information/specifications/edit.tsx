@@ -31,14 +31,6 @@ function SpecificationsEdit({ data, onClose }) {
       categoryId: formData.categoryId,
       category: categoryEnum.find((item) => item.id === formData.categoryId)
         .title,
-      /* circleNumberId: formData.circleNumberId,
-      circleNumber: circleEnum.find(
-        (item) => item.id === formData.circleNumberId
-      ).title,
-      singleWeightId: formData.singleWeightId,
-      singleWeight: singleWeightEnum.find(
-        (item) => item.id === formData.singleWeightId
-      ).title,*/
     };
     if (pictures && pictures.length > 0) {
       submitData.pictures = pictures.map((item) => {
@@ -92,25 +84,11 @@ function SpecificationsEdit({ data, onClose }) {
           <FormItem label="款号" field="styleCode" rules={[{ required: true }]}>
             <Input placeholder="请输入款号" />
           </FormItem>
-          <FormItem label="圈号" field="circleNumberId">
-            <Select placeholder="请选择圈号" allowClear>
-              {circleEnum?.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.title}
-                </Select.Option>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem label="件重" field="singleWeightId">
-            <Select placeholder="请选择件重" allowClear>
-              {singleWeightEnum?.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.title}
-                </Select.Option>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem label="品名" field="categoryId">
+          <FormItem
+            label="品名"
+            field="categoryId"
+            rules={[{ required: true }]}
+          >
             <Select placeholder="请选择品名" allowClear>
               {categoryEnum?.map((item) => (
                 <Select.Option key={item.id} value={item.id}>
