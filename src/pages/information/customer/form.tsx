@@ -28,14 +28,16 @@ function SearchForm(props: {
         form={form}
         className={styles['search-form']}
         labelAlign="left"
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 19 }}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
       >
         <Row gutter={24}>
           <Col span={8}>
             <Form.Item label="客户名称" field="name">
               <Input allowClear placeholder="客户名称" />
             </Form.Item>
+          </Col>
+          <Col span={8}>
             <Form.Item label="客户编号" field="customerCode">
               <Input allowClear placeholder="客户编号" />
             </Form.Item>

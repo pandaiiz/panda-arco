@@ -26,7 +26,7 @@ export function getColumns(
         <Button
           key="detail"
           type="text"
-          onClick={() => callback(record, 'edit')}
+          onClick={() => callback(record, 'arrange')}
         >
           编辑
         </Button>,

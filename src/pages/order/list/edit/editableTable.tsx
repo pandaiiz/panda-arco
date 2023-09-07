@@ -107,11 +107,6 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
       align: 'center',
     },
     {
-      title: '传递单号',
-      dataIndex: 'transferNo',
-      align: 'center',
-    },
-    {
       title: '操作',
       align: 'center',
       render: (col, record, colIndex) => (

@@ -21,7 +21,7 @@ function Menu() {
         await deleteMenuById(record.id);
         refresh();
         break;
-      case 'edit':
+      case 'arrange':
         setData(record);
         setVisible(true);
         break;

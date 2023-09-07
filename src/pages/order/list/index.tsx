@@ -9,6 +9,7 @@ import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import Edit from '@/pages/order/list/edit';
 import { deleteOrderById, getOrderByPaging } from '@/pages/order/list/service';
+import { isEmpty } from 'lodash';
 
 const { Title } = Typography;
 
@@ -27,7 +28,7 @@ function CustomerTable() {
         setFormParams({ ...formParams, current: 1 });
         run(formParams);
         break;
-      case 'edit':
+      case 'arrange':
         setData(record);
         setVisible(true);
         break;
@@ -51,7 +52,12 @@ function CustomerTable() {
   function handleSearch(
     params: React.SetStateAction<{ pageSize: number; current: number }>
   ) {
-    setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
+    setFormParams({
+      ...params,
+      pageSize: formParams.pageSize,
+      current: 1,
+    });
+    if (isEmpty(params)) run(formParams);
   }
 
   return (
@@ -90,7 +96,7 @@ function CustomerTable() {
           data={data}
           onClose={() => {
             setVisible(false);
-
+            setData({});
             run(formParams);
           }}
         />

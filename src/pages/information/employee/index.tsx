@@ -34,7 +34,7 @@ function SpecificationsTable() {
         // await trigger(record.id);
         // await mutate();
         break;
-      case 'edit':
+      case 'arrange':
         setData(record);
         setVisible(true);
         break;

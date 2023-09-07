@@ -13,7 +13,7 @@ import Arrange from '@/pages/order/arrange/arrange';
 
 const { Title } = Typography;
 
-function CustomerTable() {
+function PrepareMaterial() {
   const [visible, setVisible] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -82,4 +82,4 @@ function CustomerTable() {
   );
 }
 
-export default CustomerTable;
+export default PrepareMaterial;

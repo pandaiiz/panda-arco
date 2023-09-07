@@ -9,41 +9,61 @@ import {
   Button,
   InputNumber,
   Space,
+  Spin,
 } from '@arco-design/web-react';
-import { addOrder, updateOrder } from '@/pages/order/list/service';
+import {
+  addOrder,
+  getOrderDetailsById,
+  updateOrder,
+} from '@/pages/order/list/service';
 import { useRequest } from 'ahooks';
 import { getCustomerList } from '@/pages/information/customer/service';
 import EditableTable from '@/pages/order/list/edit/editableTable';
 import styles from '@/pages/order/list/style/index.module.less';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
 import { cloneDeep } from 'lodash';
 const FormItem = Form.Item;
-const InputSearch = Input.Search;
 
 const Row = Grid.Row;
 const Col = Grid.Col;
-function CustomerEdit({ data, onClose }) {
+function ListEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: customerList } = useRequest(getCustomerList);
-  const [detailData, setDetailData] = useState(data.orderDetails || []);
+  const { data: detailsData, loading } = useRequest(() =>
+    getOrderDetailsById(data.id)
+  );
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [detailData, setDetailData] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
   const [batchForm, setBatchForm] = useState({
     type: 'circle',
     number: null,
   });
 
+  useEffect(() => {
+    setDetailData(detailsData);
+  }, [detailsData]);
+
   async function onOk() {
-    await form.validate();
-    const formData = form.getFieldsValue();
-    detailData.forEach((item) => delete item.orderId);
-    if (data.id) {
-      await updateOrder(data.id, { formData, detailData });
-    } else {
-      formData.orderDetails = { create: detailData };
-      await addOrder(formData);
+    try {
+      await form.validate();
+      const formData = form.getFieldsValue();
+      const submitData = {
+        orderData: formData,
+        orderDetailData: detailData,
+      };
+      detailData.forEach((item) => delete item.orderId);
+      setConfirmLoading(true);
+      if (data.id) {
+        await updateOrder(data.id, submitData);
+      } else {
+        await addOrder(submitData);
+      }
+      Message.success('提交成功 !');
+      onClose();
+    } catch (e) {
+    } finally {
+      setConfirmLoading(false);
     }
-    Message.success('提交成功 !');
-    onClose();
   }
 
   const batchAllocation = () => {
@@ -58,7 +78,7 @@ function CustomerEdit({ data, onClose }) {
     setDetailData(rowData);
   };
   return (
-    <div>
+    <Spin tip="加载中..." loading={loading}>
       <Drawer
         height="100%"
         placement="bottom"
@@ -68,7 +88,7 @@ function CustomerEdit({ data, onClose }) {
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
-        // confirmLoading={isLoading}
+        confirmLoading={confirmLoading}
       >
         <Form
           labelCol={{ span: 6 }}
@@ -171,8 +191,8 @@ function CustomerEdit({ data, onClose }) {
           setSelectedRow={setSelectedRow}
         />
       </Drawer>
-    </div>
+    </Spin>
   );
 }
 
-export default CustomerEdit;
+export default ListEdit;

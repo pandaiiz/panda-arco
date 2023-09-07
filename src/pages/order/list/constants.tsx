@@ -7,11 +7,11 @@ export function getColumns(
   return [
     {
       title: '客户名称',
-      dataIndex: 'customer.name',
+      dataIndex: 'customerName',
     },
     {
       title: '客户编号',
-      dataIndex: 'customer.customerCode',
+      dataIndex: 'customerCode',
     },
     {
       title: '订单号',
@@ -26,7 +26,7 @@ export function getColumns(
           type="text"
           size="small"
           key="view"
-          onClick={() => callback(record, 'edit')}
+          onClick={() => callback(record, 'arrange')}
         >
           编辑
         </Button>,
