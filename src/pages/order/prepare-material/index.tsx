@@ -9,7 +9,7 @@ import { getOrderDetailsList } from '@/pages/order/arrange/service';
 import { cloneDeep } from 'lodash';
 import styles from '@/pages/order/list/style/index.module.less';
 import { IconShrink } from '@arco-design/web-react/icon';
-import Arrange from '@/pages/order/arrange/arrange';
+import Detail from '@/pages/order/prepare-material/detail';
 
 const { Title } = Typography;
 
@@ -34,7 +34,7 @@ function PrepareMaterial() {
 
   return (
     <Card>
-      <Title heading={6}>排单</Title>
+      <Title heading={6}>开料</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -43,7 +43,7 @@ function PrepareMaterial() {
             icon={<IconShrink />}
             onClick={() => setVisible(true)}
           >
-            排单
+            开料
           </Button>
         </Space>
       </div>
@@ -57,23 +57,19 @@ function PrepareMaterial() {
           type: 'checkbox',
           selectedRowKeys,
           onChange: (selectedRowKeys, selectedRows) => {
-            console.log(selectedRows);
             setSelectedRowKeys(selectedRowKeys);
             setSelectedRows(selectedRows);
           },
-          /*checkboxProps: (record) => {
-            return {
-              disabled: record.id === '4',
-            };
-          },*/
         }}
       />
 
       {visible && (
-        <Arrange
+        <Detail
           data={selectedRows}
           onClose={() => {
             setVisible(false);
+            setSelectedRows([]);
+            setSelectedRowKeys([]);
             run(formParams);
           }}
         />

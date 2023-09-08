@@ -57,15 +57,9 @@ function CustomerTable() {
           type: 'checkbox',
           selectedRowKeys,
           onChange: (selectedRowKeys, selectedRows) => {
-            console.log(selectedRows);
             setSelectedRowKeys(selectedRowKeys);
             setSelectedRows(selectedRows);
           },
-          /*checkboxProps: (record) => {
-            return {
-              disabled: record.id === '4',
-            };
-          },*/
         }}
       />
 

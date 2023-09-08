@@ -38,7 +38,7 @@ function SpecificationsTable() {
         setData(record);
         setVisible(true);
         break;
-      case 'arrange':
+      case 'detail':
         setData(record);
         setVisible(true);
         break;

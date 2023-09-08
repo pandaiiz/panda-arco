@@ -30,7 +30,7 @@ function CustomerTable() {
         setFormParams({ ...formParams, current: 1 });
         await run(formParams);
         break;
-      case 'arrange':
+      case 'detail':
         setData(record);
         setVisible(true);
         break;

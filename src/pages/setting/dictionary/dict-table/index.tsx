@@ -34,7 +34,7 @@ function DictTable() {
   }, [selectedDict?.id]);
 
   const tableCallback = async (record: any, type: any) => {
-    if (type === 'arrange') {
+    if (type === 'detail') {
       setData(record);
       setVisible(true);
     }

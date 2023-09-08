@@ -1,13 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { Message, Drawer, Table } from '@arco-design/web-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Message, Drawer, Table, Tabs, Button } from '@arco-design/web-react';
 import { cloneDeep, groupBy, sortBy } from 'lodash';
+import { nanoid } from 'nanoid';
+import { useReactToPrint } from 'react-to-print';
 
 function CustomerEdit({ data, onClose }) {
   const [columns, setColumns] = useState([]);
+  const countColumns = [
+    { title: '品名', dataIndex: 'categoryTitle' },
+    { title: '件重', dataIndex: 'singleWeight' },
+    { title: '圈号', dataIndex: 'circle' },
+    { title: '合计', dataIndex: 'typeCount' },
+  ];
+  const [typeCountList, setTypeCountList] = useState([]);
   const [circleColumnsLength, setCircleColumnsLength] = useState([]);
 
   useEffect(() => {
     const categoryGroup = groupBy(data, 'categoryId');
+    const countGroup = groupBy(
+      data,
+      (n) => `${n.categoryId}-${n.singleWeight}-${n.circle}`
+    );
+    const aa = Object.keys(countGroup).map((item) => {
+      const currentRow = countGroup[item];
+      let typeCount = 0;
+      currentRow.forEach((crItem) => (typeCount += crItem.quantity));
+      return {
+        key: nanoid(),
+        ...currentRow[0],
+        typeCount,
+      };
+    });
+    setTypeCountList(aa);
     const customerCategoryGroup = groupBy(
       data,
       (n) => n.categoryId + '-' + n.customerName
@@ -53,8 +77,15 @@ function CustomerEdit({ data, onClose }) {
         dataIndex: `circle-${item}`,
         value: item,
         render: (value, row) => {
-          row[`circle-${item}`] = row.circle === item ? row.quantity : 0;
-          return row.circle === item ? row.quantity : 0;
+          if (row.circle === item) {
+            row[`circle-${item}`] = row.quantity;
+            return row.quantity;
+          } else if (!row.circle && item === 'null') {
+            row[`circle-${item}`] = row.quantity;
+            return row.quantity;
+          } else {
+            row[`circle-${item}`] = 0;
+          }
         },
       };
     });
@@ -72,7 +103,10 @@ function CustomerEdit({ data, onClose }) {
         let count = 0;
         circleColumns.forEach((item) => {
           if (row.circle === item.value) {
-            count += Number(row.quantity || 0);
+            count += Number(row.quantity);
+          }
+          if (!row.circle && item.value === 'null') {
+            count += Number(row.quantity);
           }
         });
         row.totalCount = count;
@@ -80,36 +114,6 @@ function CustomerEdit({ data, onClose }) {
       },
     });
     setColumns(newCircleColumns);
-    // 品名 -> 客户 -> 件重
-    /*const categoryList = groupBy(data, 'categoryTitle');
-    const list = Object.keys(categoryList).map((item) => {
-      const category = categoryList[item];
-      const customerGroup = groupBy(category, (row) => row.customerId);
-      return {
-        id: nanoid(),
-        categoryTitle: item,
-        children: Object.keys(customerGroup).map((customerItem) => {
-          const singleWeightGroup = groupBy(
-            customerGroup[customerItem],
-            (row) => row.singleWeight
-          );
-          return {
-            id: nanoid(),
-            customer: customerGroup[customerItem][0].customerName,
-            children: Object.keys(singleWeightGroup).map((swItem) => {
-              console.log(singleWeightGroup[swItem]);
-              // circleColumns.find(ccItem => ccItem.circle === )
-              return {
-                id: nanoid(),
-                singleWeight: singleWeightGroup[swItem][0].singleWeight,
-                // [`circle-${item}`]:
-              };
-            }),
-          };
-        }),
-      };
-    });*/
-    // setTreeData(list);
   }, []);
 
   async function onOk() {
@@ -133,29 +137,71 @@ function CustomerEdit({ data, onClose }) {
       </Table.Summary.Row>
     );
   }
+  function countSummary(currentData) {
+    return (
+      <Table.Summary.Row>
+        <Table.Summary.Cell>总计</Table.Summary.Cell>
+        <Table.Summary.Cell></Table.Summary.Cell>
+        <Table.Summary.Cell></Table.Summary.Cell>
+        <Table.Summary.Cell>
+          {currentData.reduce((prev, next) => prev + next.typeCount, 0)}
+        </Table.Summary.Cell>
+      </Table.Summary.Row>
+    );
+  }
+
+  const printRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+  });
   return (
     <Drawer
       height="100%"
       placement="bottom"
-      title="排单"
+      title="开料"
       visible={true}
       onOk={onOk}
       autoFocus={false}
       focusLock={false}
       onCancel={onClose}
     >
-      {data?.length > 0 && (
-        <Table
-          summary={summary}
-          rowKey="id"
-          pagination={false}
-          columns={columns}
-          data={sortBy(data, ['categoryId', 'customerName'])}
-          defaultExpandAllRows={true}
-          border
-          borderCell
-        />
-      )}
+      <Tabs defaultActiveTab="1">
+        <Tabs.TabPane key="1" title="开料列表">
+          {data?.length > 0 && (
+            <Table
+              summary={summary}
+              rowKey="id"
+              pagination={false}
+              columns={columns}
+              data={sortBy(data, ['categoryId', 'customerName'])}
+              defaultExpandAllRows={true}
+              border
+              borderCell
+            />
+          )}
+        </Tabs.TabPane>
+        <Tabs.TabPane key="2" title="开料统计">
+          <Button
+            type="primary"
+            style={{ marginBottom: 10 }}
+            onClick={handlePrint}
+          >
+            打印
+          </Button>
+          <div ref={printRef}>
+            <Table
+              summary={countSummary}
+              rowKey="key"
+              pagination={false}
+              columns={countColumns}
+              data={sortBy(typeCountList, ['categoryId', 'singleWeight'])}
+              defaultExpandAllRows={true}
+              border
+              borderCell
+            />
+          </div>
+        </Tabs.TabPane>
+      </Tabs>
     </Drawer>
   );
 }

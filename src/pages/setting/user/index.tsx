@@ -37,7 +37,7 @@ function UsersTable() {
         // await trigger(record.id);
         // await mutate();
         break;
-      case 'arrange':
+      case 'detail':
         setData(record);
         setVisible(true);
         break;

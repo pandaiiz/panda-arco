@@ -28,7 +28,7 @@ function CustomerTable() {
         setFormParams({ ...formParams, current: 1 });
         run(formParams);
         break;
-      case 'arrange':
+      case 'detail':
         setData(record);
         setVisible(true);
         break;
