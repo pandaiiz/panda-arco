@@ -12,5 +12,3 @@ export const deleteOrderById = (id): Promise<any> =>
   request.delete(`/api/order/${id}`);
 export const deleteOrderDetailById = (id): Promise<any> =>
   request.delete(`/api/order/detail/${id}`);
-export const batchCreateTransfer = (data): Promise<any> =>
-  request.post(`/api/transfer/batch`, data);

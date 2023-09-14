@@ -155,7 +155,7 @@ function ListEdit({ data, onClose }) {
             <Col span={8}>
               <FormItem label="下单日期" field="orderDate">
                 <DatePicker
-                  // format="YYYY-MM-DD HH:mm:ss"
+                  format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择下单日期"
                   style={{ width: '100%' }}
                 />

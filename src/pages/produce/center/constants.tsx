@@ -7,38 +7,31 @@ export function getColumns(
 ) {
   return [
     {
-      title: '客户名称',
-      dataIndex: 'customerName',
+      title: '收发单号',
+      dataIndex: 'id',
     },
     {
-      title: '客户编号',
+      title: '客户',
       dataIndex: 'customerCode',
     },
     {
-      title: '字印',
-      dataIndex: 'charactersTitle',
+      title: '品类',
+      dataIndex: 'categoryTitle',
     },
     {
-      title: '下单日期',
-      dataIndex: 'orderDate',
-      render: (data) => data && dayjs(data).format('YYYY-MM-DD'),
+      title: '单重',
+      dataIndex: 'singleWeight',
     },
     {
-      title: '订单号',
-      dataIndex: 'orderNumber',
+      title: '圈号',
+      dataIndex: 'circle',
+      // render: (data) => Number(data),
     },
     {
-      title: '时间状态(偏差)',
-      render: (data, row) => {
-        const day = dayjs(dayjs().format('YYYY-MM-DD')).diff(
-          dayjs(row.orderDate).format('YYYY-MM-DD'),
-          'day'
-        );
-        if (day < 7) return <Tag color="green">{day}</Tag>;
-        if (7 < day && day < 10) return <Tag color="orange">{day}</Tag>;
-        if (10 < day && day < 15) return <Tag color="red">{day}</Tag>;
-      },
+      title: '款号',
+      dataIndex: 'styleCode',
     },
+
     {
       title: '操作',
       dataIndex: 'operations',
@@ -60,9 +53,9 @@ export function getColumns(
             await callback(record, 'delete');
           }}
         >
-          <Button type="text" size="small">
+          {/*<Button type="text" size="small">
             删除
-          </Button>
+          </Button>*/}
         </Popconfirm>,
       ],
     },
