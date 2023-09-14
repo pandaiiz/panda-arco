@@ -56,9 +56,12 @@ function ListEdit({ data, onClose }) {
     try {
       await form.validate();
       const formData = form.getFieldsValue();
-      formData.charactersTitle = markingEnum.find(
-        (item) => item.id === formData.charactersId
-      ).title;
+      if (formData.charactersId) {
+        formData.charactersTitle = markingEnum?.find(
+          (item) => item.id === formData.charactersId
+        ).title;
+      }
+      console.log(123);
       const submitData = {
         orderData: formData,
         orderDetailData: detailData,
