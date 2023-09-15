@@ -10,10 +10,10 @@ function Exception403() {
         <Result
           className={styles.result}
           status="403"
-          subTitle={['exception.result.403.description']}
+          subTitle="对不起，您没有访问该资源的权限"
           extra={
             <Button key="back" type="primary">
-              {['exception.result.403.back']}
+              返回
             </Button>
           }
         />

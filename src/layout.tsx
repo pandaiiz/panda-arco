@@ -13,6 +13,11 @@ import {
   IconUser,
   IconMenuFold,
   IconMenuUnfold,
+  IconInfo,
+  IconPen,
+  IconOrderedList,
+  IconDesktop,
+  IconTranslate,
 } from '@arco-design/web-react/icon';
 import qs from 'query-string';
 import NProgress from 'nprogress';
@@ -35,24 +40,14 @@ const Content = Layout.Content;
 
 function getIconFromKey(key) {
   switch (key) {
-    case 'dashboard':
-      return <IconDashboard className={styles.icon} />;
-    case 'order':
-      return <IconList className={styles.icon} />;
-    case 'form':
-      return <IconSettings className={styles.icon} />;
-    case 'profile':
-      return <IconFile className={styles.icon} />;
-    case 'visualization':
-      return <IconApps className={styles.icon} />;
-    case 'result':
-      return <IconCheckCircle className={styles.icon} />;
-    case 'exception':
-      return <IconExclamationCircle className={styles.icon} />;
-    case 'user':
-      return <IconUser className={styles.icon} />;
     case 'setting':
       return <IconSettings className={styles.icon} />;
+    case 'order':
+      return <IconOrderedList className={styles.icon} />;
+    case 'information':
+      return <IconDesktop className={styles.icon} />;
+    case 'produce-hub':
+      return <IconTranslate className={styles.icon} />;
     default:
       return <div className={styles['icon-empty']} />;
   }

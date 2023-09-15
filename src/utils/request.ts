@@ -20,7 +20,6 @@ request.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log(error);
     // Do something with request error
     return Promise.reject(error);
   }

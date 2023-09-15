@@ -61,7 +61,6 @@ function ListEdit({ data, onClose }) {
           (item) => item.id === formData.charactersId
         ).title;
       }
-      console.log(123);
       const submitData = {
         orderData: formData,
         orderDetailData: detailData,

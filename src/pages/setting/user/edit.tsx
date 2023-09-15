@@ -22,7 +22,6 @@ const FormItem = Form.Item;
 function SpecificationsEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: circleEnum, loading } = useRequest(() => getEnum('CIRCLE'));
-  console.log(circleEnum, 'circleEnum');
   const { data: roleList, isLoading } = useSWR(
     { url: '/api/role' },
     getFetcher
