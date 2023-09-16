@@ -24,6 +24,8 @@ import styles from '@/pages/order/list/style/index.module.less';
 import { cloneDeep } from 'lodash';
 import { getEnum } from '@/utils/commonService';
 import dayjs from 'dayjs';
+import { filterOption, validateMessages } from '@/utils/common';
+import { nanoid } from 'nanoid';
 const FormItem = Form.Item;
 
 const Row = Grid.Row;
@@ -31,10 +33,10 @@ const Col = Grid.Col;
 function ListEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: customerList } = useRequest(getCustomerList);
-  const { data: detailsData, loading } = useRequest(() =>
-    getOrderDetailsById(data.id)
+  const { data: detailsData, loading } = useRequest(
+    () => data.id && getOrderDetailsById(data.id)
   );
-  const { data: markingEnum } = useRequest(() => getEnum('MARKING'));
+  const { data: fontPrintEnum } = useRequest(() => getEnum('FONT_PRINT'));
 
   const { data: categoryEnum } = useRequest(() => getEnum('CATEGORY'));
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -48,8 +50,10 @@ function ListEdit({ data, onClose }) {
   useEffect(() => {
     data.id && form.setFieldsValue({ orderDate: dayjs().format() });
   }, []);
+
   useEffect(() => {
-    setDetailData(detailsData);
+    detailsData?.forEach((item) => (item.nanoid = nanoid()));
+    if (detailsData) setDetailData(detailsData);
   }, [detailsData]);
 
   async function onOk() {
@@ -57,7 +61,7 @@ function ListEdit({ data, onClose }) {
       await form.validate();
       const formData = form.getFieldsValue();
       if (formData.charactersId) {
-        formData.charactersTitle = markingEnum?.find(
+        formData.charactersTitle = fontPrintEnum?.find(
           (item) => item.id === formData.charactersId
         ).title;
       }
@@ -65,7 +69,10 @@ function ListEdit({ data, onClose }) {
         orderData: formData,
         orderDetailData: detailData,
       };
-      detailData.forEach((item) => delete item.orderId);
+      detailData.forEach((item) => {
+        item.orderId = data.id;
+        delete item.nanoid;
+      });
       setConfirmLoading(true);
       if (data.id) {
         await updateOrder(data.id, submitData);
@@ -107,18 +114,10 @@ function ListEdit({ data, onClose }) {
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           form={form}
-          initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
-          validateMessages={{
-            required: (_, { label }) => `必须填写${label}`,
-            string: {
-              length: `字符数必须是 #{length}`,
-              match: `不匹配正则 #{pattern}`,
-            },
-            number: {
-              min: `最小值为 #{min}`,
-              max: `最大值为 #{max}`,
-            },
-          }}
+          initialValues={
+            (data.id && data) || { orderDate: dayjs().toISOString() }
+          }
+          validateMessages={validateMessages}
         >
           <Row className="grid-demo" style={{ marginBottom: 16 }}>
             <Col span={8}>
@@ -127,7 +126,12 @@ function ListEdit({ data, onClose }) {
                 field="customerId"
                 rules={[{ required: true }]}
               >
-                <Select placeholder="请选择" allowClear>
+                <Select
+                  placeholder="请选择"
+                  allowClear
+                  showSearch
+                  filterOption={filterOption}
+                >
                   {customerList?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
                       {item.name}
@@ -143,21 +147,36 @@ function ListEdit({ data, onClose }) {
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="字印" field="charactersId">
-                <Select placeholder="请选择" allowClear>
-                  {markingEnum?.map((item) => (
-                    <Select.Option key={item.id} value={item.id}>
+              <FormItem label="字印" field="fontPrint">
+                <Select
+                  placeholder="请选择"
+                  allowClear
+                  showSearch
+                  filterOption={filterOption}
+                  onChange={(value, option) => {
+                    form.setFieldValue(
+                      'fontPrintName',
+                      'children' in option ? option?.children : ''
+                    );
+                  }}
+                >
+                  {fontPrintEnum?.map((item) => (
+                    <Select.Option key={item.id} value={item.key}>
                       {item.title}
                     </Select.Option>
                   ))}
                 </Select>
-                {/*<Input placeholder="请输入字印" />*/}
+              </FormItem>
+              <FormItem hidden label="字印" field="fontPrintName">
+                <Input placeholder="请输入字印" disabled />
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="下单日期" field="orderDate">
                 <DatePicker
-                  // format="YYYY-MM-DD HH:mm:ss"
+                  onChange={(dateString, date) =>
+                    form.setFieldValue('orderDate', date.toISOString())
+                  }
                   placeholder="请选择下单日期"
                   style={{ width: '100%' }}
                 />
@@ -174,7 +193,9 @@ function ListEdit({ data, onClose }) {
           <Space>
             <Button
               type="primary"
-              onClick={() => setDetailData([...detailData, {}])}
+              onClick={() =>
+                setDetailData([...detailData, { nanoid: nanoid() }])
+              }
             >
               新增
             </Button>

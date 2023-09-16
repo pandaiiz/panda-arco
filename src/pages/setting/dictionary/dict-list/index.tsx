@@ -50,9 +50,7 @@ function DictList() {
             key={item.id}
             style={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <Space>
-              {item.title}({item.key})
-            </Space>
+            <Space>{item.title}</Space>
             <Space>
               <Button
                 type="text"

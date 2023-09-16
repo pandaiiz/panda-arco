@@ -12,6 +12,7 @@ import {
   deleteCustomerById,
   getCustomerByPaging,
 } from '@/pages/information/customer/service';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -19,7 +20,10 @@ function CustomerTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
+  const [formParams, setFormParams] = useState<any>({
+    pageSize: 10,
+    current: 1,
+  });
 
   const { data: dataList, loading, run } = useRequest(getCustomerByPaging);
 
@@ -27,8 +31,7 @@ function CustomerTable() {
     switch (type) {
       case 'delete':
         await deleteCustomerById(record.id);
-        setFormParams({ ...formParams, current: 1 });
-        await run(formParams);
+        setFormParams({ ...formParams, current: 1, unixTime: dayjs().unix() });
         break;
       case 'detail':
         setData(record);
@@ -54,7 +57,12 @@ function CustomerTable() {
   function handleSearch(
     params: React.SetStateAction<{ pageSize: number; current: number }>
   ) {
-    setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
+    setFormParams({
+      ...params,
+      pageSize: formParams.pageSize,
+      current: 1,
+      unixTime: dayjs().unix(),
+    });
   }
 
   return (
@@ -93,7 +101,7 @@ function CustomerTable() {
           data={data}
           onClose={() => {
             setVisible(false);
-
+            setData({});
             run(formParams);
           }}
         />

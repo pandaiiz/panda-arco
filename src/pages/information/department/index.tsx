@@ -7,30 +7,30 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/information/customer/edit';
+import Edit from '@/pages/information/department/edit';
 import {
-  deleteCustomerById,
-  getCustomerByPaging,
-} from '@/pages/information/customer/service';
+  deleteDepartmentById,
+  getDepartmentByPaging,
+} from '@/pages/information/department/service';
 
 const { Title } = Typography;
 
-function CustomerTable() {
+function DepartmentTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
   const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
 
-  const { data: dataList, loading, run } = useRequest(getCustomerByPaging);
+  const { data: dataList, loading, run } = useRequest(getDepartmentByPaging);
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        await deleteCustomerById(record.id);
+        await deleteDepartmentById(record.id);
         setFormParams({ ...formParams, current: 1 });
         await run(formParams);
         break;
-      case 'detail':
+      case 'edit':
         setData(record);
         setVisible(true);
         break;
@@ -59,7 +59,7 @@ function CustomerTable() {
 
   return (
     <Card>
-      <Title heading={6}>客户列表</Title>
+      <Title heading={6}>部门列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -93,7 +93,7 @@ function CustomerTable() {
           data={data}
           onClose={() => {
             setVisible(false);
-
+            setData({});
             run(formParams);
           }}
         />
@@ -102,4 +102,4 @@ function CustomerTable() {
   );
 }
 
-export default CustomerTable;
+export default DepartmentTable;

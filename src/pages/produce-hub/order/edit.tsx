@@ -10,6 +10,7 @@ import {
 import useSWRMutation from 'swr/mutation';
 import { getFetcher, patchFetcher, postFetcher } from '@/utils/request';
 import useSWR from 'swr';
+import { validateMessages } from '@/utils/common';
 const FormItem = Form.Item;
 
 function MenuList({ data, onClose }) {
@@ -47,18 +48,8 @@ function MenuList({ data, onClose }) {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 18 }}
           form={form}
-          initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
-          validateMessages={{
-            required: (_, { label }) => `必须填写${label}`,
-            string: {
-              length: `字符数必须是 #{length}`,
-              match: `不匹配正则 #{pattern}`,
-            },
-            number: {
-              min: `最小值为 #{min}`,
-              max: `最大值为 #{max}`,
-            },
-          }}
+          initialValues={data.id && data}
+          validateMessages={validateMessages}
         >
           <FormItem label="上级节点" field="parentId">
             <TreeSelect

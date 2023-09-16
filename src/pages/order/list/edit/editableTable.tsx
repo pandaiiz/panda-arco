@@ -5,6 +5,7 @@ import {
   Modal,
   Select,
   Table,
+  TableColumnProps,
   Upload,
 } from '@arco-design/web-react';
 import React, { useState } from 'react';
@@ -15,28 +16,27 @@ import { deleteOrderDetailById } from '@/pages/order/list/service';
 
 const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
   const { data: categoryEnum } = useRequest(() => getEnum('CATEGORY'));
-  const columns = [
+  const columns: TableColumnProps[] = [
     {
       // 下拉框
       title: '品名',
-      dataIndex: 'categoryId',
+      dataIndex: 'category',
       align: 'center',
       render: (col, record, index) => (
         <Select
           placeholder="请选择品名"
           allowClear
-          value={record.categoryId}
-          onChange={(e) => {
+          value={record.category}
+          onChange={(value, option) => {
             const newData = cloneDeep(detailData);
-            const category = categoryEnum.find((item) => item.id === e);
-            newData[index].categoryId = e;
-            newData[index].categoryTitle = category.title;
-            newData[index].categoryKey = category.itemKey;
+            newData[index].category = value;
+            newData[index].categoryName =
+              'children' in option ? option.children : '';
             setDetailData(newData);
           }}
         >
           {categoryEnum?.map((item) => (
-            <Select.Option key={item.id} value={item.id}>
+            <Select.Option key={item.id} value={item.key}>
               {item.title}
             </Select.Option>
           ))}
@@ -128,11 +128,6 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
       ),
     },
     {
-      title: '生产状态',
-      dataIndex: 'productionStatus',
-      align: 'center',
-    },
-    {
       title: '操作',
       align: 'center',
       render: (col, record, colIndex) => (
@@ -152,12 +147,10 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
 
   return (
     <Table
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       columns={columns}
       data={detailData}
       pagination={false}
-      rowKey="id"
+      rowKey="nanoid"
       rowSelection={{
         type: 'checkbox',
         selectedRowKeys,

@@ -31,7 +31,7 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
             const category = categoryEnum.find((item) => item.id === e);
             newData[index].categoryId = e;
             newData[index].categoryTitle = category.title;
-            newData[index].categoryKey = category.itemKey;
+            newData[index].categoryKey = category.key;
             setDetailData(newData);
           }}
         >

@@ -47,7 +47,7 @@ function DictTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   return (
-    <Card title="字典详情" style={{ width: '100%' }}>
+    <Card title={`字典详情-${selectedDict.key}`} style={{ width: '100%' }}>
       {selectedDict?.id ? (
         <>
           <div className={styles['button-group']}>

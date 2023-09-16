@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button, TableColumnProps } from '@arco-design/web-react';
 
 export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
-) {
+): TableColumnProps[] {
   return [
     {
       title: '字段名',
@@ -13,7 +13,7 @@ export function getColumns(
     },
     {
       title: '值',
-      dataIndex: 'itemKey',
+      dataIndex: 'key',
       width: 300,
       align: 'center',
     },

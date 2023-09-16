@@ -8,7 +8,7 @@ function Footer(props: FooterProps = {}) {
   const { className, ...restProps } = props;
   return (
     <Layout.Footer className={cs(styles.footer, className)} {...restProps}>
-      ©2023 Created by Cyan Studio
+      ©2023 Created by WangWenhao
     </Layout.Footer>
   );
 }

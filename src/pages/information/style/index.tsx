@@ -59,7 +59,7 @@ function CustomerTable() {
 
   return (
     <Card>
-      <Title heading={6}>客户列表</Title>
+      <Title heading={6}>款式列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
