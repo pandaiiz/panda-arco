@@ -2,7 +2,7 @@ export function getColumns() {
   return [
     {
       title: '客户',
-      dataIndex: 'customerName',
+      dataIndex: 'order.customer.name',
     },
     {
       title: '款号',
@@ -10,7 +10,7 @@ export function getColumns() {
     },
     {
       title: '品名',
-      dataIndex: 'categoryTitle',
+      dataIndex: 'categoryName',
     },
     {
       title: '件重',

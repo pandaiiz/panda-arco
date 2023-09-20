@@ -1,42 +1,19 @@
 import React from 'react';
-import {
-  Modal,
-  Form,
-  Input,
-  Message,
-  TreeSelect,
-  Switch,
-  Select,
-} from '@arco-design/web-react';
-import useSWRMutation from 'swr/mutation';
-import request, {
-  getFetcher,
-  patchFetcher,
-  postFetcher,
-} from '@/utils/request';
-import useSWR from 'swr';
+import { Modal, Form, Input, Message, Select } from '@arco-design/web-react';
+import { addUser, updateUser } from '@/pages/setting/user/service';
+import { getRoles } from '@/pages/setting/role/service';
 import { useRequest } from 'ahooks';
-import { getEnum } from '@/utils/commonService';
 const FormItem = Form.Item;
 
-function SpecificationsEdit({ data, onClose }) {
+function UserEdit({ data, onClose }) {
   const [form] = Form.useForm();
-  const { data: circleEnum, loading } = useRequest(() => getEnum('CIRCLE'));
-  const { data: roleList, isLoading } = useSWR(
-    { url: '/api/role' },
-    getFetcher
-  );
-  const { trigger: addUserTrigger } = useSWRMutation('/api/user', postFetcher);
-  const { trigger: updateUserTrigger } = useSWRMutation(
-    '/api/user',
-    patchFetcher
-  );
+  const { data: roleList } = useRequest(getRoles);
 
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateUserTrigger({ data: formData, id: data.id });
-    else await addUserTrigger(formData);
+    if (data.id) await updateUser(data.id, formData);
+    else await addUser(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -49,7 +26,6 @@ function SpecificationsEdit({ data, onClose }) {
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
-        confirmLoading={isLoading}
       >
         <Form
           labelCol={{ span: 5 }}
@@ -68,46 +44,20 @@ function SpecificationsEdit({ data, onClose }) {
             },
           }}
         >
-          <FormItem label="款号" field="parentId">
-            <Select
-              placeholder="Please select"
-              style={{ width: 154 }}
-              allowClear
-            >
-              {circleEnum?.map((item) => (
+          <FormItem label="姓名" field="name" rules={[{ required: true }]}>
+            <Input placeholder="请输入用户姓名" />
+          </FormItem>
+          <FormItem label="账号" field="account">
+            <Input placeholder="请输入账号" />
+          </FormItem>
+          <FormItem label="角色" field="roleId" rules={[{ required: true }]}>
+            <Select placeholder="请选择角色">
+              {roleList?.map((item: any) => (
                 <Select.Option key={item.id} value={item.id}>
                   {item.title}
                 </Select.Option>
               ))}
             </Select>
-          </FormItem>
-          <FormItem label="名称" field="title" rules={[{ required: true }]}>
-            <Input placeholder="请输入菜单名称" />
-          </FormItem>
-          <FormItem label="地址" field="key" rules={[{ required: true }]}>
-            <Input placeholder="请输入菜单地址" />
-          </FormItem>
-          <FormItem label="备注" field="remark">
-            <Input placeholder="请输入备注" />
-          </FormItem>
-          <FormItem label="启用" field="enabled" triggerPropName="checked">
-            <Switch />
-          </FormItem>
-          <FormItem
-            tooltip="当前页是否展示面包屑。"
-            label="面包屑"
-            field="breadcrumb"
-            triggerPropName="checked"
-          >
-            <Switch />
-          </FormItem>
-          <FormItem
-            tooltip="当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。"
-            label="不渲染"
-            field="ignore"
-            triggerPropName="checked"
-          >
-            <Switch />
           </FormItem>
         </Form>
       </Modal>
@@ -115,4 +65,4 @@ function SpecificationsEdit({ data, onClose }) {
   );
 }
 
-export default SpecificationsEdit;
+export default UserEdit;

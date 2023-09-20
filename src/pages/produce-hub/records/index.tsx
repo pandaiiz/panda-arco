@@ -7,29 +7,41 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/order/list/edit';
-import { deleteOrderById } from '@/pages/produce/center/service';
-import { isEmpty } from 'lodash';
-import { getTransferByPaging } from '@/pages/produce/center/service';
+import Edit from '@/pages/produce-hub/records/edit';
+import {
+  deleteTransferDetailById,
+  getTransferDetailsByPaging,
+} from '@/pages/produce-hub/records/service';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
-function CustomerTable() {
+function RecordsTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
+  const [formParams, setFormParams] = useState<any>({
+    pageSize: 10,
+    current: 1,
+  });
 
-  const { data: dataList, loading, run } = useRequest(getTransferByPaging);
+  const {
+    data: dataList,
+    loading,
+    run,
+  } = useRequest(getTransferDetailsByPaging);
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        await deleteOrderById(record.id);
-        setFormParams({ ...formParams, current: 1 });
-        run(formParams);
+        await deleteTransferDetailById(record.id);
+        setFormParams({ ...formParams, current: 1, unixTime: dayjs().unix() });
         break;
       case 'detail':
+        setData(record);
+        setVisible(true);
+        break;
+      case 'translate':
         setData(record);
         setVisible(true);
         break;
@@ -57,13 +69,13 @@ function CustomerTable() {
       ...params,
       pageSize: formParams.pageSize,
       current: 1,
+      unixTime: dayjs().unix(),
     });
-    if (isEmpty(params)) run(formParams);
   }
 
   return (
     <Card>
-      <Title heading={6}>收发列表</Title>
+      <Title heading={6}>收发记录</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -106,4 +118,4 @@ function CustomerTable() {
   );
 }
 
-export default CustomerTable;
+export default RecordsTable;

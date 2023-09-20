@@ -10,6 +10,7 @@ import { cloneDeep } from 'lodash';
 import styles from '@/pages/order/list/style/index.module.less';
 import { IconShrink } from '@arco-design/web-react/icon';
 import Arrange from '@/pages/order/arrange/arrange';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -29,7 +30,7 @@ function CustomerTable() {
   }, [JSON.stringify(formParams)]);
 
   function handleSearch(params: any) {
-    setFormParams(cloneDeep(params));
+    setFormParams({ ...params, unixTime: dayjs().unix() });
   }
 
   return (

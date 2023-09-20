@@ -33,8 +33,8 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={8}>
-            <Form.Item label="用户名" field="account">
-              <Input allowClear placeholder="用户名" />
+            <Form.Item label="学生姓名" field="name">
+              <Input allowClear placeholder="学生姓名" />
             </Form.Item>
           </Col>
         </Row>

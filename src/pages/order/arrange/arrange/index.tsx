@@ -14,9 +14,10 @@ import { useReactToPrint } from 'react-to-print';
 import { batchCreateTransfer } from '@/pages/order/arrange/service';
 
 function Arrange({ data, onClose }) {
+  console.log(data);
   const countColumns: TableColumnProps[] = [
-    { title: '客户', dataIndex: 'customerName' },
-    { title: '品名', dataIndex: 'categoryTitle' },
+    { title: '客户', dataIndex: 'order.customer.name' },
+    { title: '品名', dataIndex: 'categoryName' },
     { title: '件重', dataIndex: 'singleWeight' },
     { title: '圈号', dataIndex: 'circle' },
     { title: '合计', dataIndex: 'typeCount' },
@@ -30,7 +31,8 @@ function Arrange({ data, onClose }) {
   useEffect(() => {
     const countGroup = groupBy(
       data,
-      (n) => `${n.categoryId}-${n.singleWeight}-${n.circle}-${n.customerName}`
+      (n) =>
+        `${n.category}-${n.singleWeight}-${n.circle}-${n.order.customer.name}`
     );
     const tableData = Object.keys(countGroup).map((item) => {
       const currentRow = countGroup[item];
@@ -76,14 +78,13 @@ function Arrange({ data, onClose }) {
       const expandData = [];
       record.children = [];
       if (rowLength === 0) {
-        expandData.push({ ...record, key: nanoid(), rowType: 'leaf' });
+        expandData.push({ ...record, key: nanoid() });
       } else {
         for (let i = 0; i < rowLength; i++) {
           expandData.push({
             ...record,
             typeCount: step,
             key: nanoid(),
-            rowType: 'leaf',
           });
         }
         if (lastRowTypeCount !== 0) {
@@ -91,7 +92,6 @@ function Arrange({ data, onClose }) {
             ...record,
             typeCount: lastRowTypeCount,
             key: nanoid(),
-            rowType: 'leaf',
           });
         }
       }
@@ -106,6 +106,12 @@ function Arrange({ data, onClose }) {
       item.children.forEach((childItem) => {
         delete childItem.id;
         delete childItem.key;
+        delete childItem.order;
+        delete childItem.unitPrice;
+        delete childItem.totalPrice;
+        delete childItem.totalWeight;
+        delete childItem.typeCount;
+        delete childItem.children;
         items.push(childItem);
       })
     );
@@ -153,7 +159,7 @@ function Arrange({ data, onClose }) {
           pagination={false}
           expandedRowKeys={expandedRowKeys}
           columns={countColumns}
-          data={sortBy(typeCountList, ['categoryId', 'customerId'])}
+          data={sortBy(typeCountList, ['category', 'customerId'])}
           defaultExpandAllRows={true}
           indentSize={60}
           border

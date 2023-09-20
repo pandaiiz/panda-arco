@@ -10,6 +10,7 @@ import { useAsyncEffect, useRequest } from 'ahooks';
 import Edit from '@/pages/order/list/edit';
 import { deleteOrderById, getOrderByPaging } from '@/pages/order/list/service';
 import { isEmpty } from 'lodash';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -17,7 +18,10 @@ function CustomerTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
+  const [formParams, setFormParams] = useState<any>({
+    pageSize: 10,
+    current: 1,
+  });
 
   const { data: dataList, loading, run } = useRequest(getOrderByPaging);
 
@@ -56,8 +60,8 @@ function CustomerTable() {
       ...params,
       pageSize: formParams.pageSize,
       current: 1,
+      unixTime: dayjs().unix(),
     });
-    if (isEmpty(params)) run(formParams);
   }
 
   return (

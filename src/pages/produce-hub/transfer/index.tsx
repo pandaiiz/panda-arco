@@ -7,8 +7,11 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/order/list/edit';
-import { deleteOrderById, getOrderByPaging } from '@/pages/order/list/service';
+import Edit from '@/pages/produce-hub/transfer/edit';
+import {
+  deleteTransferById,
+  getTransferByPaging,
+} from '@/pages/produce-hub/transfer/service';
 import { isEmpty } from 'lodash';
 
 const { Title } = Typography;
@@ -19,12 +22,12 @@ function CustomerTable() {
 
   const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
 
-  const { data: dataList, loading, run } = useRequest(getOrderByPaging);
+  const { data: dataList, loading, run } = useRequest(getTransferByPaging);
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        await deleteOrderById(record.id);
+        await deleteTransferById(record.id);
         setFormParams({ ...formParams, current: 1 });
         run(formParams);
         break;
@@ -62,7 +65,7 @@ function CustomerTable() {
 
   return (
     <Card>
-      <Title heading={6}>订单列表</Title>
+      <Title heading={6}>传递单列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>

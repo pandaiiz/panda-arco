@@ -12,48 +12,53 @@ export function getColumns(
 ): TableColumnProps[] {
   return [
     {
-      title: '客户名称',
-      dataIndex: 'customer.name',
-      align: 'center',
+      title: '传递单号',
+      dataIndex: 'id',
     },
     {
-      title: '客户编号',
-      dataIndex: 'customer.customerCode',
-      align: 'center',
+      title: '客户名称',
+      render: (data, row) => row.order && row?.order?.customer?.name,
+    },
+    {
+      title: '品名',
+      dataIndex: 'categoryName',
+    },
+    {
+      title: '圈号',
+      dataIndex: 'circle',
     },
     {
       title: '字印',
-      dataIndex: 'fontPrintName',
-      align: 'center',
+      render: (data, row) => row.fontPrintName || row.order.fontPrintName,
     },
     {
-      title: '下单日期',
+      title: '创建日期',
+      dataIndex: 'createdAt',
+      render: (data) => dayjs(data).format('YYYY-MM-DD'),
+    },
+    {
+      title: '订单日期',
       dataIndex: 'orderDate',
-      align: 'center',
-      render: (data) => data && dayjs(data).format('YYYY-MM-DD'),
+      render: (data, row) =>
+        row?.order ? dayjs(row?.order?.orderDate).format('YYYY-MM-DD') : '',
     },
     {
       title: '订单号',
-      dataIndex: 'orderNumber',
-      align: 'center',
+      render: (data, row) => (row?.order ? row?.order?.orderNumber : ''),
     },
     {
-      title: '时间状态(偏差)',
-      align: 'center',
-      render: (data, row) => {
-        const day = dayjs(dayjs().format('YYYY-MM-DD')).diff(
-          dayjs(row.orderDate).format('YYYY-MM-DD'),
-          'day'
-        );
-        if (day < 7) return <Tag color="green">{day}</Tag>;
-        if (7 <= day && day < 10) return <Tag color="orange">{day}</Tag>;
-        if (10 <= day && day < 15) return <Tag color="red">{day}</Tag>;
+      title: '状态',
+      dataIndex: 'status',
+      render: (data) => {
+        if (data === 0) return '未生产';
+        if (data === 1) return '生产中';
+        if (data === 2) return '完单';
       },
     },
-    {
+    /*{
       title: '操作',
       dataIndex: 'operations',
-      align: 'center',
+      headerCellStyle: { paddingLeft: '15px' },
       render: (_, record) => [
         <Button
           type="text"
@@ -76,6 +81,6 @@ export function getColumns(
           </Button>
         </Popconfirm>,
       ],
-    },
+    },*/
   ];
 }

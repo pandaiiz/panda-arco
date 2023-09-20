@@ -6,38 +6,30 @@ import SearchForm from './form';
 
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
-import useSWRImmutable from 'swr/immutable';
-import { getFetcher } from '@/utils/request';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import Edit from '@/pages/setting/user/edit';
-import { getUsersByPaging } from '@/pages/setting/user/service';
+import { deleteUserById, getUserByPaging } from '@/pages/setting/user/service';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
-function UsersTable() {
+function UserTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
-
-  const {
-    data: dataList,
-    mutate: fetchDataList,
-    isLoading,
-  } = useSWRImmutable(
-    { url: '/api/specifications/paging', params: formParams },
-    getFetcher
-  );
-
-  useRequest(() => getUsersByPaging(formParams));
+  const [formParams, setFormParams] = useState<any>({
+    pageSize: 10,
+    current: 1,
+  });
+  const { data: dataList, loading, run } = useRequest(getUserByPaging);
 
   const tableCallback = async (record: any, type: any) => {
     switch (type) {
       case 'delete':
-        // await trigger(record.id);
-        // await mutate();
+        await deleteUserById(record.id);
+        setFormParams({ ...formParams, current: 1, unixTime: dayjs().unix() });
         break;
-      case 'detail':
+      case 'edit':
         setData(record);
         setVisible(true);
         break;
@@ -47,7 +39,7 @@ function UsersTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    await fetchDataList(formParams);
+    run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -66,7 +58,7 @@ function UsersTable() {
 
   return (
     <Card>
-      <Title heading={6}>款式列表</Title>
+      <Title heading={6}>用户列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -81,7 +73,7 @@ function UsersTable() {
       </div>
       <Table
         rowKey="id"
-        loading={isLoading}
+        loading={loading}
         onChange={onChangeTable}
         pagination={{
           sizeCanChange: true,
@@ -98,6 +90,8 @@ function UsersTable() {
         <Edit
           data={data}
           onClose={() => {
+            run(formParams);
+            setData({});
             setVisible(false);
           }}
         />
@@ -106,4 +100,4 @@ function UsersTable() {
   );
 }
 
-export default UsersTable;
+export default UserTable;

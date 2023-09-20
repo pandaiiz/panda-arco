@@ -5,12 +5,6 @@ import DictTable from '@/pages/setting/dictionary/dict-table';
 import { atom, RecoilState } from 'recoil';
 const { Row, Col } = Grid;
 
-// 字典请求方式
-/*const { data: dictionaryItemList } = useSWRImmutable(
-    { url: '/api/dictionary/key/CIRCLE' },
-    getFetcher
-);*/
-
 export const selectedDictState: RecoilState<any> = atom({
   key: 'selectedDictState',
   default: {},
