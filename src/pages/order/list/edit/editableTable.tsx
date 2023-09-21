@@ -2,11 +2,9 @@ import {
   Button,
   Input,
   InputNumber,
-  Modal,
   Select,
   Table,
   TableColumnProps,
-  Upload,
 } from '@arco-design/web-react';
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
@@ -14,7 +12,12 @@ import { useRequest } from 'ahooks';
 import { getEnum } from '@/utils/commonService';
 import { deleteOrderDetailById } from '@/pages/order/list/service';
 
-const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
+const Editable = ({
+  detailData,
+  setDetailData,
+  setSelectedRow,
+  selectedRow,
+}) => {
   const { data: categoryEnum } = useRequest(() => getEnum('CATEGORY'));
   const columns: TableColumnProps[] = [
     {
@@ -28,10 +31,23 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
           allowClear
           value={record.category}
           onChange={(value, option) => {
+            const newSelectedRowKeys = selectedRowKeys.filter(
+              (item) => item !== record.nanoid
+            );
+            const newSelectedRow = selectedRow.filter(
+              (item) => item.nanoid !== record.nanoid
+            );
+            setSelectedRowKeys(newSelectedRowKeys);
+            setSelectedRow(newSelectedRow);
             const newData = cloneDeep(detailData);
-            newData[index].category = value;
-            newData[index].categoryName =
-              'children' in option ? option.children : '';
+            if (value) {
+              newData[index].category = value;
+              newData[index].categoryName =
+                'children' in option ? option.children : '';
+            } else {
+              newData[index].category = '';
+              newData[index].categoryName = '';
+            }
             setDetailData(newData);
           }}
         >
@@ -157,6 +173,11 @@ const Editable = ({ detailData, setDetailData, setSelectedRow }) => {
         onChange: (selectedRowKeys, selectedRows) => {
           setSelectedRowKeys(selectedRowKeys);
           setSelectedRow(selectedRows);
+        },
+        checkboxProps: (record) => {
+          return {
+            disabled: !record.category,
+          };
         },
       }}
     />

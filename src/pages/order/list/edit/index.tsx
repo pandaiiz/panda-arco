@@ -44,7 +44,7 @@ function ListEdit({ data, onClose }) {
   const [selectedRow, setSelectedRow] = useState([]);
   const [batchForm, setBatchForm] = useState({
     type: 'circle',
-    number: '',
+    value: '',
   });
 
   useEffect(() => {
@@ -88,11 +88,11 @@ function ListEdit({ data, onClose }) {
   }
 
   const batchAllocation = () => {
-    const { type, number } = batchForm;
+    const { type, value } = batchForm;
     const rowData = cloneDeep(detailData);
     rowData.forEach((item) => {
-      if (selectedRow.find((srItem) => srItem.id === item.id)) {
-        item[type] = number;
+      if (selectedRow.find((srItem) => srItem.nanoid === item.nanoid)) {
+        item[type] = value;
       }
     });
     setDetailData(rowData);
@@ -207,34 +207,35 @@ function ListEdit({ data, onClose }) {
                 showSearch
                 placeholder="请选择列"
                 style={{ marginRight: 10, width: 100 }}
-                onChange={(e) =>
-                  setBatchForm({ type: e, number: batchForm.number })
-                }
+                onChange={(e) => setBatchForm({ type: e, value: '' })}
               >
                 <Select.Option value="circle">圈号</Select.Option>
                 <Select.Option value="singleWeight">件重</Select.Option>
                 <Select.Option value="quantity">数量</Select.Option>
-                <Select.Option value="categoryId">品名</Select.Option>
+                <Select.Option value="category">品名</Select.Option>
               </Select>
-              {batchForm.type === 'categoryId' ? (
+              {batchForm.type === 'category' ? (
                 <Select
                   placeholder="请选择品名"
-                  allowClear
-                  value={batchForm.number}
+                  style={{ width: 160 }}
+                  value={batchForm.value}
+                  onChange={(value) =>
+                    setBatchForm({ type: batchForm.type, value })
+                  }
                 >
                   {categoryEnum?.map((item) => (
-                    <Select.Option key={item.id} value={item.id}>
+                    <Select.Option key={item.id} value={item.key}>
                       {item.title}
                     </Select.Option>
                   ))}
                 </Select>
               ) : (
                 <Input
-                  value={batchForm.number}
+                  value={batchForm.value}
                   placeholder="值"
-                  style={{ width: 100 }}
-                  onChange={(e) =>
-                    setBatchForm({ type: batchForm.type, number: e })
+                  style={{ width: 160 }}
+                  onChange={(value) =>
+                    setBatchForm({ type: batchForm.type, value })
                   }
                 />
               )}
@@ -246,6 +247,7 @@ function ListEdit({ data, onClose }) {
         </div>
         <EditableTable
           detailData={detailData}
+          selectedRow={selectedRow}
           setDetailData={setDetailData}
           setSelectedRow={setSelectedRow}
         />
