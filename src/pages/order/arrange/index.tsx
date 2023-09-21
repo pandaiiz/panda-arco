@@ -6,7 +6,6 @@ import SearchForm from './form';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import { getOrderDetailsList } from '@/pages/order/arrange/service';
-import { cloneDeep } from 'lodash';
 import styles from '@/pages/order/list/style/index.module.less';
 import { IconShrink } from '@arco-design/web-react/icon';
 import Arrange from '@/pages/order/arrange/arrange';
@@ -21,12 +20,16 @@ function CustomerTable() {
 
   const [formParams, setFormParams] = useState({});
 
-  const { data: dataList, loading, run } = useRequest(getOrderDetailsList);
+  const {
+    data: dataList,
+    loading,
+    run,
+  } = useRequest(() => getOrderDetailsList({ status: 0 }));
 
   const columns = useMemo(() => getColumns(), []);
 
   useAsyncEffect(async () => {
-    await run(formParams);
+    await run();
   }, [JSON.stringify(formParams)]);
 
   function handleSearch(params: any) {
@@ -69,7 +72,7 @@ function CustomerTable() {
           data={selectedRows}
           onClose={() => {
             setVisible(false);
-            run(formParams);
+            run();
           }}
         />
       )}

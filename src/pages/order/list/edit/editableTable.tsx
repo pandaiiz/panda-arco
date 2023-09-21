@@ -5,6 +5,7 @@ import {
   Select,
   Table,
   TableColumnProps,
+  Tag,
 } from '@arco-design/web-react';
 import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
@@ -27,6 +28,7 @@ const Editable = ({
       align: 'center',
       render: (col, record, index) => (
         <Select
+          disabled={record.status === 1}
           placeholder="请选择品名"
           allowClear
           value={record.category}
@@ -65,6 +67,7 @@ const Editable = ({
       align: 'center',
       render: (col, record, index) => (
         <Input
+          disabled={record.status === 1}
           value={record.styleCode}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
@@ -104,6 +107,7 @@ const Editable = ({
       align: 'center',
       render: (col, record, index) => (
         <Input
+          disabled={record.status === 1}
           value={record.circle}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
@@ -119,6 +123,7 @@ const Editable = ({
       align: 'center',
       render: (col, record, index) => (
         <InputNumber
+          disabled={record.status === 1}
           value={record.singleWeight}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
@@ -134,6 +139,7 @@ const Editable = ({
       align: 'center',
       render: (col, record, index) => (
         <InputNumber
+          disabled={record.status === 1}
           value={record.quantity}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
@@ -144,10 +150,25 @@ const Editable = ({
       ),
     },
     {
+      title: '状态',
+      align: 'center',
+      dataIndex: 'status',
+      render: (status) => (
+        <>
+          {status === 0 && <Tag color="red">未排产</Tag>}
+          {status === 1 && <Tag color="green">已排产</Tag>}
+        </>
+      ),
+    },
+    {
       title: '操作',
       align: 'center',
       render: (col, record, colIndex) => (
-        <Button type="text" onClick={() => deleteRow(record.id, colIndex)}>
+        <Button
+          disabled={record.status === 1}
+          type="text"
+          onClick={() => deleteRow(record.id, colIndex)}
+        >
           删除
         </Button>
       ),
@@ -176,7 +197,7 @@ const Editable = ({
         },
         checkboxProps: (record) => {
           return {
-            disabled: !record.category,
+            disabled: !record.category || record.status === 1,
           };
         },
       }}

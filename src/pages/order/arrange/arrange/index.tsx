@@ -14,18 +14,16 @@ import { useReactToPrint } from 'react-to-print';
 import { batchCreateTransfer } from '@/pages/order/arrange/service';
 
 function Arrange({ data, onClose }) {
-  console.log(data);
   const countColumns: TableColumnProps[] = [
     { title: '客户', dataIndex: 'order.customer.name' },
     { title: '品名', dataIndex: 'categoryName' },
     { title: '件重', dataIndex: 'singleWeight' },
     { title: '圈号', dataIndex: 'circle' },
     { title: '合计', dataIndex: 'typeCount' },
-    { title: '单号', dataIndex: 'transferCode' },
+    // { title: '单号', dataIndex: 'transferCode' },
   ];
   const [typeCountList, setTypeCountList] = useState([]);
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-  const [transferList, setTransferList] = useState([]);
   const [step, setStep] = useState(100);
 
   useEffect(() => {
@@ -62,7 +60,7 @@ function Arrange({ data, onClose }) {
         <Table.Summary.Cell>
           {currentData.reduce((prev, next) => prev + next.typeCount, 0)}
         </Table.Summary.Cell>
-        <Table.Summary.Cell></Table.Summary.Cell>
+        {/*<Table.Summary.Cell></Table.Summary.Cell>*/}
       </Table.Summary.Row>
     );
   }
@@ -115,7 +113,10 @@ function Arrange({ data, onClose }) {
         items.push(childItem);
       })
     );
-    batchCreateTransfer(items).then((res) => console.log(res));
+    batchCreateTransfer({ orderDetails: data, transfers: items }).then(() => {
+      Message.success('生成流程单成功！');
+      onClose();
+    });
   };
   return (
     <Drawer
@@ -144,13 +145,13 @@ function Arrange({ data, onClose }) {
         >
           分单
         </Button>
-        <Button
+        {/*<Button
           type="primary"
           style={{ marginBottom: 10 }}
           onClick={saveTransfer}
         >
           保存流程单
-        </Button>
+        </Button>*/}
       </Space>
       {typeCountList.length > 0 && (
         <Table
