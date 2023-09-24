@@ -67,7 +67,7 @@ const Editable = ({
       title: '款号',
       dataIndex: 'styleCode',
       align: 'center',
-      width: 160,
+      width: 220,
       render: (col, record, index) => (
         <Input
           disabled={record.status === 1}
@@ -99,7 +99,7 @@ const Editable = ({
       title: '圈号',
       dataIndex: 'circle',
       align: 'center',
-      width: 160,
+      width: 100,
       render: (col, record, index) => (
         <Input
           disabled={record.status === 1}
@@ -116,7 +116,7 @@ const Editable = ({
       title: '件重',
       dataIndex: 'singleWeight',
       align: 'center',
-      width: 160,
+      width: 100,
       render: (col, record, index) => (
         <InputNumber
           disabled={record.status === 1}
@@ -133,7 +133,7 @@ const Editable = ({
       title: '数量',
       dataIndex: 'quantity',
       align: 'center',
-      width: 160,
+      width: 100,
       render: (col, record, index) => (
         <InputNumber
           disabled={record.status === 1}
@@ -150,7 +150,7 @@ const Editable = ({
       title: '状态',
       align: 'center',
       dataIndex: 'status',
-      width: 160,
+      width: 100,
       render: (status) => (
         <>
           {status === 0 && <Tag color="red">未排产</Tag>}
@@ -161,6 +161,7 @@ const Editable = ({
     {
       title: '操作',
       align: 'center',
+      width: 120,
       render: (col, record, colIndex) => (
         <Button
           disabled={record.status === 1}
@@ -186,6 +187,7 @@ const Editable = ({
 
   return (
     <Table
+      scroll={{ y: window.screen.height - 300 }}
       columns={columns}
       data={detailData}
       pagination={false}
