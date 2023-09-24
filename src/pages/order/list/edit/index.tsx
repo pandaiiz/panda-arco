@@ -11,6 +11,7 @@ import {
   Space,
   Spin,
   DatePicker,
+  Upload,
 } from '@arco-design/web-react';
 import {
   addOrder,
@@ -93,10 +94,100 @@ function ListEdit({ data, onClose }) {
     rowData.forEach((item) => {
       if (selectedRow.find((srItem) => srItem.nanoid === item.nanoid)) {
         item[type] = value;
+        if (type === 'category')
+          item.categoryName = categoryEnum.find(
+            (item) => item.key === value
+          ).title;
       }
     });
     setDetailData(rowData);
   };
+  const footer = (
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Space>
+        <Button
+          type="primary"
+          onClick={() => setDetailData([...detailData, { nanoid: nanoid() }])}
+        >
+          新增
+        </Button>
+
+        <Upload
+          multiple
+          action="/api/picture/upload"
+          showUploadList={false}
+          onChange={(uploadList) => {
+            const doneList = uploadList.filter(
+              (item) => item.status === 'done'
+            );
+            if (doneList.length !== uploadList.length) return;
+            const appendList = uploadList.map((item) => ({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              imgSrc: item?.response?.src,
+              nanoid: nanoid(),
+              category: 'DEFAULT',
+            }));
+
+            setSelectedRow(appendList);
+            setDetailData([...detailData, ...appendList]);
+          }}
+        />
+
+        <div style={{ display: 'flex' }}>
+          <Select
+            value={batchForm.type}
+            showSearch
+            placeholder="请选择列"
+            style={{ marginRight: 10, width: 100 }}
+            onChange={(e) => setBatchForm({ type: e, value: '' })}
+          >
+            <Select.Option value="circle">圈号</Select.Option>
+            <Select.Option value="singleWeight">件重</Select.Option>
+            <Select.Option value="quantity">数量</Select.Option>
+            <Select.Option value="category">品名</Select.Option>
+          </Select>
+          {batchForm.type === 'category' ? (
+            <Select
+              placeholder="请选择品名"
+              style={{ width: 160 }}
+              value={batchForm.value}
+              showSearch
+              filterOption={filterOption}
+              onChange={(value) =>
+                setBatchForm({ type: batchForm.type, value })
+              }
+            >
+              {categoryEnum?.map((item) => (
+                <Select.Option key={item.id} value={item.key}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
+          ) : (
+            <Input
+              value={batchForm.value}
+              placeholder="值"
+              style={{ width: 160 }}
+              onChange={(value) =>
+                setBatchForm({ type: batchForm.type, value })
+              }
+            />
+          )}
+          <Button type="primary" onClick={() => batchAllocation()}>
+            分配
+          </Button>
+        </div>
+      </Space>
+      <Space>
+        <Button onClick={onClose}>取消</Button>
+        <Button type="primary" onClick={onOk}>
+          确定
+        </Button>
+      </Space>
+    </div>
+  );
+
   return (
     <Spin tip="加载中..." loading={loading}>
       <Drawer
@@ -104,7 +195,7 @@ function ListEdit({ data, onClose }) {
         placement="bottom"
         title={data.id ? '编辑' : '新增'}
         visible={true}
-        onOk={onOk}
+        footer={footer}
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
@@ -189,62 +280,6 @@ function ListEdit({ data, onClose }) {
             </Col>
           </Row>
         </Form>
-        <div className={styles['button-group']}>
-          <Space>
-            <Button
-              type="primary"
-              onClick={() =>
-                setDetailData([...detailData, { nanoid: nanoid() }])
-              }
-            >
-              新增
-            </Button>
-          </Space>
-          <Space>
-            <div style={{ display: 'flex' }}>
-              <Select
-                value={batchForm.type}
-                showSearch
-                placeholder="请选择列"
-                style={{ marginRight: 10, width: 100 }}
-                onChange={(e) => setBatchForm({ type: e, value: '' })}
-              >
-                <Select.Option value="circle">圈号</Select.Option>
-                <Select.Option value="singleWeight">件重</Select.Option>
-                <Select.Option value="quantity">数量</Select.Option>
-                <Select.Option value="category">品名</Select.Option>
-              </Select>
-              {batchForm.type === 'category' ? (
-                <Select
-                  placeholder="请选择品名"
-                  style={{ width: 160 }}
-                  value={batchForm.value}
-                  onChange={(value) =>
-                    setBatchForm({ type: batchForm.type, value })
-                  }
-                >
-                  {categoryEnum?.map((item) => (
-                    <Select.Option key={item.id} value={item.key}>
-                      {item.title}
-                    </Select.Option>
-                  ))}
-                </Select>
-              ) : (
-                <Input
-                  value={batchForm.value}
-                  placeholder="值"
-                  style={{ width: 160 }}
-                  onChange={(value) =>
-                    setBatchForm({ type: batchForm.type, value })
-                  }
-                />
-              )}
-              <Button type="primary" onClick={() => batchAllocation()}>
-                分配
-              </Button>
-            </div>
-          </Space>
-        </div>
         <EditableTable
           detailData={detailData}
           selectedRow={selectedRow}

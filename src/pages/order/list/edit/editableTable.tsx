@@ -7,11 +7,12 @@ import {
   TableColumnProps,
   Tag,
 } from '@arco-design/web-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useRequest } from 'ahooks';
 import { getEnum } from '@/utils/commonService';
 import { deleteOrderDetailById } from '@/pages/order/list/service';
+import PictureUpload from '@/pages/order/list/edit/pictureUpload';
 
 const Editable = ({
   detailData,
@@ -26,6 +27,7 @@ const Editable = ({
       title: '品名',
       dataIndex: 'category',
       align: 'center',
+      width: 160,
       render: (col, record, index) => (
         <Select
           disabled={record.status === 1}
@@ -65,6 +67,7 @@ const Editable = ({
       title: '款号',
       dataIndex: 'styleCode',
       align: 'center',
+      width: 160,
       render: (col, record, index) => (
         <Input
           disabled={record.status === 1}
@@ -77,34 +80,26 @@ const Editable = ({
         />
       ),
     },
-    /*{
+    {
       title: '图片',
-      dataIndex: 'picture',
+      dataIndex: 'imgSrc',
       align: 'center',
       render: (col, record, index) => (
-        <Upload
-          showUploadList={false}
-          onChange={(_, currentFile) => {
+        <PictureUpload
+          url={record.imgSrc}
+          onChange={(file) => {
             const newData = cloneDeep(detailData);
-            newData[index].picture = URL.createObjectURL(
-              currentFile.originFile
-            );
+            newData[index].imgSrc = file[0]?.response?.src;
             setDetailData(newData);
-            // setFile({
-            //     ...currentFile,
-            //     url: URL.createObjectURL(currentFile.originFile),
-            // });
           }}
-          name="file"
-          fileList={record.picture}
-          action="/api/picture/upload"
         />
       ),
-    },*/
+    },
     {
       title: '圈号',
       dataIndex: 'circle',
       align: 'center',
+      width: 160,
       render: (col, record, index) => (
         <Input
           disabled={record.status === 1}
@@ -121,6 +116,7 @@ const Editable = ({
       title: '件重',
       dataIndex: 'singleWeight',
       align: 'center',
+      width: 160,
       render: (col, record, index) => (
         <InputNumber
           disabled={record.status === 1}
@@ -137,6 +133,7 @@ const Editable = ({
       title: '数量',
       dataIndex: 'quantity',
       align: 'center',
+      width: 160,
       render: (col, record, index) => (
         <InputNumber
           disabled={record.status === 1}
@@ -153,6 +150,7 @@ const Editable = ({
       title: '状态',
       align: 'center',
       dataIndex: 'status',
+      width: 160,
       render: (status) => (
         <>
           {status === 0 && <Tag color="red">未排产</Tag>}
@@ -181,6 +179,10 @@ const Editable = ({
   };
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  useEffect(() => {
+    setSelectedRowKeys(selectedRow.map((item) => item.nanoid));
+  }, [selectedRow]);
 
   return (
     <Table
