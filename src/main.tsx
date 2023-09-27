@@ -1,9 +1,5 @@
 import './style/global.less';
-
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-
-import 'ag-grid-community';
+import 'react-photo-view/dist/react-photo-view.css';
 import React from 'react';
 import { ConfigProvider } from '@arco-design/web-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';

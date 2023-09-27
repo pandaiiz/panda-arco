@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 
+export const copyOrderById = (id: string): Promise<any> =>
+  request.get(`/api/order/copy/${id}`);
 export const getOrderByPaging = (params): Promise<any> =>
   request.get(`/api/order/paging`, { params });
 export const getSpecificationByCode = (code): Promise<any> =>

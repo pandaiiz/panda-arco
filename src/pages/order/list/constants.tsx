@@ -58,8 +58,16 @@ export function getColumns(
         <Button
           type="text"
           size="small"
+          key="copy"
+          onClick={() => callback(record, 'copy')}
+        >
+          复制
+        </Button>,
+        <Button
+          type="text"
+          size="small"
           key="view"
-          onClick={() => callback(record, 'detail')}
+          onClick={() => callback(record, 'edit')}
         >
           编辑
         </Button>,

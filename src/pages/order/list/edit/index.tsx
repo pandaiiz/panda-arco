@@ -43,8 +43,11 @@ function ListEdit({ data, onClose }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [detailData, setDetailData] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
-  const [batchForm, setBatchForm] = useState({
-    type: 'circle',
+  const [batchForm, setBatchForm] = useState<{
+    type: string;
+    value: any;
+  }>({
+    type: 'category',
     value: '',
   });
 
@@ -88,16 +91,18 @@ function ListEdit({ data, onClose }) {
     }
   }
 
-  const batchAllocation = () => {
+  const [fileList, setFileList] = useState<any>([]);
+  const batchChange = () => {
     const { type, value } = batchForm;
     const rowData = cloneDeep(detailData);
     rowData.forEach((item) => {
       if (selectedRow.find((srItem) => srItem.nanoid === item.nanoid)) {
         item[type] = value;
-        if (type === 'category')
+        if (type === 'category') {
           item.categoryName = categoryEnum.find(
             (item) => item.key === value
           ).title;
+        }
       }
     });
     setDetailData(rowData);
@@ -114,6 +119,7 @@ function ListEdit({ data, onClose }) {
 
         <Upload
           multiple
+          fileList={fileList}
           action="/api/picture/upload"
           showUploadList={false}
           onChange={(uploadList) => {
@@ -131,6 +137,7 @@ function ListEdit({ data, onClose }) {
 
             setSelectedRow(appendList);
             setDetailData([...detailData, ...appendList]);
+            setFileList([]);
           }}
         />
 
@@ -142,12 +149,12 @@ function ListEdit({ data, onClose }) {
             style={{ marginRight: 10, width: 100 }}
             onChange={(e) => setBatchForm({ type: e, value: '' })}
           >
+            <Select.Option value="category">品名</Select.Option>
             <Select.Option value="circle">圈号</Select.Option>
             <Select.Option value="singleWeight">件重</Select.Option>
             <Select.Option value="quantity">数量</Select.Option>
-            <Select.Option value="category">品名</Select.Option>
           </Select>
-          {batchForm.type === 'category' ? (
+          {batchForm.type === 'category' && (
             <Select
               placeholder="请选择品名"
               style={{ width: 160 }}
@@ -164,7 +171,8 @@ function ListEdit({ data, onClose }) {
                 </Select.Option>
               ))}
             </Select>
-          ) : (
+          )}
+          {batchForm.type === 'circle' && (
             <Input
               value={batchForm.value}
               placeholder="值"
@@ -174,7 +182,17 @@ function ListEdit({ data, onClose }) {
               }
             />
           )}
-          <Button type="primary" onClick={() => batchAllocation()}>
+          {batchForm.type !== 'circle' && batchForm.type !== 'category' && (
+            <InputNumber
+              value={batchForm.value}
+              placeholder="值"
+              style={{ width: 160 }}
+              onChange={(value) =>
+                setBatchForm({ type: batchForm.type, value })
+              }
+            />
+          )}
+          <Button type="primary" onClick={() => batchChange()}>
             分配
           </Button>
         </div>

@@ -87,7 +87,7 @@ const Editable = ({
       render: (col, record, index) => (
         <PictureUpload
           url={record.imgSrc}
-          onChange={(file) => {
+          onChange={(file: { response: { src: any } }[]) => {
             const newData = cloneDeep(detailData);
             newData[index].imgSrc = file[0]?.response?.src;
             setDetailData(newData);

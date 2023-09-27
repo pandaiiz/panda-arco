@@ -1,11 +1,11 @@
 import request from '@/utils/request';
 
-export const getCustomerByPaging = (params): Promise<any> =>
-  request.get(`/api/customer/paging`, { params });
-export const getCustomerList = (): Promise<any> => request.get(`/api/customer`);
-export const addCustomer = (data): Promise<any> =>
-  request.post(`/api/customer`, data);
-export const updateCustomer = (id, data): Promise<any> =>
-  request.patch(`/api/customer/${id}`, data);
-export const deleteCustomerById = (id): Promise<any> =>
-  request.delete(`/api/customer/${id}`);
+export const getStyleByPaging = (params): Promise<any> =>
+  request.get(`/api/style/paging`, { params });
+export const getStyleList = (): Promise<any> => request.get(`/api/style`);
+export const addStyle = (data): Promise<any> =>
+  request.post(`/api/style`, data);
+export const updateStyle = (id, data): Promise<any> =>
+  request.patch(`/api/style/${id}`, data);
+export const deleteStyleById = (id): Promise<any> =>
+  request.delete(`/api/style/${id}`);

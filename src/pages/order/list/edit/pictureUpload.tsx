@@ -1,28 +1,51 @@
-import { Card, Modal, Progress, Upload } from '@arco-design/web-react';
+import { Upload } from '@arco-design/web-react';
 import React, { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
-import {
-  IconDelete,
-  IconEdit,
-  IconEye,
-  IconPlus,
-} from '@arco-design/web-react/icon';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import Big from '@/assets/big.svg';
+import Small from '@/assets/small.svg';
+import Rotate from '@/assets/rotate.svg';
 
 function PictureUpload({ url, onChange }) {
   const [fileList, setFileList] = useState<any>([]);
   useEffect(() => {
     if (url) setFileList([{ url, uid: nanoid() }]);
   }, []);
-  const renderUploadList = (filesList, props) => (
-    <div style={{ display: 'flex', marginTop: 20 }}>
-      {filesList.map((file) => {
+  const renderUploadList = (filesList: any[]) => (
+    <div style={{ display: 'flex', textAlign: 'center' }}>
+      {filesList.map((file: any) => {
         const url = file.url || URL.createObjectURL(file.originFile);
 
         return (
-          <img
+          <PhotoProvider
+            key={url}
+            toolbarRender={({ onScale, scale, rotate, onRotate }) => {
+              return (
+                <>
+                  <Big
+                    className="PhotoView-Slider__toolbarIcon"
+                    onClick={() => onScale(scale + 1)}
+                  />
+                  <Small
+                    className="PhotoView-Slider__toolbarIcon"
+                    onClick={() => onScale(scale - 1)}
+                  />
+                  <Rotate
+                    className="PhotoView-Slider__toolbarIcon"
+                    onClick={() => onRotate(rotate + 90)}
+                  />
+                </>
+              );
+            }}
+          >
+            <PhotoView src={url}>
+              <img src={url} alt="" style={{ height: 100, margin: 'auto' }} />
+            </PhotoView>
+          </PhotoProvider>
+          /*<img
             key="image"
             src={url}
-            style={{ width: '100%' }}
+            style={{ height: 100, margin: 'auto' }}
             onClick={() => {
               Modal.success({
                 title: '预览',
@@ -31,7 +54,7 @@ function PictureUpload({ url, onChange }) {
               });
             }}
             alt=""
-          />
+          />*/
         );
       })}
     </div>

@@ -36,7 +36,7 @@ export default defineConfig({
         target: 'http://localhost:7000',
       },
       '/static': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:7000',
         changeOrigin: true,
       },
     },

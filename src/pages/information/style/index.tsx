@@ -7,26 +7,26 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/information/customer/edit';
+import Edit from '@/pages/information/style/edit';
 import {
-  deleteCustomerById,
-  getCustomerByPaging,
-} from '@/pages/information/customer/service';
+  deleteStyleById,
+  getStyleByPaging,
+} from '@/pages/information/style/service';
 
 const { Title } = Typography;
 
-function CustomerTable() {
+function StyleTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
   const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
 
-  const { data: dataList, loading, run } = useRequest(getCustomerByPaging);
+  const { data: dataList, loading, run } = useRequest(getStyleByPaging);
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        await deleteCustomerById(record.id);
+        await deleteStyleById(record.id);
         setFormParams({ ...formParams, current: 1 });
         await run(formParams);
         break;
@@ -59,7 +59,7 @@ function CustomerTable() {
 
   return (
     <Card>
-      <Title heading={6}>款式列表</Title>
+      <Title heading={6}>款号列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
@@ -102,4 +102,4 @@ function CustomerTable() {
   );
 }
 
-export default CustomerTable;
+export default StyleTable;

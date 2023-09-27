@@ -8,8 +8,11 @@ import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
 import Edit from '@/pages/order/list/edit';
-import { deleteOrderById, getOrderByPaging } from '@/pages/order/list/service';
-import { isEmpty } from 'lodash';
+import {
+  copyOrderById,
+  deleteOrderById,
+  getOrderByPaging,
+} from '@/pages/order/list/service';
 import dayjs from 'dayjs';
 
 const { Title } = Typography;
@@ -32,9 +35,13 @@ function CustomerTable() {
         setFormParams({ ...formParams, current: 1 });
         run(formParams);
         break;
-      case 'detail':
+      case 'edit':
         setData(record);
         setVisible(true);
+        break;
+      case 'copy':
+        await copyOrderById(record.id);
+        run(formParams);
         break;
     }
   };
