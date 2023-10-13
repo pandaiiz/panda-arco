@@ -22,6 +22,11 @@ export const getColumns = (
       align: 'center',
     },
     {
+      title: '员工编码',
+      dataIndex: 'code',
+      align: 'center',
+    },
+    {
       title: '创建日期',
       dataIndex: 'createdAt',
       align: 'center',

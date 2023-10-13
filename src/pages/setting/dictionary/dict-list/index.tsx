@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Card, Message, Modal, Space } from '@arco-design/web-react';
+import {
+  Button,
+  Card,
+  Link,
+  Message,
+  Modal,
+  Space,
+  Tag,
+} from '@arco-design/web-react';
 import Edit from '@/pages/setting/dictionary/dict-list/edit';
 import { Menu } from '@arco-design/web-react';
 import { useRecoilState } from 'recoil';
@@ -16,14 +24,14 @@ function DictList() {
       title: '请确认是否要删除此数据！',
       onOk: async () => {
         await deleteDictById(item.id);
-        await refresh();
+        refresh();
         Message.success('删除成功！');
       },
     });
   }
   const modalClose = async () => {
     setVisible(false);
-    await refresh();
+    refresh();
   };
   return (
     <Card
@@ -50,20 +58,23 @@ function DictList() {
             key={item.id}
             style={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <Space>{item.title}</Space>
             <Space>
-              <Button
-                type="text"
+              {item.enabled === 1 && <Tag color="green">启用</Tag>}
+              {item.enabled === 0 && <Tag color="red">停用</Tag>}
+              {item.title}
+            </Space>
+            <Space>
+              <Link
                 onClick={() => {
                   setSelectedDict(item);
                   setVisible(true);
                 }}
               >
                 编辑
-              </Button>
-              <Button type="text" status="danger" onClick={() => confirm(item)}>
+              </Link>
+              <Link status="error" onClick={() => confirm(item)}>
                 删除
-              </Button>
+              </Link>
             </Space>
           </MenuItem>
         ))}

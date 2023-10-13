@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TableColumnProps } from '@arco-design/web-react';
+import { Button, TableColumnProps, Tag } from '@arco-design/web-react';
 
 export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
@@ -16,6 +16,30 @@ export function getColumns(
       dataIndex: 'key',
       width: 300,
       align: 'center',
+    },
+    {
+      title: '排序',
+      dataIndex: 'sort',
+      width: 300,
+      align: 'center',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      width: 300,
+      align: 'center',
+    },
+    {
+      title: '启用',
+      dataIndex: 'enabled',
+      width: 300,
+      align: 'center',
+      render: (enabled) =>
+        enabled === 1 ? (
+          <Tag color="green">启用</Tag>
+        ) : (
+          <Tag color="red">停用</Tag>
+        ),
     },
     {
       title: '操作',

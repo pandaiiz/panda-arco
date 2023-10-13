@@ -1,9 +1,14 @@
 import React from 'react';
-import { Modal, Form, Input, Message } from '@arco-design/web-react';
 import {
-  addCustomer,
-  updateCustomer,
-} from '@/pages/information/customer/service';
+  Modal,
+  Form,
+  Input,
+  Message,
+  Upload,
+  Space,
+  Tag,
+} from '@arco-design/web-react';
+import { addStyle, updateStyle } from '@/pages/information/style/service';
 import { validateMessages } from '@/utils/common';
 const FormItem = Form.Item;
 
@@ -13,8 +18,8 @@ function CustomerEdit({ data, onClose }) {
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateCustomer(data.id, formData);
-    else await addCustomer(formData);
+    if (data.id) await updateStyle(data.id, formData);
+    else await addStyle(formData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -36,28 +41,36 @@ function CustomerEdit({ data, onClose }) {
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
           validateMessages={validateMessages}
         >
-          <FormItem
-            label="客户名称"
-            field="styleCode"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="请输入客户名称" />
+          <FormItem label="品名" field="category">
+            <Input placeholder="请选择品名" />
           </FormItem>
-          <FormItem
-            label="客户编号"
-            field="circle"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="请输入客户名称" />
+          <FormItem label="规格" field="contactsName">
+            <Input placeholder="请选择品名" />
           </FormItem>
-          <FormItem label="客户联系方式" field="singleWeight">
-            <Input placeholder="请输入客户联系方式" />
+          <FormItem label="工艺" field="contactsPhone">
+            <Input placeholder="请输入工艺" />
           </FormItem>
-          <FormItem label="联系人名字" field="contactsName">
-            <Input placeholder="请输入联系人名字" />
+          <FormItem label="编程" field="contactsPhone">
+            <Input placeholder="请输入工艺" />
           </FormItem>
-          <FormItem label="联系人电话" field="contactsPhone">
-            <Input placeholder="请输入联系人电话" />
+          <FormItem label="款号" field="styleCode" rules={[{ required: true }]}>
+            <Input placeholder="款号自动生成" />
+          </FormItem>
+          <FormItem label="设计图" field="contactsPhone">
+            <Upload action="/" />
+          </FormItem>
+          <FormItem label="编程图" field="contactsPhone">
+            <Upload action="/" />
+          </FormItem>
+          <FormItem label="实拍图" field="contactsPhone">
+            <Upload action="/" />
+          </FormItem>
+          <FormItem label="标签" field="contactsPhone">
+            <Space size="large">
+              <Tag>圆</Tag>
+              <Tag>星星</Tag>
+              <Tag>客户觉得丑</Tag>
+            </Space>
           </FormItem>
         </Form>
       </Modal>

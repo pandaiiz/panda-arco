@@ -13,10 +13,10 @@ const RoleIndex = () => {
   return (
     <>
       <Row gutter={20}>
-        <Col span={6}>
+        <Col span={8}>
           <DictList />
         </Col>
-        <Col span={18}>
+        <Col span={16}>
           <DictTable />
         </Col>
       </Row>

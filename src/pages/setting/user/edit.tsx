@@ -3,6 +3,7 @@ import { Modal, Form, Input, Message, Select } from '@arco-design/web-react';
 import { addUser, updateUser } from '@/pages/setting/user/service';
 import { getRoles } from '@/pages/setting/role/service';
 import { useRequest } from 'ahooks';
+import { validateMessages } from '@/utils/common';
 const FormItem = Form.Item;
 
 function UserEdit({ data, onClose }) {
@@ -32,23 +33,16 @@ function UserEdit({ data, onClose }) {
           wrapperCol={{ span: 18 }}
           form={form}
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
-          validateMessages={{
-            required: (_, { label }) => `必须填写${label}`,
-            string: {
-              length: `字符数必须是 #{length}`,
-              match: `不匹配正则 #{pattern}`,
-            },
-            number: {
-              min: `最小值为 #{min}`,
-              max: `最大值为 #{max}`,
-            },
-          }}
+          validateMessages={validateMessages}
         >
           <FormItem label="姓名" field="name" rules={[{ required: true }]}>
             <Input placeholder="请输入用户姓名" />
           </FormItem>
           <FormItem label="账号" field="account">
             <Input placeholder="请输入账号" />
+          </FormItem>
+          <FormItem label="编码" field="code">
+            <Input placeholder="请输入员工编码" />
           </FormItem>
           <FormItem label="角色" field="roleId" rules={[{ required: true }]}>
             <Select placeholder="请选择角色">
