@@ -13,7 +13,7 @@ import styles from '@/pages/setting/user/style/index.module.less';
 import { IconPlus } from '@arco-design/web-react/icon';
 import { getColumns } from '@/pages/setting/dictionary/dict-table/constants';
 import Edit from '@/pages/setting/dictionary/dict-table/edit';
-import { useAsyncEffect, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import {
   deleteDictItemById,
   getDictsItemById,
@@ -29,8 +29,8 @@ function DictTable() {
     run,
   } = useRequest(getDictsItemById, { manual: true });
 
-  useAsyncEffect(async () => {
-    await run(selectedDict?.id);
+  useEffect(() => {
+    run(selectedDict?.id);
   }, [selectedDict?.id]);
 
   const tableCallback = async (record: any, type: any) => {
@@ -41,13 +41,20 @@ function DictTable() {
     if (type === 'delete') {
       await deleteDictItemById(record.id);
       Message.success('删除成功！');
-      await run(selectedDict?.id);
+      run(selectedDict?.id);
     }
   };
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   return (
-    <Card title={`字典详情-${selectedDict.key}`} style={{ width: '100%' }}>
+    <Card
+      title={
+        selectedDict.key
+          ? `${selectedDict.title}（${selectedDict.key}）`
+          : '请先选择左侧的字典'
+      }
+      style={{ width: '100%' }}
+    >
       {selectedDict?.id ? (
         <>
           <div className={styles['button-group']}>
@@ -81,7 +88,7 @@ function DictTable() {
           data={data}
           onClose={async () => {
             setVisible(false);
-            await run(selectedDict?.id);
+            run(selectedDict?.id);
           }}
         />
       )}

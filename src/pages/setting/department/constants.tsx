@@ -9,16 +9,25 @@ export function getColumns(
       title: '名称',
       dataIndex: 'name',
       align: 'center',
+      width: 300,
     },
     {
       title: '编号',
       dataIndex: 'code',
       align: 'center',
+      width: 300,
+    },
+    {
+      title: '人数',
+      dataIndex: '_count.users',
+      align: 'center',
+      width: 300,
     },
     {
       title: '操作',
       dataIndex: 'operations',
       align: 'center',
+      width: 300,
       render: (_, record) => [
         <Button
           type="text"

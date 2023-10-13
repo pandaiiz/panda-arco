@@ -29,7 +29,7 @@ function SearchForm(props: {
         className={styles['search-form']}
         labelAlign="left"
         labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
+        wrapperCol={{ span: 17 }}
       >
         <Row gutter={24}>
           <Col span={8}>

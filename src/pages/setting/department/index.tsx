@@ -7,11 +7,12 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/information/department/edit';
+import Edit from '@/pages/setting/department/edit';
 import {
   deleteDepartmentById,
   getDepartmentByPaging,
-} from '@/pages/information/department/service';
+} from '@/pages/setting/department/service';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -19,7 +20,11 @@ function DepartmentTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
+  const [formParams, setFormParams] = useState({
+    unixTime: 0,
+    pageSize: 10,
+    current: 1,
+  });
 
   const { data: dataList, loading, run } = useRequest(getDepartmentByPaging);
 
@@ -28,7 +33,7 @@ function DepartmentTable() {
       case 'delete':
         await deleteDepartmentById(record.id);
         setFormParams({ ...formParams, current: 1 });
-        await run(formParams);
+        run(formParams);
         break;
       case 'edit':
         setData(record);
@@ -40,7 +45,7 @@ function DepartmentTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    await run(formParams);
+    run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -54,7 +59,12 @@ function DepartmentTable() {
   function handleSearch(
     params: React.SetStateAction<{ pageSize: number; current: number }>
   ) {
-    setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
+    setFormParams({
+      ...params,
+      pageSize: formParams.pageSize,
+      current: 1,
+      unixTime: dayjs().unix(),
+    });
   }
 
   return (

@@ -8,7 +8,7 @@ import {
   InputNumber,
 } from '@arco-design/web-react';
 import { validateMessages } from '@/utils/common';
-import { getDepartmentList } from '@/pages/information/department/service';
+import { getDepartmentList } from '@/pages/setting/department/service';
 import { useRequest } from 'ahooks';
 import { getEnum } from '@/utils/commonService';
 import {
@@ -45,7 +45,7 @@ function CustomerEdit({ data, onClose }) {
       >
         <Form
           labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18 }}
+          wrapperCol={{ span: 17 }}
           form={form}
           validateMessages={validateMessages}
         >

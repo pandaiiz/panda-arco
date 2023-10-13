@@ -3,7 +3,7 @@ import { Modal, Form, Input, Message } from '@arco-design/web-react';
 import {
   addDepartment,
   updateDepartment,
-} from '@/pages/information/department/service';
+} from '@/pages/setting/department/service';
 import { validateMessages } from '@/utils/common';
 const FormItem = Form.Item;
 
@@ -38,7 +38,7 @@ function DepartmentEdit({ data, onClose }) {
       >
         <Form
           labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18 }}
+          wrapperCol={{ span: 17 }}
           form={form}
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
           validateMessages={validateMessages}

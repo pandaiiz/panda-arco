@@ -36,7 +36,7 @@ function CustomerEdit({ data, onClose }) {
       >
         <Form
           labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18 }}
+          wrapperCol={{ span: 17 }}
           form={form}
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
           validateMessages={validateMessages}

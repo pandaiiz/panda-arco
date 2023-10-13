@@ -1,8 +1,17 @@
 import React from 'react';
-import { Form, Input, Button, Grid, Space } from '@arco-design/web-react';
+import {
+  Form,
+  Input,
+  Button,
+  Grid,
+  Space,
+  Select,
+} from '@arco-design/web-react';
 
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
+import { useRequest } from 'ahooks';
+import { getDepartmentList } from '@/pages/setting/department/service';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
@@ -11,6 +20,7 @@ function SearchForm(props: {
   onSearch: (values: Record<string, any>) => void;
 }) {
   const [form] = useForm();
+  const { data: departmentList } = useRequest(getDepartmentList);
 
   const handleSubmit = () => {
     const values = form.getFieldsValue();
@@ -33,8 +43,24 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={8}>
-            <Form.Item label="学生姓名" field="name">
-              <Input allowClear placeholder="学生姓名" />
+            <Form.Item label="姓名" field="name">
+              <Input allowClear placeholder="姓名" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="账号" field="account">
+              <Input allowClear placeholder="账号" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="部门" field="departmentId">
+              <Select placeholder="请选择部门">
+                {departmentList?.map((item: any) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>

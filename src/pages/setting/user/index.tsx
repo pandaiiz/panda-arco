@@ -53,7 +53,12 @@ function UserTable() {
   function handleSearch(
     params: React.SetStateAction<{ pageSize: number; current: number }>
   ) {
-    setFormParams({ ...params, pageSize: formParams.pageSize, current: 1 });
+    setFormParams({
+      ...params,
+      pageSize: formParams.pageSize,
+      current: 1,
+      unixTime: dayjs().unix(),
+    });
   }
 
   return (
