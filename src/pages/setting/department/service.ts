@@ -4,6 +4,8 @@ export const getDepartmentByPaging = (params): Promise<any> =>
   request.get(`/api/department/paging`, { params });
 export const getDepartmentList = (): Promise<any> =>
   request.get(`/api/department`);
+export const getDepartmentByCode = (code: string): Promise<any> =>
+  request.get(`/api/department/code/${code}`);
 export const addDepartment = (data): Promise<any> =>
   request.post(`/api/department`, data);
 export const updateDepartment = (id, data): Promise<any> =>

@@ -28,7 +28,7 @@ function StyleTable() {
       case 'delete':
         await deleteStyleById(record.id);
         setFormParams({ ...formParams, current: 1 });
-        await run(formParams);
+        run(formParams);
         break;
       case 'detail':
         setData(record);
@@ -40,7 +40,7 @@ function StyleTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    await run(formParams);
+    run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -59,7 +59,7 @@ function StyleTable() {
 
   return (
     <Card>
-      <Title heading={6}>款号列表</Title>
+      <Title heading={6}>款式列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>

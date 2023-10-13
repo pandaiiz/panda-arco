@@ -1,20 +1,11 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Spin } from '@arco-design/web-react';
+import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
 import cs from 'classnames';
 import {
-  IconDashboard,
-  IconList,
   IconSettings,
-  IconFile,
-  IconApps,
-  IconCheckCircle,
-  IconExclamationCircle,
-  IconUser,
   IconMenuFold,
   IconMenuUnfold,
-  IconInfo,
-  IconPen,
   IconOrderedList,
   IconDesktop,
   IconTranslate,

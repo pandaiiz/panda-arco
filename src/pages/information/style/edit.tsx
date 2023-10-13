@@ -7,13 +7,25 @@ import {
   Upload,
   Space,
   Tag,
+  Select,
 } from '@arco-design/web-react';
 import { addStyle, updateStyle } from '@/pages/information/style/service';
-import { validateMessages } from '@/utils/common';
+import { filterOption, validateMessages } from '@/utils/common';
+import { useRequest } from 'ahooks';
+import { getEnum } from '@/utils/commonService';
+import { getDepartmentByCode } from '@/pages/setting/department/service';
+import { cloneDeep } from 'lodash';
 const FormItem = Form.Item;
 
 function CustomerEdit({ data, onClose }) {
   const [form] = Form.useForm();
+
+  const { data: categoryList } = useRequest(() => getEnum('CATEGORY'));
+  const { data: specList } = useRequest(() => getEnum('SPEC'));
+  const { data: techList } = useRequest(() => getEnum('TECH'));
+  const { data: departmentData } = useRequest(() =>
+    getDepartmentByCode('PROGRAM')
+  );
 
   async function onOk() {
     await form.validate();
@@ -23,6 +35,29 @@ function CustomerEdit({ data, onClose }) {
     Message.success('提交成功 !');
     onClose();
   }
+  function generateStyleCode() {
+    // programmerCode specName techName categoryName
+    // await form.validate();
+    const formData = form.getFieldsValue();
+    if (!formData.programmerCode) return;
+    if (!formData.specName) return;
+    if (!formData.techName) return;
+    if (!formData.categoryName) return;
+    /*A——品名
+    3——编程代号
+    6——规格
+    12——工艺要求
+    -19——序号*/
+    form.setFieldValue(
+      'styleCode',
+      formData.category +
+        formData.programmerCode +
+        formData.spec +
+        formData.tech
+    );
+    console.log(formData);
+  }
+
   return (
     <div>
       <Modal
@@ -41,17 +76,99 @@ function CustomerEdit({ data, onClose }) {
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
           validateMessages={validateMessages}
         >
-          <FormItem label="品名" field="category">
-            <Input placeholder="请选择品名" />
+          <FormItem label="品名" field="category" rules={[{ required: true }]}>
+            <Select
+              placeholder="请选择品名"
+              showSearch
+              filterOption={filterOption}
+              onChange={(value, option) => {
+                form.setFieldValue(
+                  'categoryName',
+                  'children' in option ? option.children : ''
+                );
+                generateStyleCode();
+              }}
+            >
+              {categoryList?.map((item: any) => (
+                <Select.Option key={item.id} value={item.key}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
           </FormItem>
-          <FormItem label="规格" field="contactsName">
-            <Input placeholder="请选择品名" />
+          <FormItem label="品名" field="categoryName" hidden>
+            <Input />
           </FormItem>
-          <FormItem label="工艺" field="contactsPhone">
-            <Input placeholder="请输入工艺" />
+          <FormItem label="规格" field="spec" rules={[{ required: true }]}>
+            <Select
+              placeholder="请选择规格"
+              showSearch
+              filterOption={filterOption}
+              onChange={(value, option) => {
+                form.setFieldValue(
+                  'specName',
+                  'children' in option ? option.children : ''
+                );
+                generateStyleCode();
+              }}
+            >
+              {specList?.map((item: any) => (
+                <Select.Option key={item.id} value={item.key}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
           </FormItem>
-          <FormItem label="编程" field="contactsPhone">
-            <Input placeholder="请输入工艺" />
+
+          <FormItem label="规格" field="specName" hidden>
+            <Input />
+          </FormItem>
+          <FormItem label="工艺" field="tech" rules={[{ required: true }]}>
+            <Select
+              placeholder="请选择工艺"
+              showSearch
+              filterOption={filterOption}
+              onChange={(value, option) => {
+                form.setFieldValue(
+                  'techName',
+                  'children' in option ? option.children : ''
+                );
+                generateStyleCode();
+              }}
+            >
+              {techList?.map((item: any) => (
+                <Select.Option key={item.id} value={item.key}>
+                  {item.title}
+                </Select.Option>
+              ))}
+            </Select>
+          </FormItem>
+
+          <FormItem label="工艺" field="techName" hidden>
+            <Input />
+          </FormItem>
+          <FormItem label="编程" field="programId" rules={[{ required: true }]}>
+            <Select
+              placeholder="请选择编程"
+              showSearch
+              filterOption={filterOption}
+              onChange={(value, option) => {
+                form.setFieldValue(
+                  'programmerCode',
+                  '_key' in option ? option._key : ''
+                );
+                generateStyleCode();
+              }}
+            >
+              {departmentData?.users?.map((item: any) => (
+                <Select.Option key={item.code} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </FormItem>
+          <FormItem label="编程" field="programmerCode" hidden>
+            <Input />
           </FormItem>
           <FormItem label="款号" field="styleCode" rules={[{ required: true }]}>
             <Input placeholder="款号自动生成" />

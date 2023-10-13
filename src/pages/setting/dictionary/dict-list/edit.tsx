@@ -9,6 +9,7 @@ import {
 } from '@arco-design/web-react';
 import { addDict, updateDict } from '@/pages/setting/dictionary/service';
 import { cloneDeep } from 'lodash';
+import { validateMessages } from '@/utils/common';
 const FormItem = Form.Item;
 
 function RoleList({ data, onClose }) {
@@ -43,6 +44,7 @@ function RoleList({ data, onClose }) {
           wrapperCol={{ span: 17 }}
           form={form}
           initialValues={data}
+          validateMessages={validateMessages}
         >
           <FormItem label="字典名" field="title" rules={[{ required: true }]}>
             <Input placeholder="请输入字典名" />

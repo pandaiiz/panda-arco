@@ -6,23 +6,35 @@ export function getColumns(
 ) {
   return [
     {
-      title: '客户名称',
+      title: '品名',
       dataIndex: 'name',
     },
     {
-      title: '客户编号',
+      title: '规格',
       dataIndex: 'customerCode',
     },
     {
-      title: '客户联系方式',
+      title: '工艺',
       dataIndex: 'telephone',
     },
     {
-      title: '联系人名字',
+      title: '编程',
       dataIndex: 'contactsName',
     },
     {
-      title: '联系人电话',
+      title: '设计图',
+      dataIndex: 'contactsPhone',
+    },
+    {
+      title: '编程图',
+      dataIndex: 'contactsPhone',
+    },
+    {
+      title: '实拍图',
+      dataIndex: 'contactsPhone',
+    },
+    {
+      title: '标签',
       dataIndex: 'contactsPhone',
     },
     {
