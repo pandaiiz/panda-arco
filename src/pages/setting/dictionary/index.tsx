@@ -9,7 +9,7 @@ export const selectedDictState: RecoilState<any> = atom({
   key: 'selectedDictState',
   default: {},
 });
-const RoleIndex = () => {
+const DictIndex = () => {
   return (
     <>
       <Row gutter={20}>
@@ -24,4 +24,4 @@ const RoleIndex = () => {
   );
 };
 
-export default RoleIndex;
+export default DictIndex;

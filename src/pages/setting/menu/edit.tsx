@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Modal,
   Form,
@@ -6,20 +6,28 @@ import {
   Message,
   TreeSelect,
   Switch,
+  InputNumber,
 } from '@arco-design/web-react';
 import { useRequest } from 'ahooks';
 import { addMenu, getMenus, updateMenu } from '@/pages/setting/menu/service';
+import { validateMessages } from '@/utils/common';
+import { cloneDeep } from 'lodash';
 const FormItem = Form.Item;
 
 function MenuEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: menuList, loading } = useRequest(getMenus);
 
+  useEffect(() => {
+    if (!data.id) form.setFieldsValue({ enabled: 1, sort: 0 });
+  }, []);
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateMenu(data.id, formData);
-    else await addMenu(formData);
+    const submitData = cloneDeep(formData);
+    submitData.enabled = submitData.enabled ? 1 : 0;
+    if (data.id) await updateMenu(data.id, submitData);
+    else await addMenu(submitData);
     Message.success('提交成功 !');
     onClose();
   }
@@ -36,20 +44,10 @@ function MenuEdit({ data, onClose }) {
       >
         <Form
           labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18 }}
+          wrapperCol={{ span: 17 }}
           form={form}
           initialValues={data.id ? data : { enabled: true, breadcrumb: true }}
-          validateMessages={{
-            required: (_, { label }) => `必须填写${label}`,
-            string: {
-              length: `字符数必须是 #{length}`,
-              match: `不匹配正则 #{pattern}`,
-            },
-            number: {
-              min: `最小值为 #{min}`,
-              max: `最大值为 #{max}`,
-            },
-          }}
+          validateMessages={validateMessages}
         >
           <FormItem label="上级节点" field="parentId">
             <TreeSelect
@@ -70,6 +68,9 @@ function MenuEdit({ data, onClose }) {
           </FormItem>
           <FormItem label="地址" field="key" rules={[{ required: true }]}>
             <Input placeholder="请输入菜单地址" />
+          </FormItem>
+          <FormItem label="排序" field="sort" rules={[{ required: true }]}>
+            <InputNumber min={0} defaultValue={0} step={1} precision={0} />
           </FormItem>
           <FormItem label="备注" field="remark">
             <Input placeholder="请输入备注" />
