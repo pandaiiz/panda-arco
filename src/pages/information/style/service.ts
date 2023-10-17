@@ -11,3 +11,5 @@ export const deleteStyleById = (id): Promise<any> =>
   request.delete(`/api/style/${id}`);
 export const getListByBaseCode = (baseStyleCode: string): Promise<any> =>
   request.get(`/api/style/baseCode/${baseStyleCode}`);
+export const getListByFilter = (filter: string): Promise<any> =>
+  request.get(`/api/style/filter/${filter}`);

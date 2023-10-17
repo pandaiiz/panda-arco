@@ -1,18 +1,21 @@
 import {
+  Avatar,
   Button,
   Input,
   InputNumber,
   Select,
+  Spin,
   Table,
   TableColumnProps,
   Tag,
 } from '@arco-design/web-react';
-import React, { useEffect, useState } from 'react';
-import { cloneDeep } from 'lodash';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { cloneDeep, debounce } from 'lodash';
 import { useRequest } from 'ahooks';
 import { getEnum } from '@/utils/commonService';
 import { deleteOrderDetailById } from '@/pages/order/list/service';
 import PictureUpload from '@/pages/order/list/edit/pictureUpload';
+import { getListByFilter } from '@/pages/information/style/service';
 
 const Editable = ({
   detailData,
@@ -20,6 +23,35 @@ const Editable = ({
   setSelectedRow,
   selectedRow,
 }) => {
+  const [options, setOptions] = useState([]);
+  const [fetching, setFetching] = useState(false);
+  const refFetchId = useRef(null);
+  const debouncedFetchUser = useCallback(
+    debounce((inputValue) => {
+      refFetchId.current = Date.now();
+      const fetchId = refFetchId.current;
+      setFetching(true);
+      setOptions([]);
+      getListByFilter(inputValue).then((list) => {
+        if (refFetchId.current === fetchId && list) {
+          const options = list?.map((style: any) => ({
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar size={24} style={{ marginLeft: 6, marginRight: 12 }}>
+                  <img alt="avatar" src={style?.realitySrc[0]?.url} />
+                </Avatar>
+                {`${style.styleCode}`}
+              </div>
+            ),
+            value: style.id,
+          }));
+          setFetching(false);
+          setOptions(options);
+        }
+      });
+    }, 500),
+    []
+  );
   const { data: categoryEnum } = useRequest(() => getEnum('CATEGORY'));
   const columns: TableColumnProps[] = [
     {
@@ -65,20 +97,61 @@ const Editable = ({
     },
     {
       title: '款号',
-      dataIndex: 'styleCode',
+      dataIndex: 'styleId',
       align: 'center',
-      width: 220,
-      render: (col, record, index) => (
-        <Input
-          disabled={record.status === 1}
-          value={record.styleCode}
-          onChange={(e) => {
-            const newData = cloneDeep(detailData);
-            newData[index].styleCode = e;
-            setDetailData(newData);
-          }}
-        />
-      ),
+      width: 300,
+      render: (col, record, index) =>
+        record.styleId ? (
+          <Input.Group compact>
+            <Input
+              disabled
+              value={record.style.styleCode}
+              style={{ width: '75%' }}
+            />
+            <Button
+              style={{ width: '25%' }}
+              type="primary"
+              onClick={() => {
+                const newData = cloneDeep(detailData);
+                newData[index].styleId = '';
+                setDetailData(newData);
+              }}
+            >
+              修改
+            </Button>
+          </Input.Group>
+        ) : (
+          <Select
+            showSearch
+            options={options}
+            placeholder="根据款号/标签搜索"
+            filterOption={false}
+            renderFormat={(option) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              return option.children.props.children[1];
+            }}
+            notFoundContent={
+              fetching ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Spin style={{ margin: 12 }} />
+                </div>
+              ) : null
+            }
+            onSearch={debouncedFetchUser}
+            onChange={(value) => {
+              const newData = cloneDeep(detailData);
+              newData[index].styleId = value ? value : '';
+              setDetailData(newData);
+            }}
+          />
+        ),
     },
     {
       title: '图片',
@@ -123,7 +196,16 @@ const Editable = ({
           value={record.singleWeight}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
+
             newData[index].singleWeight = e;
+            newData[index].totalWeight =
+              record.quantity &&
+              record.singleWeight &&
+              Number(
+                (Number(record.quantity) * Number(record.singleWeight)).toFixed(
+                  2
+                )
+              );
             setDetailData(newData);
           }}
         />
@@ -141,6 +223,15 @@ const Editable = ({
           onChange={(e) => {
             const newData = cloneDeep(detailData);
             newData[index].quantity = e;
+
+            newData[index].totalWeight =
+              record.quantity &&
+              record.singleWeight &&
+              Number(
+                (Number(record.quantity) * Number(record.singleWeight)).toFixed(
+                  2
+                )
+              );
             setDetailData(newData);
           }}
         />
@@ -157,6 +248,12 @@ const Editable = ({
           {status === 1 && <Tag color="green">已排产</Tag>}
         </>
       ),
+    },
+    {
+      title: '总重',
+      align: 'center',
+      dataIndex: 'totalWeight',
+      width: 100,
     },
     {
       title: '操作',

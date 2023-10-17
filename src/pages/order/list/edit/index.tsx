@@ -66,17 +66,19 @@ function ListEdit({ data, onClose }) {
       const formData = form.getFieldsValue();
       if (formData.charactersId) {
         formData.charactersTitle = fontPrintEnum?.find(
-          (item) => item.id === formData.charactersId
+          (item: { id: any }) => item.id === formData.charactersId
         ).title;
       }
-      const submitData = {
-        orderData: formData,
-        orderDetailData: detailData,
-      };
-      detailData.forEach((item) => {
+      const submitDetailData = cloneDeep(detailData);
+      submitDetailData.forEach((item) => {
         item.orderId = data.id;
         delete item.nanoid;
+        delete item.style;
       });
+      const submitData = {
+        orderData: formData,
+        orderDetailData: submitDetailData,
+      };
       setConfirmLoading(true);
       if (data.id) {
         await updateOrder(data.id, submitData);
@@ -102,6 +104,14 @@ function ListEdit({ data, onClose }) {
           item.categoryName = categoryEnum.find(
             (item) => item.key === value
           ).title;
+        }
+        if (type === 'quantity' || type === 'singleWeight') {
+          item.totalWeight =
+            item.quantity &&
+            item.singleWeight &&
+            Number(
+              (Number(item.quantity) * Number(item.singleWeight)).toFixed(2)
+            );
         }
       }
     });
