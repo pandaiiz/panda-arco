@@ -22,6 +22,11 @@ export function getColumns(
       align: 'center',
     },
     {
+      title: '总重',
+      dataIndex: 'orderTotalWeight',
+      align: 'center',
+    },
+    {
       title: '字印',
       dataIndex: 'fontPrintName',
       align: 'center',
