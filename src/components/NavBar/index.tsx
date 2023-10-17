@@ -5,24 +5,21 @@ import {
   Menu,
   Divider,
   Message,
-  Button,
 } from '@arco-design/web-react';
 import {
-  IconNotification,
   IconPoweroff,
   IconLoading,
   IconSettings,
 } from '@arco-design/web-react/icon';
 import { commonState } from '@/store';
 import Logo from '@/assets/logo.svg';
-import MessageBox from '@/components/MessageBox';
-import IconButton from './IconButton';
 import Settings from '../Settings';
 import styles from './style/index.module.less';
 import useStorage from '@/utils/useStorage';
 import { useRecoilState } from 'recoil';
+import MobileMenu from '@/components/MobileMenu';
 
-function Navbar({ show }: { show: boolean }) {
+function Navbar({ children }: React.PropsWithChildren) {
   const [comState] = useRecoilState(commonState);
 
   const [_, setUserStatus] = useStorage('userStatus');
@@ -38,18 +35,6 @@ function Navbar({ show }: { show: boolean }) {
     } else {
       Message.info(`You clicked ${key}`);
     }
-  }
-
-  if (!show) {
-    return (
-      <div className={styles['fixed-settings']}>
-        <Settings
-          trigger={
-            <Button icon={<IconSettings />} type="primary" size="large" />
-          }
-        />
-      </div>
-    );
   }
 
   const droplist = (
@@ -72,15 +57,12 @@ function Navbar({ show }: { show: boolean }) {
       <div className={styles.left}>
         <div className={styles.logo}>
           <Logo />
-          <div className={styles['logo-name']}>Cyan</div>
+          <div className={styles['logo-name']}>鸿泰</div>
         </div>
       </div>
+      <div style={{ width: '100%' }}>{children}</div>
       <ul className={styles.right}>
-        <li>
-          <MessageBox>
-            <IconButton icon={<IconNotification />} />
-          </MessageBox>
-        </li>
+        <MobileMenu />
         <Settings />
         {comState.userInfo && (
           <li>

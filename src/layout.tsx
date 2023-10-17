@@ -1,11 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb } from '@arco-design/web-react';
-import cs from 'classnames';
 import {
   IconSettings,
-  IconMenuFold,
-  IconMenuUnfold,
   IconOrderedList,
   IconDesktop,
   IconTranslate,
@@ -13,7 +10,6 @@ import {
 import qs from 'query-string';
 import NProgress from 'nprogress';
 import Navbar from './components/NavBar';
-import Footer from './components/Footer';
 import { IRoute } from '@/routes';
 import { isArray } from './utils/is';
 import getUrlParams from './utils/getUrlParams';
@@ -26,7 +22,6 @@ import { cloneDeep } from 'lodash';
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
 
-const Sider = Layout.Sider;
 const Content = Layout.Content;
 
 function getIconFromKey(key) {
@@ -72,8 +67,7 @@ function getFlattenRoutes(routes) {
 }
 
 function PageLayout() {
-  const { settings, userInfo } = useRecoilValue(commonState);
-  const urlParams = getUrlParams();
+  const { userInfo } = useRecoilValue(commonState);
   const history = useHistory();
   const pathname = history.location.pathname;
   const currentComponent = qs.parseUrl(pathname).url.slice(1);
@@ -85,7 +79,6 @@ function PageLayout() {
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
 
   const [breadcrumb, setBreadCrumb] = useState([]);
-  const [collapsed, setCollapsed] = useState<boolean>(false);
   const [selectedKeys, setSelectedKeys] =
     useState<string[]>(defaultSelectedKeys);
 
@@ -96,16 +89,9 @@ function PageLayout() {
     Map<string, { menuItem?: boolean; subMenu?: boolean }>
   >(new Map());
 
-  const navbarHeight = 60;
-  const menuWidth = collapsed ? 48 : settings.menuWidth;
-
-  const showNavbar = settings.navbar && urlParams.navbar !== false;
-  const showMenu = settings.menu && urlParams.menu !== false;
-  const showFooter = settings.footer && urlParams.footer !== false;
-
   const flattenRoutes = useMemo(() => getFlattenRoutes(routes) || [], [routes]);
 
-  function onClickMenuItem(key) {
+  function onClickMenuItem(key: any) {
     const currentRoute = flattenRoutes.find((r) => r.key === key);
     const component = currentRoute.component;
     const preload = component.preload();
@@ -115,14 +101,6 @@ function PageLayout() {
       NProgress.done();
     });
   }
-
-  function toggleCollapse() {
-    setCollapsed((collapsed) => !collapsed);
-  }
-
-  const paddingLeft = showMenu ? { paddingLeft: menuWidth } : {};
-  const paddingTop = showNavbar ? { paddingTop: navbarHeight } : {};
-  const paddingStyle = { ...paddingLeft, ...paddingTop };
 
   function renderRoutes() {
     routeMap.current.clear();
@@ -200,44 +178,26 @@ function PageLayout() {
   return (
     routes?.length > 0 && (
       <Layout className={styles.layout}>
-        <div
-          className={cs(styles['layout-navbar'], {
-            [styles['layout-navbar-hidden']]: !showNavbar,
-          })}
-        >
-          <Navbar show={showNavbar} />
+        <div className={styles['layout-navbar']}>
+          <Navbar>
+            <Menu
+              mode="horizontal"
+              onClickMenuItem={onClickMenuItem}
+              selectedKeys={selectedKeys}
+              openKeys={openKeys}
+              onClickSubMenu={(_, openKeys) => {
+                setOpenKeys(openKeys);
+              }}
+            >
+              {renderRoutes()(routes, 1)}
+            </Menu>
+          </Navbar>
         </div>
         <Layout>
-          {showMenu && (
-            <Sider
-              className={styles['layout-sider']}
-              width={menuWidth}
-              collapsed={collapsed}
-              onCollapse={setCollapsed}
-              trigger={null}
-              collapsible
-              breakpoint="xl"
-              style={paddingTop}
-            >
-              <div className={styles['menu-wrapper']}>
-                <Menu
-                  collapse={collapsed}
-                  onClickMenuItem={onClickMenuItem}
-                  selectedKeys={selectedKeys}
-                  openKeys={openKeys}
-                  onClickSubMenu={(_, openKeys) => {
-                    setOpenKeys(openKeys);
-                  }}
-                >
-                  {renderRoutes()(routes, 1)}
-                </Menu>
-              </div>
-              <div className={styles['collapse-btn']} onClick={toggleCollapse}>
-                {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
-              </div>
-            </Sider>
-          )}
-          <Layout className={styles['layout-content']} style={paddingStyle}>
+          <Layout
+            className={styles['layout-content']}
+            style={{ paddingTop: 60 }}
+          >
             <div className={styles['layout-content-wrapper']}>
               {!!breadcrumb.length && (
                 <div className={styles['layout-breadcrumb']}>
@@ -271,7 +231,6 @@ function PageLayout() {
                 </Switch>
               </Content>
             </div>
-            {showFooter && <Footer />}
           </Layout>
         </Layout>
       </Layout>

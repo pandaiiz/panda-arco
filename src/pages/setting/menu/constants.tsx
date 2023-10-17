@@ -1,9 +1,14 @@
 import React from 'react';
-import { Button, Popconfirm, Tag } from '@arco-design/web-react';
+import {
+  Button,
+  Popconfirm,
+  TableColumnProps,
+  Tag,
+} from '@arco-design/web-react';
 
 export function getColumns(
   callback: (record: Record<string, any>, type: string) => Promise<void>
-) {
+): TableColumnProps[] {
   return [
     {
       title: '名称',

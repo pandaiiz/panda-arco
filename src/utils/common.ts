@@ -12,3 +12,16 @@ export const validateMessages = {
 
 export const filterOption = (inputValue, option) =>
   option.props.children.indexOf(inputValue) >= 0;
+
+export const pictureSrcHandle = (obj: any, key: string) => {
+  obj[key] =
+    obj[key]?.length > 0
+      ? [
+          {
+            uid: obj[key][0]?.uid,
+            name: obj[key][0]?.name,
+            url: obj[key][0]?.response?.src || obj[key][0]?.url,
+          },
+        ]
+      : [];
+};

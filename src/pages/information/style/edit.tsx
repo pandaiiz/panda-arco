@@ -1,25 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   Form,
   Input,
   Message,
   Upload,
-  Space,
-  Tag,
   Select,
 } from '@arco-design/web-react';
-import { addStyle, updateStyle } from '@/pages/information/style/service';
-import { filterOption, validateMessages } from '@/utils/common';
+import {
+  addStyle,
+  getListByBaseCode,
+  updateStyle,
+} from '@/pages/information/style/service';
+import {
+  filterOption,
+  pictureSrcHandle,
+  validateMessages,
+} from '@/utils/common';
 import { useRequest } from 'ahooks';
 import { getEnum } from '@/utils/commonService';
 import { getDepartmentByCode } from '@/pages/setting/department/service';
+import DynamicTag from '@/components/DynamicTag';
 import { cloneDeep } from 'lodash';
 const FormItem = Form.Item;
 
-function CustomerEdit({ data, onClose }) {
+function StyleEdit({ data, onClose }) {
   const [form] = Form.useForm();
 
+  const [tags, setTags] = useState([]);
   const { data: categoryList } = useRequest(() => getEnum('CATEGORY'));
   const { data: specList } = useRequest(() => getEnum('SPEC'));
   const { data: techList } = useRequest(() => getEnum('TECH'));
@@ -27,15 +35,27 @@ function CustomerEdit({ data, onClose }) {
     getDepartmentByCode('PROGRAM')
   );
 
+  useEffect(() => {
+    if (data.id) {
+      setTags(JSON.parse(data.tags) || []);
+    }
+  }, []);
+
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateStyle(data.id, formData);
-    else await addStyle(formData);
+    const submitData = cloneDeep(formData);
+    delete submitData.programmerCode;
+    submitData.tags = JSON.stringify(tags);
+    pictureSrcHandle(submitData, 'designSrc');
+    pictureSrcHandle(submitData, 'realitySrc');
+    pictureSrcHandle(submitData, 'programSrc');
+    if (data.id) await updateStyle(data.id, submitData);
+    else await addStyle(submitData);
     Message.success('提交成功 !');
     onClose();
   }
-  function generateStyleCode() {
+  async function generateStyleCode() {
     // programmerCode specName techName categoryName
     // await form.validate();
     const formData = form.getFieldsValue();
@@ -48,14 +68,16 @@ function CustomerEdit({ data, onClose }) {
     6——规格
     12——工艺要求
     -19——序号*/
-    form.setFieldValue(
-      'styleCode',
+
+    const baseStyleCode =
       formData.category +
-        formData.programmerCode +
-        formData.spec +
-        formData.tech
-    );
-    console.log(formData);
+      formData.programmerCode +
+      formData.spec +
+      formData.tech;
+    const list = await getListByBaseCode(baseStyleCode);
+
+    form.setFieldValue('baseStyleCode', baseStyleCode);
+    form.setFieldValue('styleCode', `${baseStyleCode}-${list.length + 1}`);
   }
 
   return (
@@ -67,7 +89,6 @@ function CustomerEdit({ data, onClose }) {
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
-        // confirmLoading={isLoading}
       >
         <Form
           labelCol={{ span: 5 }}
@@ -78,6 +99,7 @@ function CustomerEdit({ data, onClose }) {
         >
           <FormItem label="品名" field="category" rules={[{ required: true }]}>
             <Select
+              disabled={data.id}
               placeholder="请选择品名"
               showSearch
               filterOption={filterOption}
@@ -101,6 +123,7 @@ function CustomerEdit({ data, onClose }) {
           </FormItem>
           <FormItem label="规格" field="spec" rules={[{ required: true }]}>
             <Select
+              disabled={data.id}
               placeholder="请选择规格"
               showSearch
               filterOption={filterOption}
@@ -125,6 +148,7 @@ function CustomerEdit({ data, onClose }) {
           </FormItem>
           <FormItem label="工艺" field="tech" rules={[{ required: true }]}>
             <Select
+              disabled={data.id}
               placeholder="请选择工艺"
               showSearch
               filterOption={filterOption}
@@ -147,7 +171,7 @@ function CustomerEdit({ data, onClose }) {
           <FormItem label="工艺" field="techName" hidden>
             <Input />
           </FormItem>
-          <FormItem label="编程" field="programId" rules={[{ required: true }]}>
+          <FormItem disabled={data.id} label="编程" field="programmerId">
             <Select
               placeholder="请选择编程"
               showSearch
@@ -170,24 +194,49 @@ function CustomerEdit({ data, onClose }) {
           <FormItem label="编程" field="programmerCode" hidden>
             <Input />
           </FormItem>
-          <FormItem label="款号" field="styleCode" rules={[{ required: true }]}>
-            <Input placeholder="款号自动生成" />
+          <FormItem hidden label="基础款号" field="baseStyleCode">
+            <Input placeholder="基础款号自动生成" />
           </FormItem>
-          <FormItem label="设计图" field="contactsPhone">
-            <Upload action="/" />
+          <FormItem label="款号" field="styleCode">
+            <Input disabled placeholder="款号自动生成" />
           </FormItem>
-          <FormItem label="编程图" field="contactsPhone">
-            <Upload action="/" />
+          <FormItem label="设计图" field="designSrc" triggerPropName="fileList">
+            <Upload
+              listType="picture-card"
+              imagePreview
+              multiple
+              action="/api/picture/upload"
+              limit={1}
+            />
           </FormItem>
-          <FormItem label="实拍图" field="contactsPhone">
-            <Upload action="/" />
+          <FormItem
+            label="编程图"
+            field="programSrc"
+            triggerPropName="fileList"
+          >
+            <Upload
+              listType="picture-card"
+              multiple
+              imagePreview
+              action="/api/picture/upload"
+              limit={1}
+            />
+          </FormItem>
+          <FormItem
+            label="实拍图"
+            field="realitySrc"
+            triggerPropName="fileList"
+          >
+            <Upload
+              listType="picture-card"
+              multiple
+              imagePreview
+              action="/api/picture/upload"
+              limit={1}
+            />
           </FormItem>
           <FormItem label="标签" field="contactsPhone">
-            <Space size="large">
-              <Tag>圆</Tag>
-              <Tag>星星</Tag>
-              <Tag>客户觉得丑</Tag>
-            </Space>
+            <DynamicTag tags={tags} setTags={setTags} />
           </FormItem>
         </Form>
       </Modal>
@@ -195,4 +244,4 @@ function CustomerEdit({ data, onClose }) {
   );
 }
 
-export default CustomerEdit;
+export default StyleEdit;

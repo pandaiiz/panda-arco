@@ -24,7 +24,7 @@ function Setting(props: SettingProps) {
   }
 
   return (
-    <>
+    <div style={{ marginLeft: 8 }}>
       {trigger ? (
         React.cloneElement(trigger as React.ReactElement, {
           onClick: () => setVisible(true),
@@ -68,7 +68,7 @@ function Setting(props: SettingProps) {
           }
         />
       </Drawer>
-    </>
+    </div>
   );
 }
 
