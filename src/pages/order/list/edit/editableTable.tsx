@@ -223,7 +223,6 @@ const Editable = ({
           onChange={(e) => {
             const newData = cloneDeep(detailData);
             newData[index].quantity = e;
-
             newData[index].totalWeight =
               record.quantity &&
               record.singleWeight &&

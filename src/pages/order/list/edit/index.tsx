@@ -21,7 +21,6 @@ import {
 import { useRequest } from 'ahooks';
 import { getCustomerList } from '@/pages/information/customer/service';
 import EditableTable from '@/pages/order/list/edit/editableTable';
-import styles from '@/pages/order/list/style/index.module.less';
 import { cloneDeep } from 'lodash';
 import { getEnum } from '@/utils/commonService';
 import dayjs from 'dayjs';
@@ -51,6 +50,12 @@ function ListEdit({ data, onClose }) {
     value: '',
   });
 
+  const countTotalWeight = () => {
+    let count = 0;
+    detailData.forEach((item) => (count += Number(item?.totalWeight)));
+    form.setFieldValue('orderTotalWeight', Number(count.toFixed(2)));
+  };
+
   useEffect(() => {
     data.id && form.setFieldsValue({ orderDate: dayjs().format() });
   }, []);
@@ -59,6 +64,10 @@ function ListEdit({ data, onClose }) {
     detailsData?.forEach((item) => (item.nanoid = nanoid()));
     if (detailsData) setDetailData(detailsData);
   }, [detailsData]);
+
+  useEffect(() => {
+    countTotalWeight();
+  }, [detailData]);
 
   async function onOk() {
     try {
@@ -113,6 +122,8 @@ function ListEdit({ data, onClose }) {
               (Number(item.quantity) * Number(item.singleWeight)).toFixed(2)
             );
         }
+
+        countTotalWeight();
       }
     });
     setDetailData(rowData);
@@ -304,6 +315,11 @@ function ListEdit({ data, onClose }) {
             <Col span={8}>
               <FormItem label="备注" field="remark">
                 <Input placeholder="请输入备注" />
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="总重" field="orderTotalWeight" disabled>
+                <InputNumber placeholder="总重" />
               </FormItem>
             </Col>
           </Row>
