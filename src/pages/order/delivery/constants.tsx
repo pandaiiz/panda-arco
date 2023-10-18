@@ -91,41 +91,5 @@ export function getColumns(
         if (data === 2) return <Tag color="blue">完单</Tag>;
       },
     },
-    {
-      title: '操作',
-      dataIndex: 'operations',
-      align: 'center',
-      render: (_, record) => (
-        <>
-          {record.status === 1 && (
-            <Popconfirm
-              focusLock
-              title="确认完单吗？"
-              onOk={async () => {
-                await callback(record, 'end');
-              }}
-            >
-              <Button type="text" size="small">
-                完单
-              </Button>
-            </Popconfirm>
-          )}
-          {record.status === 0 && (
-            <Popconfirm
-              key="delete"
-              focusLock
-              title="确认删除吗？"
-              onOk={async () => {
-                await callback(record, 'delete');
-              }}
-            >
-              <Button type="text" size="small">
-                删除
-              </Button>
-            </Popconfirm>
-          )}
-        </>
-      ),
-    },
   ];
 }

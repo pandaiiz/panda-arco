@@ -116,6 +116,8 @@ function Arrange({ data, onClose }) {
       delete item.children;
       delete item.imgSrc;
       delete item.style;
+      delete item.category;
+      delete item.categoryName;
     });
     batchCreateTransfer({ orderDetails: data, transfers }).then(() => {
       Message.success('生成流程单成功！');
@@ -145,7 +147,7 @@ function Arrange({ data, onClose }) {
         <Button type="primary" onClick={splitTransfer}>
           分单
         </Button>
-        <PrintModal list={transferList} />
+        {/*<PrintModal list={transferList} />*/}
       </Space>
       {typeCountList.length > 0 && (
         <Table

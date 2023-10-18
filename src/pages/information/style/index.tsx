@@ -135,7 +135,7 @@ function StyleTable() {
 
   return window.innerWidth > 500 ? (
     <Card>
-      <Title>款式列表</Title>
+      <Title heading={6}>款式列表</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>

@@ -48,6 +48,14 @@ export function getColumns(
       align: 'center',
     },
     {
+      title: '生产进度(总/完)',
+      align: 'center',
+      render: (_, record) => {
+        const end = record.transfers.filter((item) => item.status === 2).length;
+        return `${record.transfers.length}/${end}`;
+      },
+    },
+    {
       title: '时间状态(偏差)',
       align: 'center',
       render: (data, row) => {

@@ -7,24 +7,18 @@ import SearchForm from './form';
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/produce-hub/transfer/edit';
-import {
-  deleteTransferById,
-  endTransferById,
-  getTransferByPaging,
-} from '@/pages/produce-hub/transfer/service';
+import Edit from '@/pages/order/list/edit';
+import { copyOrderById, deleteOrderById } from '@/pages/order/list/service';
 import dayjs from 'dayjs';
-import PrintModal from '@/pages/order/arrange/arrange/PrintModal';
+import { getFinishedTransferByPaging } from '@/pages/order/finished/service';
 
 const { Title } = Typography;
 
 function CustomerTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
-  const [selectedRows1, setSelectedRows1] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [formParams, setFormParams] = useState({
-    unixTime: 0,
+
+  const [formParams, setFormParams] = useState<any>({
     pageSize: 10,
     current: 1,
   });
@@ -33,24 +27,21 @@ function CustomerTable() {
     data: dataList,
     loading,
     run,
-  } = useRequest(getTransferByPaging, {
-    manual: true,
-  });
+  } = useRequest(getFinishedTransferByPaging);
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
       case 'delete':
-        await deleteTransferById(record.id);
+        await deleteOrderById(record.id);
         setFormParams({ ...formParams, current: 1 });
         run(formParams);
         break;
-      case 'detail':
+      case 'edit':
         setData(record);
         setVisible(true);
         break;
-      case 'end':
-        await endTransferById(record.id);
-        setFormParams({ ...formParams, current: 1 });
+      case 'copy':
+        await copyOrderById(record.id);
         run(formParams);
         break;
     }
@@ -59,7 +50,7 @@ function CustomerTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    run(formParams);
+    await run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -67,7 +58,6 @@ function CustomerTable() {
       ...formParams,
       current,
       pageSize,
-      unixTime: dayjs().unix(),
     });
   }
 
@@ -84,32 +74,17 @@ function CustomerTable() {
 
   return (
     <Card>
-      <Title heading={6}>传递单列表</Title>
+      <Title heading={6}>送货单</Title>
       <SearchForm onSearch={handleSearch} />
       <div className={styles['button-group']}>
         <Space>
-          <Button
-            type="primary"
-            icon={<IconPlus />}
-            onClick={() => setVisible(true)}
-          >
-            新增
+          <Button type="primary" onClick={() => setVisible(true)}>
+            出货
           </Button>
-          <PrintModal list={selectedRows1} onClose={() => run(formParams)} />
         </Space>
       </div>
       <Table
         rowKey="id"
-        rowSelection={{
-          type: 'checkbox',
-          selectedRowKeys,
-          onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedRows1(selectedRows);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            setSelectedRowKeys(selectedRowKeys);
-          },
-        }}
         loading={loading}
         onChange={onChangeTable}
         pagination={{

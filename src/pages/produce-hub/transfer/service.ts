@@ -14,5 +14,7 @@ export const batchPrintTransfer = (ids): Promise<any> =>
   request.post(`/api/transfer/batchPrint`, ids);
 export const deleteTransferById = (id): Promise<any> =>
   request.delete(`/api/transfer/${id}`);
+export const endTransferById = (id): Promise<any> =>
+  request.patch(`/api/transfer/${id}`, { status: 2 });
 export const deleteTransferDetailById = (id): Promise<any> =>
   request.delete(`/api/transfer/detail/${id}`);
