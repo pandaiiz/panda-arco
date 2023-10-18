@@ -22,7 +22,6 @@ function CustomerEdit({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: departmentList } = useRequest(getDepartmentList);
   const { data: productTypeEnum } = useRequest(() => getEnum('PRODUCT_TYPE'));
-  console.log(departmentList);
 
   async function onOk() {
     await form.validate();

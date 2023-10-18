@@ -1,5 +1,14 @@
 import React from 'react';
-import { Form, Input, Button, Grid, Space } from '@arco-design/web-react';
+import {
+  Form,
+  Input,
+  Button,
+  Grid,
+  Space,
+  InputNumber,
+  Select,
+  Tag,
+} from '@arco-design/web-react';
 
 import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
 import styles from './style/index.module.less';
@@ -33,13 +42,17 @@ function SearchForm(props: {
       >
         <Row gutter={24}>
           <Col span={8}>
-            <Form.Item label="客户名称" field="name">
-              <Input allowClear placeholder="客户名称" />
+            <Form.Item label="传递单" field="id">
+              <InputNumber placeholder="传递单号" />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="客户编号" field="customerCode">
-              <Input allowClear placeholder="客户编号" />
+            <Form.Item label="状态" field="status">
+              <Select placeholder="状态">
+                <Select.Option value={0}>未生产</Select.Option>
+                <Select.Option value={1}>生产中</Select.Option>
+                <Select.Option value={2}>完单</Select.Option>
+              </Select>
             </Form.Item>
           </Col>
         </Row>

@@ -10,6 +10,8 @@ export const addTransfer = (data): Promise<any> =>
   request.post(`/api/transfer`, data);
 export const updateTransfer = (id, data): Promise<any> =>
   request.patch(`/api/transfer/${id}`, data);
+export const batchPrintTransfer = (ids): Promise<any> =>
+  request.post(`/api/transfer/batchPrint`, ids);
 export const deleteTransferById = (id): Promise<any> =>
   request.delete(`/api/transfer/${id}`);
 export const deleteTransferDetailById = (id): Promise<any> =>

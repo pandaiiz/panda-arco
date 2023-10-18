@@ -80,10 +80,17 @@ function ArrangeTable() {
     },
     {
       title: '款号',
-      dataIndex: 'styleCode',
+      dataIndex: 'style.styleCode',
       width: 100,
       align: 'center',
-      sorter: (a, b) => a.styleCode?.length - b.styleCode?.length,
+      sorter: (a, b) => a.style.styleCode?.length - b.style.styleCode?.length,
+    },
+    {
+      title: '规格',
+      dataIndex: 'style.specName',
+      width: 100,
+      align: 'center',
+      sorter: (a, b) => a.style.specName?.length - b.style.specName?.length,
     },
     {
       title: '品名',
@@ -93,13 +100,6 @@ function ArrangeTable() {
       sorter: (a, b) => a.categoryName?.length - b.categoryName?.length,
     },
     {
-      title: '件重',
-      dataIndex: 'singleWeight',
-      width: 100,
-      align: 'center',
-      sorter: (a, b) => a.singleWeight - b.singleWeight,
-    },
-    {
       title: '圈号',
       dataIndex: 'circle',
       width: 100,
@@ -107,11 +107,25 @@ function ArrangeTable() {
       sorter: (a, b) => a.circle - b.circle,
     },
     {
+      title: '件重',
+      dataIndex: 'singleWeight',
+      width: 100,
+      align: 'center',
+      sorter: (a, b) => a.singleWeight - b.singleWeight,
+    },
+    {
       title: '数量',
       dataIndex: 'quantity',
       width: 100,
       align: 'center',
       sorter: (a, b) => a.quantity - b.quantity,
+    },
+    {
+      title: '合计',
+      dataIndex: 'totalWeight',
+      width: 100,
+      align: 'center',
+      sorter: (a, b) => a.totalWeight - b.totalWeight,
     },
   ];
 

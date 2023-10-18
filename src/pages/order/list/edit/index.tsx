@@ -51,9 +51,17 @@ function ListEdit({ data, onClose }) {
   });
 
   const countTotalWeight = () => {
-    let count = 0;
-    detailData.forEach((item) => (count += Number(item?.totalWeight)));
-    form.setFieldValue('orderTotalWeight', Number(count.toFixed(2)));
+    let orderTotalWeight = 0;
+    let orderTotalQuantity = 0;
+    detailData.forEach((item) => {
+      orderTotalWeight += Number(item?.totalWeight);
+      orderTotalQuantity += Number(item?.quantity);
+    });
+    form.setFieldValue('orderTotalWeight', Number(orderTotalWeight.toFixed(2)));
+    form.setFieldValue(
+      'orderTotalQuantity',
+      Number(orderTotalQuantity.toFixed(2))
+    );
   };
 
   useEffect(() => {
@@ -250,7 +258,7 @@ function ListEdit({ data, onClose }) {
           validateMessages={validateMessages}
         >
           <Row className="grid-demo" style={{ marginBottom: 16 }}>
-            <Col span={8}>
+            <Col span={6}>
               <FormItem
                 label="客户名称"
                 field="customerId"
@@ -271,12 +279,12 @@ function ListEdit({ data, onClose }) {
               </FormItem>
             </Col>
 
-            <Col span={8}>
+            <Col span={6}>
               <FormItem label="订单号" field="orderNumber">
                 <Input placeholder="请输入订单号" />
               </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <FormItem label="字印" field="fontPrint">
                 <Select
                   placeholder="请选择"
@@ -301,7 +309,7 @@ function ListEdit({ data, onClose }) {
                 <Input placeholder="请输入字印" disabled />
               </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <FormItem label="下单日期" field="orderDate">
                 <DatePicker
                   onChange={(dateString, date) =>
@@ -312,12 +320,17 @@ function ListEdit({ data, onClose }) {
                 />
               </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <FormItem label="备注" field="remark">
                 <Input placeholder="请输入备注" />
               </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <FormItem label="总件数" field="orderTotalQuantity" disabled>
+                <InputNumber placeholder="总件数" />
+              </FormItem>
+            </Col>
+            <Col span={6}>
               <FormItem label="总重" field="orderTotalWeight" disabled>
                 <InputNumber placeholder="总重" />
               </FormItem>

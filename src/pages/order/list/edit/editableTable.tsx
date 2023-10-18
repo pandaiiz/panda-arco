@@ -34,19 +34,8 @@ const Editable = ({
       setOptions([]);
       getListByFilter(inputValue).then((list) => {
         if (refFetchId.current === fetchId && list) {
-          const options = list?.map((style: any) => ({
-            label: (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar size={24} style={{ marginLeft: 6, marginRight: 12 }}>
-                  <img alt="avatar" src={style?.realitySrc[0]?.url} />
-                </Avatar>
-                {`${style.styleCode}`}
-              </div>
-            ),
-            value: style.id,
-          }));
           setFetching(false);
-          setOptions(options);
+          setOptions(list);
         }
       });
     }, 500),
@@ -105,7 +94,7 @@ const Editable = ({
           <Input.Group compact>
             <Input
               disabled
-              value={record.style.styleCode}
+              value={record?.style?.styleCode}
               style={{ width: '75%' }}
             />
             <Button
@@ -123,7 +112,6 @@ const Editable = ({
         ) : (
           <Select
             showSearch
-            options={options}
             placeholder="根据款号/标签搜索"
             filterOption={false}
             renderFormat={(option) => {
@@ -147,10 +135,19 @@ const Editable = ({
             onSearch={debouncedFetchUser}
             onChange={(value) => {
               const newData = cloneDeep(detailData);
-              newData[index].styleId = value ? value : '';
+              newData[index].styleId = value?.id || '';
+              newData[index].style = value || '';
+              newData[index].category = value?.category || '';
+              newData[index].categoryName = value?.categoryName || '';
               setDetailData(newData);
             }}
-          />
+          >
+            {options.map((option) => (
+              <Select.Option key={option.id} value={option}>
+                {option.styleCode}
+              </Select.Option>
+            ))}
+          </Select>
         ),
     },
     {
@@ -196,16 +193,11 @@ const Editable = ({
           value={record.singleWeight}
           onChange={(e) => {
             const newData = cloneDeep(detailData);
-
             newData[index].singleWeight = e;
             newData[index].totalWeight =
               record.quantity &&
-              record.singleWeight &&
-              Number(
-                (Number(record.quantity) * Number(record.singleWeight)).toFixed(
-                  2
-                )
-              );
+              e &&
+              Number((Number(record.quantity) * Number(e)).toFixed(2));
             setDetailData(newData);
           }}
         />
@@ -224,13 +216,9 @@ const Editable = ({
             const newData = cloneDeep(detailData);
             newData[index].quantity = e;
             newData[index].totalWeight =
-              record.quantity &&
+              e &&
               record.singleWeight &&
-              Number(
-                (Number(record.quantity) * Number(record.singleWeight)).toFixed(
-                  2
-                )
-              );
+              Number((Number(e) * Number(record.singleWeight)).toFixed(2));
             setDetailData(newData);
           }}
         />

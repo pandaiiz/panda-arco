@@ -33,13 +33,6 @@ export function getColumns(): TableColumnProps[] {
       sorter: (a, b) => a.categoryName?.length - b.categoryName?.length,
     },
     {
-      title: '件重',
-      dataIndex: 'singleWeight',
-      width: 100,
-      align: 'center',
-      sorter: (a, b) => a.singleWeight - b.singleWeight,
-    },
-    {
       title: '圈号',
       dataIndex: 'circle',
       width: 100,
@@ -47,11 +40,25 @@ export function getColumns(): TableColumnProps[] {
       sorter: (a, b) => a.circle - b.circle,
     },
     {
+      title: '件重',
+      dataIndex: 'singleWeight',
+      width: 100,
+      align: 'center',
+      sorter: (a, b) => a.singleWeight - b.singleWeight,
+    },
+    {
       title: '数量',
       dataIndex: 'quantity',
       width: 100,
       align: 'center',
       sorter: (a, b) => a.quantity - b.quantity,
+    },
+    {
+      title: '合计',
+      dataIndex: 'totalWeight',
+      width: 100,
+      align: 'center',
+      sorter: (a, b) => a.totalWeight - b.totalWeight,
     },
   ];
 }

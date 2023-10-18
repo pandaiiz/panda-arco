@@ -27,6 +27,11 @@ export function getColumns(
       align: 'center',
     },
     {
+      title: '总数',
+      dataIndex: 'orderTotalQuantity',
+      align: 'center',
+    },
+    {
       title: '字印',
       dataIndex: 'fontPrintName',
       align: 'center',

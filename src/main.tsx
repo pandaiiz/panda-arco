@@ -1,5 +1,6 @@
 import './style/global.less';
 import 'react-photo-view/dist/react-photo-view.css';
+
 import React from 'react';
 import { ConfigProvider } from '@arco-design/web-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';

@@ -12,17 +12,29 @@ import {
   deleteTransferById,
   getTransferByPaging,
 } from '@/pages/produce-hub/transfer/service';
-import { isEmpty } from 'lodash';
+import dayjs from 'dayjs';
+import PrintModal from '@/pages/order/arrange/arrange/PrintModal';
 
 const { Title } = Typography;
 
 function CustomerTable() {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
+  const [selectedRows1, setSelectedRows1] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [formParams, setFormParams] = useState({
+    unixTime: 0,
+    pageSize: 10,
+    current: 1,
+  });
 
-  const [formParams, setFormParams] = useState({ pageSize: 10, current: 1 });
-
-  const { data: dataList, loading, run } = useRequest(getTransferByPaging);
+  const {
+    data: dataList,
+    loading,
+    run,
+  } = useRequest(getTransferByPaging, {
+    manual: true,
+  });
 
   const tableCallback = async (record: any, type: string) => {
     switch (type) {
@@ -41,7 +53,7 @@ function CustomerTable() {
   const columns = useMemo(() => getColumns(tableCallback), []);
 
   useAsyncEffect(async () => {
-    await run(formParams);
+    run(formParams);
   }, [JSON.stringify(formParams)]);
 
   function onChangeTable({ current, pageSize }) {
@@ -49,6 +61,7 @@ function CustomerTable() {
       ...formParams,
       current,
       pageSize,
+      unixTime: dayjs().unix(),
     });
   }
 
@@ -59,8 +72,8 @@ function CustomerTable() {
       ...params,
       pageSize: formParams.pageSize,
       current: 1,
+      unixTime: dayjs().unix(),
     });
-    if (isEmpty(params)) run(formParams);
   }
 
   return (
@@ -76,10 +89,21 @@ function CustomerTable() {
           >
             新增
           </Button>
+          <PrintModal list={selectedRows1} onClose={() => run(formParams)} />
         </Space>
       </div>
       <Table
         rowKey="id"
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys,
+          onChange: (selectedRowKeys, selectedRows) => {
+            setSelectedRows1(selectedRows);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setSelectedRowKeys(selectedRowKeys);
+          },
+        }}
         loading={loading}
         onChange={onChangeTable}
         pagination={{

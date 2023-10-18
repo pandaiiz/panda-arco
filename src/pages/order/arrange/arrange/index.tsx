@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Message,
   Drawer,
@@ -10,8 +10,8 @@ import {
 } from '@arco-design/web-react';
 import { cloneDeep, groupBy, sortBy } from 'lodash';
 import { nanoid } from 'nanoid';
-import { useReactToPrint } from 'react-to-print';
 import { batchCreateTransfer } from '@/pages/order/arrange/service';
+import PrintModal from '@/pages/order/arrange/arrange/PrintModal';
 
 function Arrange({ data, onClose }) {
   const countColumns: TableColumnProps[] = [
@@ -23,6 +23,7 @@ function Arrange({ data, onClose }) {
     // { title: '单号', dataIndex: 'transferCode' },
   ];
   const [typeCountList, setTypeCountList] = useState([]);
+  const [transferList, setTransferList] = useState([]);
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [step, setStep] = useState(100);
 
@@ -60,14 +61,10 @@ function Arrange({ data, onClose }) {
         <Table.Summary.Cell>
           {currentData.reduce((prev, next) => prev + next.typeCount, 0)}
         </Table.Summary.Cell>
-        {/*<Table.Summary.Cell></Table.Summary.Cell>*/}
       </Table.Summary.Row>
     );
   }
-  const printRef = useRef(null);
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-  });
+
   const splitTransfer = () => {
     const countList = cloneDeep(typeCountList);
     countList.forEach((record) => {
@@ -95,25 +92,32 @@ function Arrange({ data, onClose }) {
       }
       record.children = expandData;
     });
+
+    const items = [];
+    countList.forEach((item) =>
+      item.children.forEach((childItem) => {
+        items.push(childItem);
+      })
+    );
+    setTransferList(items);
     setExpandedRowKeys(countList.map((item) => item.key));
     setTypeCountList(countList);
   };
   const saveTransfer = () => {
-    const items = [];
-    typeCountList.forEach((item) =>
-      item.children.forEach((childItem) => {
-        delete childItem.id;
-        delete childItem.key;
-        delete childItem.order;
-        delete childItem.unitPrice;
-        delete childItem.totalPrice;
-        delete childItem.totalWeight;
-        delete childItem.typeCount;
-        delete childItem.children;
-        items.push(childItem);
-      })
-    );
-    batchCreateTransfer({ orderDetails: data, transfers: items }).then(() => {
+    const transfers = cloneDeep(transferList);
+    transfers.forEach((item) => {
+      delete item.id;
+      delete item.key;
+      delete item.order;
+      delete item.unitPrice;
+      delete item.totalPrice;
+      delete item.totalWeight;
+      delete item.typeCount;
+      delete item.children;
+      delete item.imgSrc;
+      delete item.style;
+    });
+    batchCreateTransfer({ orderDetails: data, transfers }).then(() => {
       Message.success('生成流程单成功！');
       onClose();
     });
@@ -129,7 +133,7 @@ function Arrange({ data, onClose }) {
       focusLock={false}
       onCancel={onClose}
     >
-      <Space>
+      <Space style={{ marginBottom: 10 }}>
         <InputNumber
           min={0}
           value={step}
@@ -138,20 +142,10 @@ function Arrange({ data, onClose }) {
           }}
           style={{ width: 160 }}
         />
-        <Button
-          type="primary"
-          style={{ marginBottom: 10 }}
-          onClick={splitTransfer}
-        >
+        <Button type="primary" onClick={splitTransfer}>
           分单
         </Button>
-        {/*<Button
-          type="primary"
-          style={{ marginBottom: 10 }}
-          onClick={saveTransfer}
-        >
-          保存流程单
-        </Button>*/}
+        <PrintModal list={transferList} />
       </Space>
       {typeCountList.length > 0 && (
         <Table
