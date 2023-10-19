@@ -200,6 +200,9 @@ function StyleEdit({ data, onClose }) {
           <FormItem label="款号" field="styleCode">
             <Input disabled placeholder="款号自动生成" />
           </FormItem>
+          <FormItem label="备注" field="remark">
+            <Input placeholder="备注" />
+          </FormItem>
           <FormItem label="设计图" field="designSrc" triggerPropName="fileList">
             <Upload
               listType="picture-card"

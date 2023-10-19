@@ -78,6 +78,11 @@ export function getColumns(
       ),
     },
     {
+      title: '备注',
+      dataIndex: 'remark',
+      align: 'center',
+    },
+    {
       title: '操作',
       dataIndex: 'operations',
       align: 'center',

@@ -119,7 +119,10 @@ const PrintTemplate = ({ list }) => {
   return (
     <>
       {data?.map((item, index) => (
-        <div key={index} style={{ marginTop: 10, pageBreakAfter: 'always' }}>
+        <div
+          key={index}
+          style={{ marginTop: 10, pageBreakAfter: 'always', padding: 10 }}
+        >
           <div style={{ display: 'flex' }}>
             <div style={{ width: '40%' }}>
               <Barcode

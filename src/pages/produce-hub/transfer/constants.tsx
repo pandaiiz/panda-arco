@@ -110,7 +110,7 @@ export function getColumns(
               </Button>
             </Popconfirm>
           )}
-          {record.status === 0 && (
+          {/*{record.status === 0 && (
             <Popconfirm
               key="delete"
               focusLock
@@ -123,7 +123,7 @@ export function getColumns(
                 删除
               </Button>
             </Popconfirm>
-          )}
+          )}*/}
         </>
       ),
     },

@@ -7,16 +7,21 @@ import {
   Space,
   InputNumber,
   TableColumnProps,
+  Image,
 } from '@arco-design/web-react';
 import { cloneDeep, groupBy, sortBy } from 'lodash';
 import { nanoid } from 'nanoid';
 import { batchCreateTransfer } from '@/pages/order/arrange/service';
-import PrintModal from '@/pages/order/arrange/arrange/PrintModal';
 
 function Arrange({ data, onClose }) {
   const countColumns: TableColumnProps[] = [
     { title: '客户', dataIndex: 'order.customer.name' },
     { title: '品名', dataIndex: 'categoryName' },
+    { title: '款号', dataIndex: 'style.styleCode' },
+    {
+      title: '图片',
+      render: (col, item) => <Image src={item?.style?.realitySrc[0]?.url} />,
+    },
     { title: '件重', dataIndex: 'singleWeight' },
     { title: '圈号', dataIndex: 'circle' },
     { title: '合计', dataIndex: 'typeCount' },
@@ -43,6 +48,7 @@ function Arrange({ data, onClose }) {
         typeCount,
       };
     });
+    console.log(tableData);
     setTypeCountList(tableData);
   }, []);
 
@@ -55,6 +61,8 @@ function Arrange({ data, onClose }) {
     return (
       <Table.Summary.Row>
         <Table.Summary.Cell>总计</Table.Summary.Cell>
+        <Table.Summary.Cell></Table.Summary.Cell>
+        <Table.Summary.Cell></Table.Summary.Cell>
         <Table.Summary.Cell></Table.Summary.Cell>
         <Table.Summary.Cell></Table.Summary.Cell>
         <Table.Summary.Cell></Table.Summary.Cell>

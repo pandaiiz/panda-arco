@@ -7,6 +7,7 @@ import {
   Typography,
   TableColumnProps,
   Input,
+  Image,
 } from '@arco-design/web-react';
 
 import SearchForm from './form';
@@ -84,6 +85,12 @@ function ArrangeTable() {
       width: 100,
       align: 'center',
       sorter: (a, b) => a.style.styleCode?.length - b.style.styleCode?.length,
+    },
+    {
+      title: '图片',
+      width: 100,
+      align: 'center',
+      render: (_, record) => <Image src={record?.style?.realitySrc[0]?.url} />,
     },
     {
       title: '规格',

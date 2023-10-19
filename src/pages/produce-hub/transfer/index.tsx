@@ -50,13 +50,13 @@ function CustomerTable() {
         break;
       case 'end':
         await endTransferById(record.id);
-        setFormParams({ ...formParams, current: 1 });
+        setFormParams({ ...formParams });
         run(formParams);
         break;
     }
   };
 
-  const columns = useMemo(() => getColumns(tableCallback), []);
+  const columns = getColumns(tableCallback);
 
   useAsyncEffect(async () => {
     run(formParams);
