@@ -21,9 +21,8 @@ const PrintModal = ({ list, onClose }) => {
           <>
             <Button
               onClick={() => {
-                setVisible(false);
-
                 onClose();
+                setVisible(false);
               }}
             >
               取消
@@ -58,9 +57,9 @@ const PrintModal = ({ list, onClose }) => {
         autoFocus={false}
         focusLock={true}
       >
-        <div style={{ height: 600, overflowY: 'scroll' }}>
+        <div style={{ height: 600, overflowY: 'auto' }}>
           <div ref={popupContentRef} id="popupContentRef">
-            <PrintTemplate list={list} />
+            {list?.length > 0 && <PrintTemplate list={list} />}
           </div>
         </div>
       </Modal>

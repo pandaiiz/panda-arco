@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Input,
   InputNumber,
@@ -16,6 +15,7 @@ import { getEnum } from '@/utils/commonService';
 import { deleteOrderDetailById } from '@/pages/order/list/service';
 import PictureUpload from '@/pages/order/list/edit/pictureUpload';
 import { getListByFilter } from '@/pages/information/style/service';
+import FindStyle from '@/pages/order/list/edit/findStyle';
 
 const Editable = ({
   detailData,
@@ -25,6 +25,8 @@ const Editable = ({
 }) => {
   const [options, setOptions] = useState([]);
   const [fetching, setFetching] = useState(false);
+  const [findStyle, setFindStyle] = useState<any>({});
+  const [findStyleVisible, setFindStyleVisible] = useState(false);
   const refFetchId = useRef(null);
   const debouncedFetchUser = useCallback(
     debounce((inputValue) => {
@@ -99,7 +101,7 @@ const Editable = ({
             />
             <Button
               style={{ width: '25%' }}
-              type="primary"
+              status="danger"
               onClick={() => {
                 const newData = cloneDeep(detailData);
                 newData[index].styleId = '';
@@ -110,44 +112,58 @@ const Editable = ({
             </Button>
           </Input.Group>
         ) : (
-          <Select
-            showSearch
-            placeholder="根据款号/标签搜索"
-            filterOption={false}
-            renderFormat={(option) => {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              return option.children.props.children[1];
-            }}
-            notFoundContent={
-              fetching ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Spin style={{ margin: 12 }} />
-                </div>
-              ) : null
-            }
-            onSearch={debouncedFetchUser}
-            onChange={(value) => {
-              const newData = cloneDeep(detailData);
-              newData[index].styleId = value?.id || '';
-              newData[index].style = value || '';
-              newData[index].category = value?.category || '';
-              newData[index].categoryName = value?.categoryName || '';
-              setDetailData(newData);
-            }}
-          >
-            {options.map((option) => (
-              <Select.Option key={option.id} value={option}>
-                {option.styleCode}
-              </Select.Option>
-            ))}
-          </Select>
+          <Input.Group compact>
+            <Select
+              style={{ width: '75%' }}
+              showSearch
+              placeholder="根据款号/标签搜索"
+              filterOption={false}
+              renderFormat={(option) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return option.children.props.children[1];
+              }}
+              notFoundContent={
+                fetching ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Spin style={{ margin: 12 }} />
+                  </div>
+                ) : null
+              }
+              onSearch={debouncedFetchUser}
+              onChange={(value) => {
+                const newData = cloneDeep(detailData);
+                newData[index].styleId = value?.id || '';
+                newData[index].style = value || '';
+                newData[index].category = value?.category || '';
+                newData[index].categoryName = value?.categoryName || '';
+                setDetailData(newData);
+              }}
+            >
+              {options.map((option) => (
+                <Select.Option key={option.id} value={option}>
+                  {option.styleCode}
+                </Select.Option>
+              ))}
+            </Select>
+
+            <Button
+              style={{ width: '25%' }}
+              type="primary"
+              onClick={() => {
+                setFindStyle(record);
+                setFindStyleVisible(true);
+              }}
+            >
+              检索
+            </Button>
+          </Input.Group>
         ),
     },
     {
@@ -270,26 +286,52 @@ const Editable = ({
   }, [selectedRow]);
 
   return (
-    <Table
-      scroll={{ y: window.screen.height - 300 }}
-      columns={columns}
-      data={detailData}
-      pagination={false}
-      rowKey="nanoid"
-      rowSelection={{
-        type: 'checkbox',
-        selectedRowKeys,
-        onChange: (selectedRowKeys, selectedRows) => {
-          setSelectedRowKeys(selectedRowKeys);
-          setSelectedRow(selectedRows);
-        },
-        checkboxProps: (record) => {
-          return {
-            disabled: !record.category || record.status === 1,
-          };
-        },
-      }}
-    />
+    <>
+      {findStyleVisible && (
+        <FindStyle
+          visible={findStyleVisible}
+          style={findStyle}
+          onClose={(value) => {
+            const current = cloneDeep(findStyle);
+            current.styleId = value?.id || '';
+            current.style = value || '';
+            current.category = value?.category || '';
+            current.categoryName = value?.categoryName || '';
+            const newData = cloneDeep(detailData);
+            const a = newData.find((item) => item.nanoid === current.nanoid);
+            Object.assign(a, current);
+            /*newData.forEach((item) => {
+              if (item.nanoid === current.nanoid) {
+                item = { ...current };
+              }
+            });*/
+            setDetailData(newData);
+            setFindStyleVisible(false);
+            setFindStyle({});
+          }}
+        />
+      )}
+      <Table
+        scroll={{ y: window.screen.height - 300 }}
+        columns={columns}
+        data={detailData}
+        pagination={false}
+        rowKey="nanoid"
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys,
+          onChange: (selectedRowKeys, selectedRows) => {
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRow(selectedRows);
+          },
+          checkboxProps: (record) => {
+            return {
+              disabled: !record.category || record.status === 1,
+            };
+          },
+        }}
+      />
+    </>
   );
 };
 

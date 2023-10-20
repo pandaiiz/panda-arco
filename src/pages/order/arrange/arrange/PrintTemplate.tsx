@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Descriptions, Table } from '@arco-design/web-react';
+import { Descriptions, Table, TableColumnProps } from '@arco-design/web-react';
 import dayjs from 'dayjs';
 import Barcode from 'react-barcode';
-const columns = [
+import { sortBy } from 'lodash';
+const columns: TableColumnProps[] = [
   {
     title: '部门',
     width: 90,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
     bodyCellStyle: {
       height: 30,
     },
   },
   {
-    title: '发料重量',
-    width: 130,
+    title: '发料重',
+    width: 140,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
   },
   {
@@ -25,13 +34,21 @@ const columns = [
     width: 90,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
   },
   {
-    title: '回收重量',
+    title: '回收重',
     width: 130,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
   },
   {
@@ -39,6 +56,10 @@ const columns = [
     width: 90,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
   },
   {
@@ -46,6 +67,10 @@ const columns = [
     width: 90,
     headerCellStyle: {
       backgroundColor: 'transparent',
+      fontSize: 12,
+      fontWeight: 300,
+      textAlign: 'center',
+      padding: 0,
     },
   },
 ];
@@ -61,8 +86,22 @@ const PrintTemplate = ({ list }) => {
   function summary() {
     return (
       <Table.Summary.Row>
-        <Table.Summary.Cell colSpan={2}>打印日期</Table.Summary.Cell>
-        <Table.Summary.Cell colSpan={4}>
+        <Table.Summary.Cell
+          colSpan={2}
+          style={{
+            backgroundColor: 'transparent',
+            fontSize: 12,
+          }}
+        >
+          打印日期
+        </Table.Summary.Cell>
+        <Table.Summary.Cell
+          colSpan={4}
+          style={{
+            backgroundColor: 'transparent',
+            fontSize: 12,
+          }}
+        >
           {dayjs().format('YYYY-MM-DD HH:mm:ss')}
         </Table.Summary.Cell>
       </Table.Summary.Row>
@@ -70,7 +109,8 @@ const PrintTemplate = ({ list }) => {
   }
   const [data, setData] = useState([]);
   useEffect(() => {
-    const handleList = list.map((item) => ({
+    const handleList = sortBy(list, 'id').map((item) => ({
+      item,
       transfer: [
         {
           label: '品名',
@@ -78,7 +118,7 @@ const PrintTemplate = ({ list }) => {
         },
         {
           label: '订单日期',
-          value: dayjs(item.order.orderDate).format('YYYY-MM-DD HH:mm'),
+          value: dayjs(item.order.orderDate).format('YYYY-MM-DD'),
         },
         {
           label: '客户',
@@ -115,7 +155,7 @@ const PrintTemplate = ({ list }) => {
       ],
     }));
     setData(handleList);
-  }, []);
+  }, [list]);
   return (
     <>
       {data?.map((item, index) => (
@@ -125,15 +165,11 @@ const PrintTemplate = ({ list }) => {
         >
           <div style={{ display: 'flex' }}>
             <div style={{ width: '40%' }}>
-              <Barcode
-                value={list[index].id.toString()}
-                height={60}
-                width={2}
-              />
+              <Barcode value={item.item.id.toString()} height={60} width={2} />
             </div>
-            <div style={{ width: '60%' }}>
+            <div style={{ width: '60%', paddingTop: 10 }}>
               <img
-                src={list[index].style.realitySrc[0].url}
+                src={item.item.style.realitySrc[0].url}
                 alt=""
                 style={{ width: '100%' }}
               />
@@ -141,7 +177,13 @@ const PrintTemplate = ({ list }) => {
           </div>
           <Descriptions
             size="small"
-            labelStyle={{ width: 90, backgroundColor: 'transparent' }}
+            labelStyle={{
+              width: 75,
+              padding: 4,
+              backgroundColor: 'transparent',
+              fontSize: 12,
+            }}
+            valueStyle={{ fontSize: 12, padding: '0 6px' }}
             data={item.transfer}
             border
             column={2}
@@ -149,7 +191,7 @@ const PrintTemplate = ({ list }) => {
             colon=":"
           />
           <Table
-            style={{ fontSize: 14, fontWeight: 300 }}
+            style={{ fontSize: 12, fontWeight: 300, marginTop: -1 }}
             size="small"
             border
             borderCell
