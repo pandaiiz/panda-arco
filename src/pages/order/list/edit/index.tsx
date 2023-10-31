@@ -26,6 +26,7 @@ import { getEnum } from '@/utils/commonService';
 import dayjs from 'dayjs';
 import { filterOption, validateMessages } from '@/utils/common';
 import { nanoid } from 'nanoid';
+import { IconArrowUp } from '@arco-design/web-react/icon';
 const FormItem = Form.Item;
 
 const Row = Grid.Row;
@@ -136,6 +137,17 @@ function ListEdit({ data, onClose }) {
     });
     setDetailData(rowData);
   };
+
+  const appendToDetailData = (list: any[]) => {
+    const appendList = list.map((item) => ({
+      imgSrc: item?.response?.src || item?.src,
+      nanoid: nanoid(),
+      category: 'DEFAULT',
+    }));
+    setSelectedRow(appendList);
+    setDetailData([...detailData, ...appendList]);
+    setFileList([]);
+  };
   const footer = (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Space>
@@ -145,28 +157,31 @@ function ListEdit({ data, onClose }) {
         >
           新增
         </Button>
+        <Upload
+          action="/api/upload/excel"
+          showUploadList={false}
+          onChange={(fileList, file) => {
+            if (file.status === 'done') {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              appendToDetailData(file.response.children);
+            }
+          }}
+        >
+          <Button icon={<IconArrowUp />}>上传EXCEL</Button>
+        </Upload>
 
         <Upload
           multiple
           fileList={fileList}
-          action="/api/picture/upload"
+          action="/api/upload/order"
           showUploadList={false}
           onChange={(uploadList) => {
             const doneList = uploadList.filter(
               (item) => item.status === 'done'
             );
             if (doneList.length !== uploadList.length) return;
-            const appendList = uploadList.map((item) => ({
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              imgSrc: item?.response?.src,
-              nanoid: nanoid(),
-              category: 'DEFAULT',
-            }));
-
-            setSelectedRow(appendList);
-            setDetailData([...detailData, ...appendList]);
-            setFileList([]);
+            appendToDetailData(uploadList);
           }}
         />
 

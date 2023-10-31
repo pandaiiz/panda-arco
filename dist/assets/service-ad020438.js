@@ -1,1 +1,0 @@
-import{l as e}from"./index-f50a7ad4.js";const n=t=>e.get("/api/department/paging",{params:t}),r=()=>e.get("/api/department"),s=t=>e.get(`/api/department/code/${t}`),d=t=>e.post("/api/department",t),m=(t,a)=>e.patch(`/api/department/${t}`,a),o=t=>e.delete(`/api/department/${t}`);export{r as a,d as b,n as c,o as d,s as g,m as u};

@@ -1,0 +1,1 @@
+import{o as e}from"./index-2fe9f87b.js";const l=t=>e.get("/api/style/paging",{params:t}),y=t=>e.post("/api/style",t),o=t=>e.post("/api/style/batch",t),i=(t,s)=>e.patch(`/api/style/${t}`,s),p=t=>e.delete(`/api/style/${t}`),c=t=>e.get(`/api/style/baseCode/${t}`),d=t=>e.get(`/api/style/filter/${t}`);export{d as a,o as b,y as c,p as d,c as e,l as g,i as u};
