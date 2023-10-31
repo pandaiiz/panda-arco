@@ -15,6 +15,7 @@ import {
   IconCloseCircle,
   IconFilter,
   IconPlus,
+  IconUpload,
 } from '@arco-design/web-react/icon';
 
 import SearchForm from './form';
@@ -30,11 +31,13 @@ import {
 } from '@/pages/information/style/service';
 import dayjs from 'dayjs';
 import MobileFilter from '@/pages/information/style/mobileFilter';
+import BatchCreate from '@/pages/information/style/batchCreate';
 
 const { Title } = Typography;
 
 function StyleTable() {
   const [visible, setVisible] = useState(false);
+  const [batchCreateVisible, setBatchCreateVisible] = useState(false);
   const [data, setData] = useState({});
   const [mobileVisible, setMobileVisible] = useState(false);
 
@@ -146,6 +149,13 @@ function StyleTable() {
           >
             新增
           </Button>
+          <Button
+            type="primary"
+            icon={<IconUpload />}
+            onClick={() => setBatchCreateVisible(true)}
+          >
+            上传
+          </Button>
         </Space>
       </div>
       <Table
@@ -170,6 +180,15 @@ function StyleTable() {
           onClose={() => {
             setVisible(false);
             setData({});
+            run(formParams);
+          }}
+        />
+      )}
+
+      {batchCreateVisible && (
+        <BatchCreate
+          onClose={() => {
+            setBatchCreateVisible(false);
             run(formParams);
           }}
         />

@@ -5,6 +5,8 @@ export const getStyleByPaging = (params): Promise<any> =>
 export const getStyleList = (): Promise<any> => request.get(`/api/style`);
 export const addStyle = (data): Promise<any> =>
   request.post(`/api/style`, data);
+export const batchAddStyle = (data): Promise<any> =>
+  request.post(`/api/style/batch`, data);
 export const updateStyle = (id, data): Promise<any> =>
   request.patch(`/api/style/${id}`, data);
 export const deleteStyleById = (id): Promise<any> =>

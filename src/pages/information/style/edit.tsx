@@ -6,6 +6,10 @@ import {
   Message,
   Upload,
   Select,
+  Card,
+  Image,
+  Space,
+  Button,
 } from '@arco-design/web-react';
 import {
   addStyle,
@@ -22,6 +26,7 @@ import { getEnum } from '@/utils/commonService';
 import { getDepartmentByCode } from '@/pages/setting/department/service';
 import DynamicTag from '@/components/DynamicTag';
 import { cloneDeep } from 'lodash';
+import { FormItemUploadRender } from '@/components/Upload/FormItemUploadRender';
 const FormItem = Form.Item;
 
 function StyleEdit({ data, onClose }) {
@@ -121,6 +126,30 @@ function StyleEdit({ data, onClose }) {
           <FormItem label="品名" field="categoryName" hidden>
             <Input />
           </FormItem>
+
+          <FormItem disabled={data.id} label="编程" field="programmerId">
+            <Select
+              placeholder="请选择编程"
+              showSearch
+              filterOption={filterOption}
+              onChange={(value, option) => {
+                form.setFieldValue(
+                  'programmerCode',
+                  '_key' in option ? option._key : ''
+                );
+                generateStyleCode();
+              }}
+            >
+              {departmentData?.users?.map((item: any) => (
+                <Select.Option key={item.code} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </FormItem>
+          <FormItem label="编程" field="programmerCode" hidden>
+            <Input />
+          </FormItem>
           <FormItem label="规格" field="spec" rules={[{ required: true }]}>
             <Select
               disabled={data.id}
@@ -171,29 +200,6 @@ function StyleEdit({ data, onClose }) {
           <FormItem label="工艺" field="techName" hidden>
             <Input />
           </FormItem>
-          <FormItem disabled={data.id} label="编程" field="programmerId">
-            <Select
-              placeholder="请选择编程"
-              showSearch
-              filterOption={filterOption}
-              onChange={(value, option) => {
-                form.setFieldValue(
-                  'programmerCode',
-                  '_key' in option ? option._key : ''
-                );
-                generateStyleCode();
-              }}
-            >
-              {departmentData?.users?.map((item: any) => (
-                <Select.Option key={item.code} value={item.id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem label="编程" field="programmerCode" hidden>
-            <Input />
-          </FormItem>
           <FormItem hidden label="基础款号" field="baseStyleCode">
             <Input placeholder="基础款号自动生成" />
           </FormItem>
@@ -206,10 +212,9 @@ function StyleEdit({ data, onClose }) {
           <FormItem label="设计图" field="designSrc" triggerPropName="fileList">
             <Upload
               listType="picture-card"
-              imagePreview
-              multiple
-              action="/api/picture/upload"
+              action="/api/upload/image"
               limit={1}
+              renderUploadList={FormItemUploadRender}
             />
           </FormItem>
           <FormItem
@@ -219,10 +224,9 @@ function StyleEdit({ data, onClose }) {
           >
             <Upload
               listType="picture-card"
-              multiple
-              imagePreview
-              action="/api/picture/upload"
+              action="/api/upload/image"
               limit={1}
+              renderUploadList={FormItemUploadRender}
             />
           </FormItem>
           <FormItem
@@ -232,10 +236,9 @@ function StyleEdit({ data, onClose }) {
           >
             <Upload
               listType="picture-card"
-              multiple
-              imagePreview
-              action="/api/picture/upload"
+              action="/api/upload/image"
               limit={1}
+              renderUploadList={FormItemUploadRender}
             />
           </FormItem>
           <FormItem label="标签" field="contactsPhone">

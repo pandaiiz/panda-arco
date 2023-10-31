@@ -25,3 +25,10 @@ export const pictureSrcHandle = (obj: any, key: string) => {
         ]
       : [];
 };
+
+export const filterNumbers = (str: string) => {
+  return str.replace(/\d/g, '');
+};
+export const filterLetters = (str: string) => {
+  return str.replace(/[a-zA-Z]/g, '');
+};
