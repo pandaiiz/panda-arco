@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Modal,
   Form,
@@ -8,16 +8,16 @@ import {
   InputNumber,
 } from '@arco-design/web-react';
 import { useRecoilValue } from 'recoil';
-import { selectedDictState } from '@/pages/setting/dictionary';
 import {
   addDictItem,
   updateDictItem,
 } from '@/pages/setting/dictionary/service';
 import { cloneDeep } from 'lodash';
+import DictContext from '@/pages/setting/dictionary/context';
 const FormItem = Form.Item;
 
 function EditDict({ data, onClose }) {
-  const selectedDict = useRecoilValue(selectedDictState);
+  const currentDict = useContext(DictContext);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function EditDict({ data, onClose }) {
     if (data.id) {
       await updateDictItem(data.id, submitData);
     } else {
-      await addDictItem({ ...submitData, dictId: selectedDict.id });
+      await addDictItem({ ...submitData, dictId: currentDict.id });
     }
     Message.success('提交成功 !');
     onClose();

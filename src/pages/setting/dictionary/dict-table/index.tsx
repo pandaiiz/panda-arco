@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Card,
@@ -7,8 +7,6 @@ import {
   Space,
   Table,
 } from '@arco-design/web-react';
-import { useRecoilValue } from 'recoil';
-import { selectedDictState } from '@/pages/setting/dictionary';
 import styles from '@/pages/setting/user/style/index.module.less';
 import { IconPlus } from '@arco-design/web-react/icon';
 import { getColumns } from '@/pages/setting/dictionary/dict-table/constants';
@@ -18,9 +16,10 @@ import {
   deleteDictItemById,
   getDictsItemById,
 } from '@/pages/setting/dictionary/service';
+import DictContext from '@/pages/setting/dictionary/context';
 
 function DictTable() {
-  const selectedDict = useRecoilValue(selectedDictState);
+  const currentDict = useContext(DictContext);
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
   const {
@@ -30,8 +29,8 @@ function DictTable() {
   } = useRequest(getDictsItemById, { manual: true });
 
   useEffect(() => {
-    run(selectedDict?.id);
-  }, [selectedDict?.id]);
+    run(currentDict?.id);
+  }, [currentDict?.id]);
 
   const tableCallback = async (record: any, type: any) => {
     if (type === 'detail') {
@@ -41,7 +40,7 @@ function DictTable() {
     if (type === 'delete') {
       await deleteDictItemById(record.id);
       Message.success('删除成功！');
-      run(selectedDict?.id);
+      run(currentDict?.id);
     }
   };
   const columns = useMemo(() => getColumns(tableCallback), []);
@@ -49,13 +48,13 @@ function DictTable() {
   return (
     <Card
       title={
-        selectedDict.key
-          ? `${selectedDict.title}（${selectedDict.key}）`
+        currentDict.key
+          ? `${currentDict.title}（${currentDict.key}）`
           : '请先选择左侧的字典'
       }
       style={{ width: '100%' }}
     >
-      {selectedDict?.id ? (
+      {currentDict?.id ? (
         <>
           <div className={styles['button-group']}>
             <Space>
@@ -88,7 +87,7 @@ function DictTable() {
           data={data}
           onClose={async () => {
             setVisible(false);
-            run(selectedDict?.id);
+            run(currentDict?.id);
           }}
         />
       )}

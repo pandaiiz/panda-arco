@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Card,
@@ -10,13 +10,12 @@ import {
 } from '@arco-design/web-react';
 import Edit from '@/pages/setting/dictionary/dict-list/edit';
 import { Menu } from '@arco-design/web-react';
-import { useRecoilState } from 'recoil';
-import { selectedDictState } from '@/pages/setting/dictionary';
 import { useRequest } from 'ahooks';
 import { deleteDictById, getDicts } from '@/pages/setting/dictionary/service';
+import DictContext from '@/pages/setting/dictionary/context';
 const MenuItem = Menu.Item;
-function DictList() {
-  const [selectedDict, setSelectedDict] = useRecoilState(selectedDictState);
+function DictList({ setCurrentDict }) {
+  const currentDict = useContext(DictContext);
   const [visible, setVisible] = useState(false);
   const { data: dictionaryList, refresh } = useRequest(getDicts);
   function confirm(item: { id: any }) {
@@ -41,7 +40,7 @@ function DictList() {
         <Button
           type="text"
           onClick={() => {
-            setSelectedDict({});
+            setCurrentDict(undefined);
             setVisible(true);
           }}
         >
@@ -53,7 +52,7 @@ function DictList() {
         {dictionaryList?.map((item) => (
           <MenuItem
             onClick={() => {
-              setSelectedDict(item);
+              setCurrentDict(item);
             }}
             key={item.id}
             style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -66,7 +65,7 @@ function DictList() {
             <Space>
               <Link
                 onClick={() => {
-                  setSelectedDict(item);
+                  setCurrentDict(item);
                   setVisible(true);
                 }}
               >
@@ -79,7 +78,7 @@ function DictList() {
           </MenuItem>
         ))}
       </Menu>
-      {visible && <Edit data={selectedDict} onClose={modalClose} />}
+      {visible && <Edit data={currentDict} onClose={modalClose} />}
     </Card>
   );
 }

@@ -1,26 +1,24 @@
 import { Grid } from '@arco-design/web-react';
-import React from 'react';
+import React, { useState } from 'react';
 import DictList from '@/pages/setting/dictionary/dict-list';
 import DictTable from '@/pages/setting/dictionary/dict-table';
 import { atom, RecoilState } from 'recoil';
+import DictContext from '@/pages/setting/dictionary/context';
 const { Row, Col } = Grid;
 
-export const selectedDictState: RecoilState<any> = atom({
-  key: 'selectedDictState',
-  default: {},
-});
 const DictIndex = () => {
+  const [currentDict, SetCurrentDict] = useState<any>({});
   return (
-    <>
+    <DictContext.Provider value={currentDict}>
       <Row gutter={20}>
         <Col span={8}>
-          <DictList />
+          <DictList setCurrentDict={SetCurrentDict} />
         </Col>
         <Col span={16}>
           <DictTable />
         </Col>
       </Row>
-    </>
+    </DictContext.Provider>
   );
 };
 
