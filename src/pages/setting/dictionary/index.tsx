@@ -2,7 +2,6 @@ import { Grid } from '@arco-design/web-react';
 import React, { useState } from 'react';
 import DictList from '@/pages/setting/dictionary/dict-list';
 import DictTable from '@/pages/setting/dictionary/dict-table';
-import { atom, RecoilState } from 'recoil';
 import DictContext from '@/pages/setting/dictionary/context';
 const { Row, Col } = Grid;
 
