@@ -42,6 +42,7 @@ function RecordsTable() {
         setVisible(true);
         break;
       case 'translate':
+        console.log('translate')
         setData(record);
         setVisible(true);
         break;

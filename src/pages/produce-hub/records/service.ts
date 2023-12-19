@@ -12,3 +12,7 @@ export const addTransferDetail = (data): Promise<any> =>
 
 export const updateTransferDetail = (id, data): Promise<any> =>
   request.patch(`/api/transfer/item/${id}`, data);
+
+
+  export const getLastTransferDetailByTransferId = (id): Promise<any> =>
+  request.get(`/api/transfer/last-item/${id}`);

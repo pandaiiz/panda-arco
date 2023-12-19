@@ -7,7 +7,7 @@ export function getColumns(
   return [
     {
       title: '流程单号',
-      dataIndex: 'transferCode',
+      dataIndex: 'transferId',
     },
     {
       title: '部门',
@@ -15,11 +15,12 @@ export function getColumns(
     },
     {
       title: '类型',
-      dataIndex: 'productType',
+      dataIndex: 'productTypeName',
     },
     {
       title: '出入库',
       dataIndex: 'type',
+      render: (value) => value === 'IN' ? '入库' : '出库'
     },
     {
       title: '重量',
@@ -35,7 +36,7 @@ export function getColumns(
     },
     {
       title: '品名',
-      dataIndex: 'categoryName',
+      dataIndex: 'transfer.style.categoryName',
     },
     {
       title: '操作',
@@ -50,14 +51,14 @@ export function getColumns(
         >
           转发
         </Button>,
-        <Button
-          type="text"
-          size="small"
-          key="view"
-          onClick={() => callback(record, 'detail')}
-        >
-          编辑
-        </Button>,
+        // <Button
+        //   type="text"
+        //   size="small"
+        //   key="view"
+        //   onClick={() => callback(record, 'detail')}
+        // >
+        //   编辑
+        // </Button>,
         <Popconfirm
           key="delete"
           focusLock

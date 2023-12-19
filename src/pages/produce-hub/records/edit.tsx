@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Modal,
   Form,
@@ -9,10 +9,13 @@ import {
 } from '@arco-design/web-react';
 import { validateMessages } from '@/utils/common';
 import { getDepartmentList } from '@/pages/setting/department/service';
-import { useRequest } from 'ahooks';
+import { useDebounce, useRequest } from 'ahooks';
+import { cloneDeep, debounce } from 'lodash';
+
 import { getEnum } from '@/utils/commonService';
 import {
   addTransferDetail,
+  getLastTransferDetailByTransferId,
   updateTransferDetail,
 } from '@/pages/produce-hub/records/service';
 const FormItem = Form.Item;
@@ -26,21 +29,57 @@ function CustomerEdit({ data, onClose }) {
   async function onOk() {
     await form.validate();
     const formData = form.getFieldsValue();
-    if (data.id) await updateTransferDetail(data.id, formData);
-    else await addTransferDetail(formData);
+    // if (data.id) await updateTransferDetail(data.id, formData);
+    // else await addTransferDetail(formData);
+    delete formData.id
+    const current = productTypeEnum.find(item => item.key === formData.productType)
+    formData.productTypeName = current.title
+    await addTransferDetail(formData);
     Message.success('提交成功 !');
     onClose();
   }
+
+  useEffect(() => {
+    if (data.id) {
+      form.setFieldsValue({
+        transferId: data.transferId,
+        departmentId: data.departmentId,
+        productType: data.productType,
+        weight: data.weight,
+        quantity: data.quantity,
+        remark: data.remark,
+      })
+    }
+  }, [])
+
+
+  const debouncedFetchTransfer = useCallback(
+    debounce((inputValue) => {
+      getLastTransferDetailByTransferId(inputValue).then(res => {
+        if (res.length > 0) {
+          form.setFieldsValue({
+            // transferId: res[0].transferId,
+            departmentId: res[0].departmentId,
+            productType: res[0].productType,
+            weight: res[0].weight,
+            quantity: res[0].quantity,
+            remark: res[0].remark,
+          })
+        }
+      })
+    }, 1000),
+    []
+  );
+
   return (
     <div>
       <Modal
-        title={data.id ? '编辑' : '新增'}
+        title='新增'
         visible={true}
         onOk={onOk}
         autoFocus={false}
         focusLock={false}
         onCancel={onClose}
-        // confirmLoading={isLoading}
       >
         <Form
           labelCol={{ span: 5 }}
@@ -50,17 +89,17 @@ function CustomerEdit({ data, onClose }) {
         >
           <FormItem
             label="流程单"
-            field="transferCode"
+            field="transferId"
             rules={[{ required: true }]}
           >
-            <InputNumber placeholder="请输入流程单" />
+            <InputNumber placeholder="请输入流程单" onChange={debouncedFetchTransfer} />
           </FormItem>
           <FormItem
             label="部门"
             field="departmentId"
             rules={[{ required: true }]}
           >
-            <RadioGroup type="button" name="lang" defaultValue="Guangzhou">
+            <RadioGroup type="button">
               {departmentList?.map((item) => (
                 <Radio key={item.id} value={item.id}>
                   {item.name}
@@ -73,7 +112,7 @@ function CustomerEdit({ data, onClose }) {
             field="productType"
             rules={[{ required: true }]}
           >
-            <RadioGroup type="button" name="lang" defaultValue="Guangzhou">
+            <RadioGroup type="button">
               {productTypeEnum?.map((item) => (
                 <Radio key={item.id} value={item.key}>
                   {item.title}
@@ -82,7 +121,7 @@ function CustomerEdit({ data, onClose }) {
             </RadioGroup>
           </FormItem>
           <FormItem label="出入库" field="type" rules={[{ required: true }]}>
-            <RadioGroup type="button">
+            <RadioGroup type="button" >
               <Radio value="IN">入库</Radio>
               <Radio value="OUT">出库</Radio>
             </RadioGroup>

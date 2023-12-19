@@ -63,7 +63,7 @@ function PictureUpload({ url, onChange }) {
     <div>
       <Upload
         imagePreview
-        action="/api/picture/upload"
+        action="/api/upload/image"
         listType="picture-card"
         limit={1}
         fileList={fileList}
