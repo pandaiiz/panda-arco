@@ -31,7 +31,7 @@ const FormItem = Form.Item;
 
 const Row = Grid.Row;
 const Col = Grid.Col;
-function ListEdit({ data, onClose }) {
+function DeliveryNote({ data, onClose }) {
   const [form] = Form.useForm();
   const { data: customerList } = useRequest(getCustomerList);
   const { data: detailsData, loading } = useRequest(
@@ -104,7 +104,7 @@ function ListEdit({ data, onClose }) {
         await addOrder(submitData);
       }
       Message.success('提交成功 !');
-      onClose();
+      // onClose();
     } catch (e) {
     } finally {
       setConfirmLoading(false);
@@ -363,4 +363,4 @@ function ListEdit({ data, onClose }) {
   );
 }
 
-export default ListEdit;
+export default DeliveryNote;

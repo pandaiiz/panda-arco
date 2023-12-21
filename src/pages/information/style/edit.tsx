@@ -6,10 +6,6 @@ import {
   Message,
   Upload,
   Select,
-  Card,
-  Image,
-  Space,
-  Button,
 } from '@arco-design/web-react';
 import {
   addStyle,
@@ -214,6 +210,7 @@ function StyleEdit({ data, onClose }) {
               listType="picture-card"
               action="/api/upload/image"
               limit={1}
+              accept='image/*'
               renderUploadList={FormItemUploadRender}
             />
           </FormItem>
@@ -226,6 +223,7 @@ function StyleEdit({ data, onClose }) {
               listType="picture-card"
               action="/api/upload/image"
               limit={1}
+              accept='image/*'
               renderUploadList={FormItemUploadRender}
             />
           </FormItem>
@@ -238,6 +236,7 @@ function StyleEdit({ data, onClose }) {
               listType="picture-card"
               action="/api/upload/image"
               limit={1}
+              accept='image/*'
               renderUploadList={FormItemUploadRender}
             />
           </FormItem>

@@ -1,22 +1,24 @@
 import React, { useState, useMemo } from 'react';
 import { Table, Card, Button, Space, Typography } from '@arco-design/web-react';
-import { IconPlus } from '@arco-design/web-react/icon';
 
 import SearchForm from './form';
 
 import styles from './style/index.module.less';
 import { getColumns } from './constants';
 import { useAsyncEffect, useRequest } from 'ahooks';
-import Edit from '@/pages/order/list/edit';
+import DeliveryNote from '@/pages/order/delivery/DeliveryNote';
 import { copyOrderById, deleteOrderById } from '@/pages/order/list/service';
 import dayjs from 'dayjs';
 import { getFinishedTransferByPaging } from '@/pages/order/finished/service';
 
 const { Title } = Typography;
 
-function CustomerTable() {
+function DeliveryTable() {
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const [formParams, setFormParams] = useState<any>({
     pageSize: 10,
@@ -37,7 +39,7 @@ function CustomerTable() {
         run(formParams);
         break;
       case 'edit':
-        setData(record);
+        // setData(record);
         setVisible(true);
         break;
       case 'copy':
@@ -95,16 +97,25 @@ function CustomerTable() {
           pageSize: formParams.pageSize,
           total: dataList?.pagination?.total,
         }}
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys,
+          onChange: (selectedRowKeys, selectedRows) => {
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRows(selectedRows);
+
+          },
+        }}
         columns={columns}
         data={dataList?.data}
       />
 
       {visible && (
-        <Edit
-          data={data}
+        <DeliveryNote
+          data={selectedRows}
           onClose={() => {
             setVisible(false);
-            setData({});
+            setSelectedRows([]);
             run(formParams);
           }}
         />
@@ -113,4 +124,4 @@ function CustomerTable() {
   );
 }
 
-export default CustomerTable;
+export default DeliveryTable;
